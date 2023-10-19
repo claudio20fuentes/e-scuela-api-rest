@@ -36,9 +36,10 @@ const login = async (req, res) => {
 
         const payload = {
             userId: user.id,
-            correo: user.correo,
-            nombre: user.nombre,
-            apellidos: user.apellidos,
+            name: user.nombre + ' ' + user.apellidos || '',
+            mail: user.correo,
+            roleId: user.roleId || 5,
+            phone: user.movil,
         };
 
         const keyLength = 32;

@@ -1,5 +1,8 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
+const Apoderado = require('./apoderadoModel');
+const Profesor = require('./profesorModel');
+const Rol = require('./rolModel');
 
 const Users = sequelize.define('Users',{
     id: {
@@ -27,7 +30,42 @@ const Users = sequelize.define('Users',{
     movil: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    idRol: {
+        type: DataTypes.INTEGER,
+        allowNull: false
     }
 });
+
+Users.hasMany(Apoderado, {
+    foreignKey: 'idUsuario',
+    sourceKey: 'id'
+})
+
+Apoderado.belongsTo(Users, {
+    foreignKey: 'idUsuario',
+    targetKey: 'id'
+})
+
+Users.hasMany(Profesor, {
+    foreignKey: 'idUsuario',
+    sourceKey: 'id'
+})
+
+Profesor.belongsTo(Users, {
+    foreignKey: 'idUsuario',
+    targetKey: 'id'
+})
+
+Users.belongsTo(Rol, {
+    foreignKey: 'idRol',
+    targetKey: 'id'
+})
+
+Rol.hasMany(Users, {
+    foreignKey: 'idRol',
+    sourceKey: 'id'
+})
+
 
 module.exports = Users;

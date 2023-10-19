@@ -1,8 +1,8 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
-const Bloque = require('./bloqueModel');
+const User = require('./userModel');
 
-const Asignatura = sequelize.define('Asignaturas', {
+const Escuela = sequelize.define('Escuela', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -14,14 +14,14 @@ const Asignatura = sequelize.define('Asignaturas', {
   }
 });
 
-Asignatura.hasMany(Bloque, {
-  foreignKey: 'idAsignatura',
+Escuela.hasMany(User, {
+  foreignKey: 'idEscuela',
   sourceKey: 'id'
-});
+})
 
-Bloque.belongsTo(Asignatura, {
-  foreignKey: 'idAsignatura',
+User.belongsTo(Escuela, {
+  foreignKey: 'idEscuela',
   targetKey: 'id'
-});
+})
 
-module.exports = Asignatura;
+module.exports = Escuela;

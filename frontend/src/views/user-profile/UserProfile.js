@@ -114,7 +114,7 @@ const UserProfile = () => {
                               id='userName'
                               variant='outlined'
                               fullWidth
-                              value={userData.nombre}
+                              value={userData.name}
                               onChange={(e) => setUserName(e.target.value)}
                               disabled={!open}
                             />

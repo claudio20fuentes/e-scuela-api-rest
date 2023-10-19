@@ -10,33 +10,12 @@ const Profesor = sequelize.define('Profesores', {
     primaryKey: true,
     autoIncrement: true
   },
-  rut: {
-    type: DataTypes.STRING,
+  idUsuario: {
+    type: DataTypes.INTEGER,
     allowNull: false
   },
-  nombre: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  correo: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  movil: {
-    type: DataTypes.STRING,
-    allowNull: false
-  }
 });
 
-Profesor.hasMany(Asignatura, {
-  foreignKey: 'idProfesor',
-  sourceKey: 'id'
-});
-
-Asignatura.belongsTo(Profesor, {
-  foreignKey: 'idProfesor',
-  targetKey: 'id'
-});
 
 Profesor.hasMany(Curso, {
   foreignKey: 'idProfesor',
