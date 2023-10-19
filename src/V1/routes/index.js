@@ -17,7 +17,7 @@ const profesorRoutes = require("./profesorRoutes");
 const rolRoutes = require("./rolRoutes");
 const userRoutes = require("./userRoutes");
 
-router.use("/login", loginRoutes);
+router.use("/auth", loginRoutes);
 router.use("/alertaApoderado", alertaApoderadoRoutes);
 router.use("/alertaProfesor", alertaProfesorRoutes);
 router.use("/apoderado", apoderadoRoutes);

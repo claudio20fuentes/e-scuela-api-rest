@@ -14,7 +14,7 @@ app.use(express.urlencoded({extended: false}));
 app.use(cors(corsOptions));
 
 const router = require('./V1/routes');
-app.use('/', router);
+app.use('/api/v1', router);
 
 app.listen(PORT, () => {
   testConnection();

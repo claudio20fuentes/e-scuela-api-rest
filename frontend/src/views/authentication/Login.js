@@ -59,6 +59,7 @@ const Login = () => {
     axios
       .post(`${backendUrl}/api/v1/auth/login`, data)
       .then((res) => {
+        console.log(res)
         localStorage.setItem('token', res.data.token);
         setUserData();
         navigate('/');
