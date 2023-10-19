@@ -39,7 +39,7 @@ const ProfileDropdown = ({ handleClose }) => {
               sx={{
                 lineHeight: '1.235',
               }}>
-              {user.nombre}
+              {`${user.nombre}` + ' ' + `${user.apellidos || ''}`}
             </Typography>
             <Box display='flex' alignItems='center'>
               <Typography
@@ -53,7 +53,7 @@ const ProfileDropdown = ({ handleClose }) => {
                 <FeatherIcon icon='mail' width='18' />
               </Typography>
               <Typography color='textSecondary' variant='h6'>
-                {user.mail}
+                {user.correo}
               </Typography>
             </Box>
           </Box>
