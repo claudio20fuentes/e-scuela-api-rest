@@ -1,3 +1,5 @@
 # Ignorar archivos y carpetas generados automáticamente
 node_modules/
 dist/
+.env
+.DS_Store
