@@ -1,5 +1,5 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('../config/config');
+const sequelize = require('../config/db');
 const AlertaProfesor = require('./alertaProfesorModel');
 const AlertaApoderado = require('./alertaApoderadoModel');
 const Justificativo = require('./justificativoModel');

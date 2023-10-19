@@ -1,5 +1,5 @@
 const express = require('express');
-const sequelize = require('./config/config');
+const sequelize = require('./config/db');
 const { DataTypes } = require('sequelize');
 require('dotenv').config();
 
