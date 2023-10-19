@@ -44,12 +44,13 @@ class BloqueService {
                 console.error('Bloque no encontrado');
             }
             await bloque.update(data);
-            return true;
+            return bloque;
         } catch (error) {
             console.error(`Error al editar el bloque con ID ${id}:`, error);
         }
     };
 
+    //Elimina bloque por id
     async deleteBloque(id) {
         try {
             const bloque = await Bloque.findByPk(id);
@@ -57,12 +58,14 @@ class BloqueService {
                 console.error('Bloque no encontrado');
             }
             await bloque.destroy();
-            return true;
+            return bloque;
         } catch (error) {
             console.error(`Error al eliminar el bloque con ID ${id}:`, error);
         }
     };
 
+
+    //Elimina todos los bloques de un dia asociados a un curso 
     async deleteAllBloquesDiaCurso(idDia, idCurso){
         try {
             const result = await Bloque.destroy({

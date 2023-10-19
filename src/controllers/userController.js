@@ -1,8 +1,9 @@
 const userService = require('../services/userService');
-const UserService = require('../services/userService');
+// const UserService = require('../services/userService');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
+// TRAE TODOS LOS USUARIOS REGISTRADOS
 const getAllUsers = async (req, res) => {
 
     try {
@@ -24,6 +25,7 @@ const getAllUsers = async (req, res) => {
     }
 };
 
+// TRAE UN USUARIO DE LA APP, FREQUIERE COMO PARAMETRO EL ID DEL USUARIO
 const getOnUser = async (req, res) => {
 
     const userId = req.params.id;
@@ -33,7 +35,7 @@ const getOnUser = async (req, res) => {
     
         if (!user) {
             
-            return res.status(404).json({ error: 'User no encontrado' });
+            return res.status(404).json({ succes: false, error: 'User no encontrado' });
 
         }
 
@@ -46,25 +48,34 @@ const getOnUser = async (req, res) => {
         
     }
 }
+// CREAR USUARIO, A TRAVÉS DEL BODY DE LA SOLICITUD
 
 const createUser = async (req, res) => {
 
     const dataUser = req.body;
     const roleId = req.body.roleId;
+    
 
     try {
 
-        const user = await UserService.createUser(dataUser, roleId);
-        res.status(201).json({ succes: true, data: user });
-        return user;
+        const result = await UserService.createUser(dataUser, roleId);
+
+        if (result.succes) {
+            res.status(201).json({ succes: true, data: result.data, caca: "caca" })
+            
+        }else{
+            res.status(400).json({ succes: false, errors: result.errors})
+            return result;
+        }
         
     } catch (error) {
        
         console.error('Error al crear el user', error);
-        res.status(500).json({ error: 'Error en el servidor' });
+        res.status(500).json({ error: "Error de servidor" });
 
     }
 }
+
 
 const login = async (req, res) => {
 
