@@ -2,7 +2,6 @@ const express = require('express');
 const sequelize = require('./config/db');
 const { DataTypes } = require('sequelize');
 require('dotenv').config();
-const cors = require('cors');
 
 //IMPORTACIÓN DE RUTAS
 const v1Justificativo = require('./V1/routes/justificativoRoutes');
