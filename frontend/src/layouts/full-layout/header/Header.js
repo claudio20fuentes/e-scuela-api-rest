@@ -219,7 +219,7 @@ const Header = ({ sx, customClass, toggleSidebar, toggleMobileSidebar }) => {
                 sx={{
                   ml: 1,
                 }}>
-                {user.nombre}
+                {user.name}
               </Typography>
               <FeatherIcon icon='chevron-down' width='20' height='20' />
             </Box>
