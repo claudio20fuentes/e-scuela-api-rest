@@ -22,7 +22,7 @@ const Estudiante = sequelize.define('Estudiantes',{
     },
     idApoderado: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        defaultValue: null
     }
 
 });

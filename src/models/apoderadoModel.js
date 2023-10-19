@@ -10,18 +10,10 @@ const Apoderado = sequelize.define('Apoderados', {
     primaryKey: true,
     autoIncrement: true
   },
-  rut: {
-    type: DataTypes.STRING,
+  idUsuario: {
+    type: DataTypes.INTEGER,
     allowNull: false
   },
-  nombre: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  correo: {
-    type: DataTypes.STRING,
-    allowNull: false
-  }
 });
 
 Apoderado.hasMany(Estudiante, {

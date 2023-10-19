@@ -9,10 +9,6 @@ const Matricula = sequelize.define('Matriculas', {
     primaryKey: true,
     autoIncrement: true
   },
-  año: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
   fechaMatricula: {
     type: DataTypes.DATE,
     allowNull: false
@@ -28,11 +24,15 @@ const Matricula = sequelize.define('Matriculas', {
 });
 
 Estudiante.belongsToMany(Curso, {
-  through: Matricula
+  through: Matricula,
+  foreignKey: 'idEstudiante',     // Name of the foreign key in the join table
+  otherKey: 'idCurso' 
 });
 
 Curso.belongsToMany(Estudiante, {
-  through: Matricula
+  through: Matricula,
+  foreignKey: 'idCurso',     // Name of the foreign key in the join table
+  otherKey: 'idEstudiante'
 });
 
 

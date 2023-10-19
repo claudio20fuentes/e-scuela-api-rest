@@ -7,14 +7,14 @@ const cors = require("cors");
 const app = express();
 const PORT = process.env.PORT || 3004;
 
-const corsOptions = require('./config/corsOptions');
+const corsOptions = require("./config/corsOptions");
 
 app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 app.use(cors(corsOptions));
 
-const router = require('./V1/routes');
-app.use('/api/v1', router);
+const router = require("./V1/routes");
+app.use("/api/v1", router);
 
 app.listen(PORT, () => {
   testConnection();
@@ -27,50 +27,55 @@ app.get("/", (req, res) => {
 });
 
 //IMPORTAR LOS MODELOS
-const AlertaApoderadoModel = require("./models/alertaApoderadoModel");
-const AlertaProfesorModel = require("./models/alertaProfesorModel");
-const ApoderadoModel = require("./models/apoderadoModel");
-const AsignaturaModel = require("./models/asignaturaModel");
-const AsistenciaModel = require("./models/asistenciaModel");
-const BloqueModel = require("./models/bloqueModel");
-const CursoModel = require("./models/cursoModel");
-const DetalleAsistenciaModel = require("./models/detalleAsistenciaModel");
-const DiaModel = require("./models/diaModel");
-const EstudianteModel = require("./models/estudianteModel");
-const JustificativoModel = require("./models/justificativoModel");
-const MatriculaModel = require("./models/matriculaModel");
-const ProfesorModel = require("./models/profesorModel");
-const RolesModel = require("./models/rolModel");
-const UsersModel = require("./models/userModel");
-const UsersRolesModel = require("./models/userRolesModel");
+
+const {
+  alertaApoderado,
+  alertaProfesor,
+  apoderado,
+  asignatura,
+  asistencia,
+  bloque,
+  curso,
+  detalleAsistencia,
+  dia,
+  estudiante,
+  justificativo,
+  matricula,
+  profesor,
+  profesorAsignatura,
+  rol,
+  user,
+  escuela,
+} = require("./models");
 
 //DEFINICIÓN DE LOS MODELOS
-const AlertaApoderado = new AlertaApoderadoModel(sequelize, DataTypes);
-const AlertaProfesor = new AlertaProfesorModel(sequelize, DataTypes);
-const Apoderado = new ApoderadoModel(sequelize, DataTypes);
-const Asignatura = new AsignaturaModel(sequelize, DataTypes);
-const Asistencia = new AsistenciaModel(sequelize, DataTypes);
-const Bloque = new BloqueModel(sequelize, DataTypes);
-const Curso = new CursoModel(sequelize, DataTypes);
-const DetalleAsistencia = new DetalleAsistenciaModel(sequelize, DataTypes);
-const Dia = new DiaModel(sequelize, DataTypes);
-const Estudiante = new EstudianteModel(sequelize, DataTypes);
-const justificativo = new JustificativoModel(sequelize, DataTypes);
-const matricula = new MatriculaModel(sequelize, DataTypes);
-const profesor = new ProfesorModel(sequelize, DataTypes);
+const AlertaApoderado = new alertaApoderado(sequelize, DataTypes);
+const AlertaProfesor = new alertaProfesor(sequelize, DataTypes);
+const Apoderado = new apoderado(sequelize, DataTypes);
+const Asistencia = new asistencia(sequelize, DataTypes);
+const Bloque = new bloque(sequelize, DataTypes);
+const Curso = new curso(sequelize, DataTypes);
+const DetalleAsistencia = new detalleAsistencia(sequelize, DataTypes);
+const Dia = new dia(sequelize, DataTypes);
+const Estudiante = new estudiante(sequelize, DataTypes);
+const Justificativo = new justificativo(sequelize, DataTypes);
+const Matricula = new matricula(sequelize, DataTypes);
+const Asignatura = new asignatura(sequelize, DataTypes);
+const Profesor = new profesor(sequelize, DataTypes);
+const ProfesorAsignatura = new profesorAsignatura(sequelize, DataTypes);
 
-const User = new UsersModel(sequelize, DataTypes);
-const Rol = new RolesModel(sequelize, DataTypes);
-const UserRol = new UsersRolesModel(sequelize, DataTypes);
+const User = new user(sequelize, DataTypes);
+const Rol = new rol(sequelize, DataTypes);
+const Escuela = new escuela(sequelize, DataTypes);
 
-// (async () => {
-//   try {
-//     await sequelize.sync({ force: true }); // Opción force: true solo para desarrollo
-//     console.log('Los modelos han sido sincronizados con la base de datos.');
-//   } catch (error) {
-//     console.error('Error al sincronizar los modelos:', error);
-//   }
-// })();
+(async () => {
+  try {
+    await sequelize.sync({ force: true }); // Opción force: true solo para desarrollo
+    console.log("Los modelos han sido sincronizados con la base de datos.");
+  } catch (error) {
+    console.error("Error al sincronizar los modelos:", error);
+  }
+})();
 
 async function testConnection() {
   try {
