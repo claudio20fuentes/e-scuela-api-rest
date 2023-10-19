@@ -11,6 +11,8 @@ router
     
     .delete("/:idDia/:idCurso", bloqueController.deleteAllBloquesDiaCurso)
 
+    .delete("/:id", bloqueController.deleteBloque)
+
     .put("/:id", bloqueController.updateBloque);
 
     module.exports = router;

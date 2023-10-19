@@ -27,23 +27,28 @@ class UserService {
         }
     }
 
+    // CREACION DE UN USUARIO DE LA APLICACION
     async createUser(userData, roleId) {
+
+
+        const result = { succes: false, data: null, errors: []}
 
         try {
 
             const { correo, contrasena } = userData;
 
             //Validación de entrada
-            if (!correo || !contrasena) throw new Error('Correo y contraseña son campos obligatorios');
+            if (!correo || !contrasena) throw new Error('Correo y contraseña son campos obligatorios'), result.errors.push("Correo y contraseña son campos obligatorios"); 
 
+            //Trae el usuario si es que existe según el correo
             const existignUser = await User.findOne({ where: { correo } });
 
-            if (existignUser) throw new Error('El usuario ya está registrado');
+            if (existignUser) throw new Error('El usuario ya está registrado'), result.errors.push("El usuario ya está registrado");
 
             //Validación de contraseña fuerte
             const isStrongPassword = this.validateStrongPassword(contrasena);
 
-            if (!isStrongPassword) throw new Error('La contraseña no cumple con los requisitos de seguridad');
+            if (!isStrongPassword) throw new Error('La contraseña no cumple con los requisitos de seguridad'), result.errors.push('La contraseña no cumple con los requisitos de seguridad');
 
             const hashedPassword = await bcrypt.hash(contrasena, 10);
 
@@ -58,13 +63,16 @@ class UserService {
 
                 const role = await Rol.findByPk(roleId, { transaction });
 
-                if (!role) console.error('Rol no encontrado');
+                if (!role) console.error('Rol no encontrado'), result.errors.push("Rol no encontrado");
 
                 await user.addRole(role, { transaction });
 
                 await transaction.commit();
 
-                return user;
+                result.succes = true;
+                result.data = user;
+
+                return result;
 
             } catch (error) {
                 //Revertir transacción en caso de error
@@ -73,8 +81,9 @@ class UserService {
             }
 
         } catch (error) {
-            console.error("Error al crear el user", error);
-            throw error;
+
+            return result;
+
         }
     }
 

@@ -12,6 +12,8 @@ const v1Curso = require('./V1/routes/cursoRoutes');
 const v1User = require('./V1/routes/userRoutes');
 const v1Rol = require('./V1/routes/rolRoutes');
 const v1Bloque = require('./V1/routes/bloqueRoutes');
+const v1Asistencia = require('./V1/routes/asistenciaRoutes');
+const V1DetalleAsistencia = require('./V1/routes/detalleAsistenciaRoutes');
 const v1Login = require('./V1/routes/loginRoutes');
 
 const app = express();
@@ -34,6 +36,8 @@ app.use("/api/v1/curso", v1Curso);
 app.use("/api/v1/user", v1User);
 app.use("/api/v1/rol", v1Rol);
 app.use("/api/v1/bloque", v1Bloque);
+app.use("/api/v1/asistencia", v1Asistencia);
+app.use("/api/v1/detalleAsistencia", V1DetalleAsistencia);
 
 app.listen(PORT, () => {
     testConnection();

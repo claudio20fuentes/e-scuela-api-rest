@@ -46,7 +46,7 @@ const updateBloque = async (req, res) => {
         
         const update = await BloqueService.updateBloque(idBloque, data);
         if (update) {
-            res.status(200).json({ succes: true, message: 'Bloque actualizado correctamente' });
+            res.status(200).json({ succes: true, message: 'Bloque actualizado correctamente', data: update });
             
         }else{
             res.status(404).json({ error: 'Bloque no encontrado' });
@@ -60,6 +60,8 @@ const updateBloque = async (req, res) => {
 
 };
 
+
+
 const deleteAllBloquesDiaCurso = async (req, res) => {
 
     const { idDia, idCurso } = req.params;
@@ -68,7 +70,7 @@ const deleteAllBloquesDiaCurso = async (req, res) => {
 
         const bloques = await BloqueService.deleteAllBloquesDiaCurso(idDia, idCurso);
         
-        res.status(201).json({ succces: true, data: bloques });
+        res.status(201).json({ succces: true, message: "Bloques eliminados correctamente", data: bloques });
 
 
     } catch (error) {
@@ -80,9 +82,29 @@ const deleteAllBloquesDiaCurso = async (req, res) => {
 
 };
 
+const deleteBloque = async (req, res) => {
+    
+    const id = req.params;
+
+    try {
+        
+        const bloque = await BloqueService.deleteBloque(id);
+
+        res.status(201).json({ succces: true, message: "Bloque eliminado correctamente", data: bloque });
+
+    } catch (error) {
+       
+        console.error('Error al crear el bloque:', error);
+        res.status(500).json({ error: 'Error en el servidor' });
+
+    }
+
+}
+
 module.exports = {
     createBloque,
     getAllBloquesDiaCurso,
     deleteAllBloquesDiaCurso,
-    updateBloque
+    updateBloque,
+    deleteBloque
 };
