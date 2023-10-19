@@ -36,7 +36,9 @@ const login = async (req, res) => {
 
         const payload = {
             userId: user.id,
-            correo: user.correo
+            correo: user.correo,
+            nombre: user.nombre,
+            apellidos: user.apellidos,
         };
 
         const keyLength = 32;
@@ -45,7 +47,7 @@ const login = async (req, res) => {
         // Generar el token de acceso utilizando JWT o cualquier otra técnica de autenticación
         // Puedes implementar una función que genere y firme el token con los datos del usuario
 
-        res.status(200).json({ success: true, token: token });
+        res.status(200).json({ success: true, token });
 
     } catch (error) {
         console.error('Error al autenticar el usuario:', error);

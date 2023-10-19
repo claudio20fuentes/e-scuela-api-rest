@@ -119,7 +119,6 @@ class UserService {
                 return null;
             }
 
-
             return user;
 
         } catch (error) {

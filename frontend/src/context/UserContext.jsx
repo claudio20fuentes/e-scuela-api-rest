@@ -26,8 +26,8 @@ export const UserProvider = (props) => {
       }
       localStorage.setItem('token', token);
       const info = jwt(token);
-      if (info?.user) {
-        setUser(info.user);
+      if (info) {
+        setUser(info);
       }
     } else {
       localStorage.clear();
