@@ -28,7 +28,6 @@ const login = async (req, res) => {
 
     const { user: correo, password: contrasena } = req.body;
 
-    console.log(correo, contrasena)
     try {
         const user = await userService.authenticateUser(correo, contrasena);
         if (!user) {

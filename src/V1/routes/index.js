@@ -1,0 +1,37 @@
+const express = require("express");
+const router = express.Router();
+const loginRoutes = require("./loginRoutes");
+const alertaApoderadoRoutes = require("./alertaApoderadoRoutes");
+const alertaProfesorRoutes = require("./alertaProfesorRoutes");
+const apoderadoRoutes = require("./apoderadoRoutes");
+const asignaturaRoutes = require("./asignaturaRoutes");
+const asistenciaRoutes = require("./asistenciaRoutes");
+const bloqueRoutes = require("./bloqueRoutes");
+const cursoRoutes = require("./cursoRoutes");
+const detalleAsistenciaRoutes = require("./detalleAsistenciaRoutes");
+const diaRoutes = require("./diaRoutes");
+const estudianteRoutes = require("./estudianteRoutes");
+const justificativoRoutes = require("./justificativoRoutes");
+const matriculaRoutes = require("./matriculaRoutes");
+const profesorRoutes = require("./profesorRoutes");
+const rolRoutes = require("./rolRoutes");
+const userRoutes = require("./userRoutes");
+
+router.use("/auth", loginRoutes);
+router.use("/alertaApoderado", alertaApoderadoRoutes);
+router.use("/alertaProfesor", alertaProfesorRoutes);
+router.use("/apoderado", apoderadoRoutes);
+router.use("/asignatura", asignaturaRoutes);
+router.use("/asistencia", asistenciaRoutes);
+router.use("/bloque", bloqueRoutes);
+router.use("/curso", cursoRoutes);
+router.use("/detalleAsistencia", detalleAsistenciaRoutes);
+router.use("/dia", diaRoutes);
+router.use("/estudiante", estudianteRoutes);
+router.use("/justificativo", justificativoRoutes);
+router.use("/matricula", matriculaRoutes);
+router.use("/profesor", profesorRoutes);
+router.use("/rol", rolRoutes);
+router.use("/user", userRoutes);
+
+module.exports = router;

@@ -113,11 +113,12 @@ class UserService {
                 return null;
             }
 
-            const isPasswordValid = await bcrypt.compare(contrasena, user.contrasena);
+            const isPasswordValid = await bcrypt.compare(contrasena, user.contrasena );
 
             if (!isPasswordValid) {
                 return null;
             }
+
 
             return user;
 
