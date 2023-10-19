@@ -2,6 +2,7 @@ const express = require('express');
 const sequelize = require('./config/db');
 const { DataTypes } = require('sequelize');
 require('dotenv').config();
+const cors = require('cors');
 
 //IMPORTACIÓN DE RUTAS
 const v1Justificativo = require('./V1/routes/justificativoRoutes');
@@ -11,12 +12,21 @@ const v1Curso = require('./V1/routes/cursoRoutes');
 const v1User = require('./V1/routes/userRoutes');
 const v1Rol = require('./V1/routes/rolRoutes');
 const v1Bloque = require('./V1/routes/bloqueRoutes');
+const v1Login = require('./V1/routes/loginRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3004;
 app.use(express.json());
 
+// CORS
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+  // Add other headers like methods, headers, etc. as needed
+  next();
+});
+
 //RUTAS
+app.use("/api/v1/auth", v1Login);
 app.use("/api/v1/justificativo", v1Justificativo);
 app.use("/api/v1/dia", v1Dia);
 app.use("/api/v1/profesor", v1Profesor);

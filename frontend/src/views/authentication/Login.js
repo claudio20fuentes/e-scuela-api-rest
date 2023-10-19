@@ -57,7 +57,7 @@ const Login = () => {
 
   const onSubmit = (data) => {
     axios
-      .post(`${backendUrl}/login`, data)
+      .post(`${backendUrl}/api/v1/auth`, data)
       .then((res) => {
         localStorage.setItem('token', res.data.token);
         setUserData();
