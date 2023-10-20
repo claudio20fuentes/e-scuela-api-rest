@@ -138,7 +138,7 @@ const UserProfile = () => {
                         id='role'
                         variant='outlined'
                         fullWidth
-                        value={rolType(userData.rol)}
+                        value={rolType(userData.role)}
                         disabled={true}
                       />
                     </Grid>

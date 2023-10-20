@@ -1,6 +1,3 @@
-import React, { useContext } from 'react';
-import { UserContext } from '../../../context/UserContext';
-
 const createMenuItems = () => {
 
   const menu = [
@@ -17,12 +14,12 @@ const createMenuItems = () => {
     },
     {
       title: 'Mis cursos',
-      icon: 'widgetIcon',
+      icon: 'book-open',
       href: '/classes',
     },
     {
       title: 'Mi Reg. Asistencia',
-      icon: 'reporteIcon',
+      icon: 'command',
       href: '/reports',
       collapse: true,
       children: [
@@ -49,23 +46,23 @@ const createMenuItems = () => {
     {
       title: 'Organización',
       icon: 'settings',
-      href: '/school',
+      href: '/administration',
       collapse: true,
       children: [
         {
           title: 'Matrícula',
           icon: '',
-          href: '/school/enrollment',
+          href: '/administration/enrollment',
         },
         {
           title: 'Docentes',
           icon: '',
-          href: '/school/teachers',
+          href: '/administration/teachers',
         },
         {
           title: 'Escuela',
           icon: '',
-          href: '/school/config',
+          href: '/administration/school-settings',
         },
       ],
     },

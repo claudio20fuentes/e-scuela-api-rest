@@ -3,7 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    return queryInterface.bulkInsert("Mastriculas", [
+    return queryInterface.bulkInsert("Matriculas", [
       {
         fechaMatricula: new Date("2023-03-01"),
         idEstudiante: 1,

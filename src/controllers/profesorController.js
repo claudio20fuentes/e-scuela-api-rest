@@ -4,7 +4,7 @@ const getAllProfesores = async (req, res) => {
 
     try {
 
-        const allProfesores = await ProfesorService.getAllProfesores();
+        const allProfesores = await ProfesorService.getAllProfesores(req);
 
         if (!allProfesores || allProfesores.length === 0) {
             
@@ -12,7 +12,7 @@ const getAllProfesores = async (req, res) => {
 
         }
 
-        res.status(200).json({ succes: true, data: allProfesores });
+        res.status(200).json({ succes: true, body: allProfesores });
 
     } catch (error) {
 

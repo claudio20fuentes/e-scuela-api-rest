@@ -107,7 +107,7 @@ class UserService {
 
     async authenticateUser(correo, contrasena) {
         try {
-            const user = await User.findOne({ where: { correo } });
+            const user = await User.findOne({ where: { correo }, include: Rol });
 
             if (!user) {
                 return null;
