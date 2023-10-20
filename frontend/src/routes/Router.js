@@ -28,7 +28,7 @@ const PasswordUpdated = Loadable(
   lazy(() => import('../views/authentication/PasswordUpdated'))
 );
 
-/* ****Pages***** */
+/* ****DASHBOARDS***** */
 const Dashboard1 = Loadable(
   lazy(() => import('../views/dashboards/Dashboard1'))
 );
@@ -39,11 +39,17 @@ const Dashboard3 = Loadable(
   lazy(() => import('../views/dashboards/Dashboard3'))
 );
 
+/* ****CONFIG DE USUARIO***** */
 const UserProfile = Loadable(
   lazy(() => import('../views/user-profile/UserProfile'))
 );
 const UserNewPassword = Loadable(
   lazy(() => import('../views/user-profile/UserNewPassword'))
+);
+
+/* ****DOCENTES***** */
+const AdministrarDocentes = Loadable(
+  lazy(() => import('../views/administration/docentes/mainView'))
 );
 
 /* ****Routes***** */
@@ -60,6 +66,8 @@ const Router = [
 
       { path: '/settings/user', element: <UserProfile /> },
       { path: '/settings/user/new-password', element: <UserNewPassword /> },
+
+      { path: '/administration/teachers', element: <AdministrarDocentes /> },
     ],
   },
   {

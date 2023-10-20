@@ -34,6 +34,10 @@ const Users = sequelize.define('Users',{
     idRol: {
         type: DataTypes.INTEGER,
         allowNull: false
+    },
+    idEscuela: {
+        type: DataTypes.INTEGER,
+        allowNull: false
     }
 });
 

@@ -2,6 +2,7 @@ const userService = require('../services/userService');
 const UserService = require('../services/userService');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
+require("dotenv").config();
 
 
 
@@ -40,11 +41,10 @@ const login = async (req, res) => {
             mail: user.correo,
             role: user.idRol,
             phone: user.movil,
+            school: user.idEscuela,
         };
 
-        const keyLength = 32;
-        const secretKey = crypto.randomBytes(keyLength).toString('hex');
-        const token = jwt.sign(payload, secretKey, { expiresIn: '1h' });
+        const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
         // Generar el token de acceso utilizando JWT o cualquier otra técnica de autenticación
         // Puedes implementar una función que genere y firme el token con los datos del usuario
 

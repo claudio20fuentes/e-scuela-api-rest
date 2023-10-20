@@ -16,22 +16,24 @@ const matriculaRoutes = require("./matriculaRoutes");
 const profesorRoutes = require("./profesorRoutes");
 const rolRoutes = require("./rolRoutes");
 const userRoutes = require("./userRoutes");
+const authenticateToken = require("../../middlewares/session");
 
 router.use("/auth", loginRoutes);
-router.use("/alertaApoderado", alertaApoderadoRoutes);
-router.use("/alertaProfesor", alertaProfesorRoutes);
-router.use("/apoderado", apoderadoRoutes);
-router.use("/asignatura", asignaturaRoutes);
-router.use("/asistencia", asistenciaRoutes);
-router.use("/bloque", bloqueRoutes);
-router.use("/curso", cursoRoutes);
+
+router.use("/alertaApoderados", alertaApoderadoRoutes);
+router.use("/alertaProfesores", alertaProfesorRoutes);
+router.use("/apoderados", apoderadoRoutes);
+router.use("/asignaturas", asignaturaRoutes);
+router.use("/asistencias", asistenciaRoutes);
+router.use("/bloques", bloqueRoutes);
+router.use("/cursos", cursoRoutes);
 router.use("/detalleAsistencia", detalleAsistenciaRoutes);
-router.use("/dia", diaRoutes);
-router.use("/estudiante", estudianteRoutes);
-router.use("/justificativo", justificativoRoutes);
-router.use("/matricula", matriculaRoutes);
-router.use("/profesor", profesorRoutes);
-router.use("/rol", rolRoutes);
-router.use("/user", userRoutes);
+router.use("/dias", diaRoutes);
+router.use("/estudiantes", estudianteRoutes);
+router.use("/justificativos", justificativoRoutes);
+router.use("/matriculas", matriculaRoutes);
+router.use("/profesores", authenticateToken, profesorRoutes);
+router.use("/roles", rolRoutes);
+router.use("/users", userRoutes);
 
 module.exports = router;
