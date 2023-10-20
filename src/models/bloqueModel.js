@@ -9,11 +9,11 @@ const Bloque = sequelize.define('Bloques', {
     autoIncrement: true
   },
   horaInicio: {
-    type: DataTypes.TIME,
+    type: DataTypes.STRING,
     allowNull: false
   },
   horaFin: {
-    type: DataTypes.TIME,
+    type: DataTypes.STRING,
     allowNull: false
   },
   idDia: {
