@@ -27,13 +27,13 @@ const RowComponent = ({ cellContent = [], collapsedContent, index }) => {
           </IconButton>
         </TableCell>
         {cellContent?.map((content, index) => (
-          <TableCell key={index}>{content}</TableCell>
+          <TableCell key={index} style={{paddingLeft: 5, paddingRight: 10, height: 70}}>{content}</TableCell>
         ))}
       </TableRow>
       <TableRow>
-        <TableCell sx={{ padding: 0 }} colSpan={5}>
+        <TableCell sx={{ padding: 0 }} colSpan={cellContent.length + 1}>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box style={{ backgroundColor: "#d3d3d3" }} pl={6}>
+            <Box style={{ backgroundColor: "#d3d3d3" }} pl={3}>
               <Table size="small">
                 <TableBody>
                   {

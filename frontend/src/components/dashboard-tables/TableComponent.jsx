@@ -134,7 +134,7 @@ const TableComponent = ({
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
-        labelRowsPerPage="Filas por página"
+        labelRowsPerPage="Filas"
         labelDisplayedRows={({ from, to, count }) => {
           return "" + from + "-" + to + " de " + count;
         }}
