@@ -1,29 +1,24 @@
-import { useState, useEffect } from 'react';
-import {
-  Card,
-  CardContent,
-  Typography,
-  Grid,
-} from '@mui/material';
+import { useState, useEffect } from "react";
+import { Card, CardContent, Typography, Grid } from "@mui/material";
 
-import PageContainer from '@containers/PageContainer';
+import PageContainer from "@containers/PageContainer";
 import { backend_url as backendUrl } from "@variables";
-import TableComponent from '@components/dashboard-tables/TableComponent';
-import axios from 'axios';
+import TableComponent from "@components/dashboard-tables/TableComponent";
+import axios from "axios";
 
 const DocentesMainView = () => {
-
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(0);
 
   useEffect(() => {
-    axios.get(`${backendUrl}/api/v1/profesores/`, {
-      headers: {
-        authorization: 'Bearer ' + localStorage.getItem('token'),
-        token: localStorage.getItem('token'),
-      },
-    })
+    axios
+      .get(`${backendUrl}/api/v1/profesores/`, {
+        headers: {
+          authorization: "Bearer " + localStorage.getItem("token"),
+          token: localStorage.getItem("token"),
+        },
+      })
       .then((res) => {
         const data = res.data.body;
         setData(data);
@@ -33,12 +28,8 @@ const DocentesMainView = () => {
         console.log(err);
       });
   }, []);
-  
+
   const headCells = [
-    {
-      id: "",
-      label: "",
-    },
     {
       id: "token",
       label: "Nombre",
@@ -59,30 +50,44 @@ const DocentesMainView = () => {
 
   const parseData = (profesores) => {
     const rows = profesores.map((profesor) => {
-      const { nombre, correo, asignatura, jefatura } = profesor;
+      const { nombre, apellidos, correo, asignatura, jefatura } = profesor;
       return {
-        nombre,
+        nombre: `${nombre} ${apellidos}`,
         correo,
         asignatura,
         jefatura,
       };
     });
-    return rows;
-  }
+    const collapsedContent = profesores.map((profesor) => {
+      return {
+        correo: profesor.correo,
+        // asignatura: profesor.asignatura,
+        // jefatura: profesor.jefatura,
+      };
+    });
+    return { rows, collapsedContent };
+  };
 
   return (
-    <PageContainer title='Docentes' description='reports detail page'>
-      <Grid container justifyContent='space-between'>
+    <PageContainer title="Docentes" description="reports detail page">
+      <Grid container justifyContent="space-between">
         <Grid item xs={12} sm={6} sx={{ pl: 3, mb: 2 }}>
-          <Typography variant='h2' fontWeight={500}>
+          <Typography variant="h2" fontWeight={500}>
             Listado de Docentes
           </Typography>
         </Grid>
       </Grid>
       <Grid container>
-        <Card style={{ width: '100%' }}>
+        <Card style={{ width: "100%" }}>
           <CardContent>
-            <TableComponent headers={headCells} data={parseData(data)} page={page} setPage={setPage} isLoading={isLoading} />
+            <TableComponent
+              headers={headCells}
+              data={parseData(data).rows}
+              collapsedContent={parseData(data).collapsedContent}
+              page={page}
+              setPage={setPage}
+              isLoading={isLoading}
+            />
           </CardContent>
         </Card>
       </Grid>

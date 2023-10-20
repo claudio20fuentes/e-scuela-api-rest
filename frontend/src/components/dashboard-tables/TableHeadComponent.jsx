@@ -5,6 +5,7 @@ import {
   TableCell,
   Typography,
   TableSortLabel,
+  Table,
 } from "@mui/material";
 import { visuallyHidden } from "@mui/utils";
 
@@ -29,6 +30,7 @@ const TableHeadComponent = ({
   return (
     <TableHead>
       <TableRow>
+      <TableCell style={{width: '5px', padding: 0}} />
         {headers.map((header) => (
           <TableCell
             key={header.id}

@@ -1,24 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
-  Card,
-  CardContent,
-  Box,
   Table,
-  TableHead,
   TableRow,
   TableCell,
   Typography,
   TableContainer,
   TableBody,
   TablePagination,
-  Chip,
   Skeleton,
-  TableSortLabel,
-  IconButton,
-  ButtonBase,
-  Collapse,
-  Grid,
-  Button,
 } from "@mui/material";
 
 import RowComponent from "./RowComponent";
@@ -26,6 +15,7 @@ import TableHeadComponent from "./TableHeadComponent";
 
 const TableComponent = ({
   data = [],
+  collapsedContent = {},
   headers,
   isLoading,
   page,
@@ -123,10 +113,11 @@ const TableComponent = ({
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((el, index) => {
                     const cellContent = Object.values(el);
+                    const collapsedCellContent = collapsedContent[index]
                     return (
                       <RowComponent
                         cellContent={cellContent}
-                        collapsedContent={el.collapsedContent}
+                        collapsedContent={collapsedCellContent}
                         index={index}
                         key={index}
                       />
