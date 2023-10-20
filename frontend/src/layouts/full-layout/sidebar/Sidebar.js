@@ -83,10 +83,10 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
               Menuitems.map((item, index) => {
               const itemHref = item.href;
               // {/********SubHeader**********/}
-              if(item.subheader === 'Administración' && userData.rol != 1) {
+              if(item.subheader === 'Administración' && userData.role != 1) {
                 return null;
               }
-              if((item.title === 'Organización' || item.title === 'Cursos') && userData.rol != 1) {
+              if((item.title === 'Organización' || item.title === 'Cursos') && userData.role != 1) {
                 return null;
               }
 
