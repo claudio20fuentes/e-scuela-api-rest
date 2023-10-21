@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import {
-  Card,
-  CardContent,
   Typography,
   Grid,
   Link,
@@ -10,15 +8,14 @@ import {
 
 import PageContainer from "@containers/PageContainer";
 import { backend_url as backendUrl } from "@variables";
-import TableComponent from "@components/dashboard-tables/TableComponent";
+import { TableComponent } from "@components/tables/";
 
-import FeatherIcon from "feather-icons-react";
 import axios from "axios";
 
 const DocentesMainView = () => {
   const [data, setData] = useState([]);
+  const [selected, setSelected] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [page, setPage] = useState(0);
 
   useEffect(() => {
     axios
@@ -34,37 +31,29 @@ const DocentesMainView = () => {
         setIsLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response.status === 401) {
+          localStorage.clear();
+          window.location.reload();
+        }
       });
   }, []);
 
-  const headCells = [
-    {
-      id: "nombre",
-      label: "Nombre",
-    },
-    {
-      id: "correo",
-      label: "Correo",
-    },
-  ];
-
   const parseData = (profesores) => {
     const rows = profesores.map((profesor) => {
-      const { nombre, apellidos, correo, asignatura, jefatura } = profesor;
+      const { nombre, apellidos, correo } = profesor.userData;
+      const { subjects, headTeacher } = profesor;
+      const allSubjects = subjects.map((subject) => subject.nombre).join(", ");
+      let headClass = headTeacher.map((classroom) => classroom?.nombreCurso);
+      headClass = headClass.length > 0 ? headClass[0] : "No asignado";
+
       return {
         nombre: `${nombre} ${apellidos}`,
         correo,
+        asignatura: allSubjects,
+        jefatura: headClass,
       };
     });
-    const collapsedContent = profesores.map((profesor) => {
-      return {
-        correo: profesor.correo,
-        // asignatura: profesor.asignatura,
-        // jefatura: profesor.jefatura,
-      };
-    });
-    return { rows, collapsedContent };
+    return rows;
   };
 
   return (
@@ -76,27 +65,20 @@ const DocentesMainView = () => {
           </Typography>
         </Grid>
         <Grid item xs={12} display="flex" justifyContent="flex-end" pr={2}>
-              <Link href={`#/settings/company/user/create`} underline="none">
-                <Button variant="contained" >
-                  + Agregar
-                </Button>
-              </Link>
-            </Grid>
+          <Link href={`#/settings/company/user/create`} underline="none">
+            <Button variant="contained">+ Agregar</Button>
+          </Link>
+        </Grid>
       </Grid>
-      
       <Grid container>
-        <Card style={{ width: "100%", padding: "0" }}>
-          <CardContent style={{ paddingBottom: 0}}>
-            <TableComponent
-              headers={headCells}
-              data={parseData(data).rows}
-              collapsedContent={parseData(data).collapsedContent}
-              page={page}
-              setPage={setPage}
-              isLoading={isLoading}
-            />
-          </CardContent>
-        </Card>
+        <TableComponent
+          rows={parseData(data)}
+          setSelected={setSelected}
+          edit={true}
+          isLoading={isLoading}
+          search={true}
+          columnsOnMobile={2}
+        />
       </Grid>
     </PageContainer>
   );
