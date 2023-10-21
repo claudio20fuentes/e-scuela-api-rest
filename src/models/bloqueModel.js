@@ -1,43 +1,47 @@
-const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('../config/db');
-const Asistencia = require('./asistenciaModel');
+const { Sequelize, DataTypes } = require("sequelize");
+const sequelize = require("../config/db");
+const Asistencia = require("./asistenciaModel");
 
-const Bloque = sequelize.define('Bloques', {
+const Bloque = sequelize.define("Bloques", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
-    autoIncrement: true
+    autoIncrement: true,
   },
   horaInicio: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
   },
   horaFin: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
   },
   idDia: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
   },
   idAsignatura: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
   },
   idCurso: {
     type: DataTypes.INTEGER,
-    allowNull: false
-  }
+    allowNull: false,
+  },
+  idEscuela: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
 });
 
 Bloque.hasMany(Asistencia, {
-  foreignKey: 'idBloque',
-  sourceKey: 'id'
+  foreignKey: "idBloque",
+  sourceKey: "id",
 });
 
 Asistencia.belongsTo(Bloque, {
-  foreignKey: 'idBloque',
-  targetKey: 'id'
+  foreignKey: "idBloque",
+  targetKey: "id",
 });
 
 module.exports = Bloque;

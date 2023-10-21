@@ -18,9 +18,10 @@ import PageContainer from "@containers/PageContainer";
 import DatosPersonales from "./DatosPersonalesComponent";
 import AsignaturasCursos from "./AsignaturasCursosComponent";
 
+import { fetchClasses } from "@utils/fetchData";
+
 const CreateDocente = () => {
   const [open, setOpen] = useState(false);
-  const [subjects, setSubjects] = useState([]);
   const [classes, setClasses] = useState([]);
   const [user, setUser] = useState({
     nombre: "",
@@ -37,16 +38,7 @@ const CreateDocente = () => {
     mode: "onTouched",
   });
 
-  // TODO: call ASIGNATURAS and get them all
-
   // TODO: call CURSOS and get them all
-
-  const asignaturas = [
-    { value: 1, label: "Matemática" },
-    { value: 2, label: "Lenguaje" },
-    { value: 3, label: "Historia" },
-    { value: 4, label: "Ciencias" },
-  ];
 
   const cursos = [
     { value: 1, label: "1 Básico" },
@@ -60,7 +52,11 @@ const CreateDocente = () => {
   ];
 
   useEffect(() => {
-    setSubjects(asignaturas);
+    const fetchData = async () => {
+      const dataFetched = await fetchClasses();
+      setClasses(dataFetched);
+    };
+    fetchData();
     setClasses(cursos);
   }, []);
 
@@ -85,7 +81,6 @@ const CreateDocente = () => {
     }
   };
 
-  console.log(user);
   return (
     <PageContainer title="Profile" description="User profile">
       <Grid container>
@@ -101,7 +96,6 @@ const CreateDocente = () => {
                   setUser={setUser}
                   classes={classes}
                 />
-                <Divider width="100%" />
                 <AsignaturasCursos
                   user={user}
                   setUser={setUser}

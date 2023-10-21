@@ -31,7 +31,11 @@ const DetalleAsistencia = sequelize.define('DetallesAsistencias', {
   idMatricula: {
     type: DataTypes.INTEGER,
     allowNull: false
-  }
+  },
+  idEscuela: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
 });
 
 DetalleAsistencia.hasMany(AlertaProfesor, {

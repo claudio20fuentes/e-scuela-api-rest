@@ -15,28 +15,24 @@ import FeatherIcon from "feather-icons-react";
 import CustomFormLabel from "@customElements/CustomFormLabel";
 import CustomSelect from "@customElements/CustomSelect";
 
-import { backend_url } from "@variables";
-import axios from "axios";
+import { fetchSubjects } from "@utils/fetchData";
 
 const CreateDocente = ({ user, setUser, classes }) => {
   const [subjects, setSubjects] = useState([]);
   const [newSubject, setNewSubject] = useState([]);
   const [newClassroom, setNewClassroom] = useState([]);
 
-  // TODO: call ASIGNATURAS and get them all
-
-  const asignaturas = [
-    { value: 1, label: "Matemática" },
-    { value: 2, label: "Lenguaje" },
-    { value: 3, label: "Historia" },
-    { value: 4, label: "Ciencias" },
-  ];
-
   useEffect(() => {
-    setSubjects(asignaturas);
+    const fetchData = async () => {
+      const dataFetched = await fetchSubjects();
+      setSubjects(dataFetched);
+    };
+    fetchData();
   }, []);
 
   const addSubject = () => {
+    const alreadyExists = user.subjects.some((el) => el.value === newSubject.value );
+    !alreadyExists &&
     newSubject.length != 0 &&
       setUser((prevUser) => ({
         ...prevUser,
@@ -45,13 +41,16 @@ const CreateDocente = ({ user, setUser, classes }) => {
     setNewSubject("");
   };
 
-  const removeSubject = (index) => {
-    setSubjects((prevSubjects) =>
-      prevSubjects.filter((subject, i) => i !== index)
-    );
+  const removeSubject = (value) => {
+    setUser((prevUser) => ({
+      ...prevUser,
+      subjects: prevUser.subjects.filter((subject) => subject.value !== value),
+    }));
   };
 
   const addClassroom = () => {
+    const alreadyExists = user.classes.some((el) => el.value === newClassroom.value );
+    !alreadyExists &&
     newClassroom.length != 0 &&
       setUser((prevUser) => ({
         ...prevUser,
@@ -60,10 +59,11 @@ const CreateDocente = ({ user, setUser, classes }) => {
     setNewSubject("");
   };
 
-  const removeClassroom = (index) => {
-    setSubjects((prevSubjects) =>
-      prevSubjects.filter((classSoom, i) => i !== index)
-    );
+  const removeClassroom = (value) => {
+    setUser((prevUser) => ({
+      ...prevUser,
+      classes: prevUser.classes.filter((el) => el.value !== value),
+    }));
   };
 
   return (
@@ -86,7 +86,7 @@ const CreateDocente = ({ user, setUser, classes }) => {
                   setNewSubject(selected);
                 }}
               >
-                {subjects.map((option) => (
+                {subjects?.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
                     {option.label}
                   </MenuItem>
@@ -117,7 +117,7 @@ const CreateDocente = ({ user, setUser, classes }) => {
                       <IconButton
                         style={{ padding: "0" }}
                         onClick={() => {
-                          removeSubject(index);
+                          removeSubject(subject.value);
                         }}
                       >
                         <FeatherIcon icon="x-square" style={{ color: "red" }} />
@@ -175,7 +175,7 @@ const CreateDocente = ({ user, setUser, classes }) => {
                       <IconButton
                         style={{ padding: "0" }}
                         onClick={() => {
-                          removeClassroom(index);
+                          removeClassroom(classroom.value);
                         }}
                       >
                         <FeatherIcon icon="x-square" style={{ color: "red" }} />

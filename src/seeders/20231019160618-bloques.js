@@ -37,6 +37,7 @@ module.exports = {
               idDia: dia,
               idAsignatura: asignaturas[randomIndex],
               idCurso: curso,
+              idEscuela: 1,
               createdAt: new Date(),
               updatedAt: new Date(),
             };
