@@ -49,7 +49,13 @@ const UserNewPassword = Loadable(
 
 /* ****DOCENTES***** */
 const AdministrarDocentes = Loadable(
-  lazy(() => import('../views/administration/docentes/mainView'))
+  lazy(() => import('../views/administration/docentes/MainView'))
+);
+const CrearDocente = Loadable(
+  lazy(() => import('../views/administration/docentes/CrearDocente'))
+);
+const EditarDocente = Loadable(
+  lazy(() => import('../views/administration/docentes/EditarDocente'))
 );
 
 /* ****Routes***** */
@@ -68,6 +74,8 @@ const Router = [
       { path: '/settings/user/new-password', element: <UserNewPassword /> },
 
       { path: '/administration/teachers', element: <AdministrarDocentes /> },
+      { path: '/administration/teachers/create', element: <CrearDocente /> },
+      { path: '/administration/teachers/:id', element: <EditarDocente /> },
     ],
   },
   {
