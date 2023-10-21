@@ -1,17 +1,36 @@
+const Asignatura = require("../models/asignaturaModel");
+const Curso = require("../models/cursoModel");
 const Profesor = require("../models/profesorModel");
 const Users = require("../models/userModel");
 class ProfesorService {
   async getAllProfesores(req) {
     try {
       const data = await Profesor.findAll({
-        include: {
-          model: Users,
-          attributes: { exclude: ["contrasena"] },
-          where: { idEscuela: req.user.school },
-        },
+        include: [
+          {
+            model: Users,
+            attributes: { exclude: ["contrasena"] },
+            where: { idEscuela: req.user.school },
+          },
+          {
+            model: Curso,
+            attributes: ["nombreCurso"],
+          },
+          {
+            model: Asignatura,
+            attributes: ["nombre"],
+          }
+        ],
       });
 
-      const result = data.map((profesor) => profesor.User);
+      const result = data.map((profesor) => {
+        const { User, Asignaturas, Cursos } = profesor;
+        return {
+          userData: User, 
+          subjects: Asignaturas,
+          headTeacher: Cursos
+        };
+      });
       return result;
     } catch (error) {
       console.error("Error al obtener los profesores: ", error);

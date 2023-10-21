@@ -33,18 +33,28 @@ const DocentesMainView = () => {
         setIsLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response.status === 401) {
+          localStorage.clear();
+          window.location.reload();
+        }
       });
   }, []);
 
   const parseData = (profesores) => {
     const rows = profesores.map((profesor) => {
-      const { nombre, apellidos, correo, asignatura, jefatura } = profesor;
+      const { nombre, apellidos, correo } = profesor.userData;
+      const { subjects, headTeacher } = profesor;
+      const allSubjects = subjects.map((subject) => subject.nombre).join(", ");
+      let headClass = headTeacher.map((classroom) => classroom?.nombreCurso);
+      headClass = headClass.length > 0 ? headClass[0] : "No asignado";
+
+
       return {
         nombre: `${nombre} ${apellidos}`,
         correo,
-        asignatura: 'ejemplo',
-        jefatura: 'ejemplo jefatura',
+        asignatura: allSubjects,
+        jefatura: headClass,
+
       };
     });
     return rows;

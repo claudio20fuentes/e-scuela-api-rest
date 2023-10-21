@@ -23,13 +23,12 @@ const RowComponent = ({ rowContent = {}, index, columnsOnMobile = 2 }) => {
 
   return (
     <>
-      <TableRow>
+      <TableRow onClick={() => setOpen(!open)}>
         {mobile && (
           <TableCell style={{ padding: 0 }}>
             <IconButton
               aria-label="expand row"
               size="small"
-              onClick={() => setOpen(!open)}
             >
               {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
             </IconButton>
