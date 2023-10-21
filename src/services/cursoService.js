@@ -2,9 +2,9 @@ const Curso = require('../models/cursoModel');
 
 class CursoService {
 
-    async getAllCursos() {
+    async getAllCursos( idEscuela ) {
         try {
-            const result = await Curso.findAll();
+            const result = await Curso.findAll( { where: { idEscuela } });
             return result;
         } catch (error) {
             console.error('Error al obtener los cursos', error);

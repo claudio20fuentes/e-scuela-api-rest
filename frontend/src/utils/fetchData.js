@@ -30,19 +30,19 @@ export const fetchSubjects = async () => {
 export const fetchClasses = async () => {
     return new Promise(async (resolve, reject) => {
       try {
-        const res = await axios.get(`${backendUrl}/api/v1/asignaturas/`, {
+        const res = await axios.get(`${backendUrl}/api/v1/cursos/`, {
           headers: {
             authorization: "Bearer " + localStorage.getItem("token"),
           },
         });
   
         const data = res.data.body;
-        const parsedSubjects = data.map((subject) => ({
+        const parsedClasses = data.map((subject) => ({
           value: subject.id,
-          label: subject.nombre,
+          label: subject.nombreCurso,
         }));
   
-        resolve(parsedSubjects);
+        resolve(parsedClasses);
       } catch (error) {
         if (error.response && error.response.status === 401) {
           localStorage.clear();
