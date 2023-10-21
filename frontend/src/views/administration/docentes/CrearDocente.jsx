@@ -38,26 +38,12 @@ const CreateDocente = () => {
     mode: "onTouched",
   });
 
-  // TODO: call CURSOS and get them all
-
-  const cursos = [
-    { value: 1, label: "1 Básico" },
-    { value: 2, label: "2 Básico" },
-    { value: 3, label: "3 Básico" },
-    { value: 4, label: "4 Básico" },
-    { value: 5, label: "5 Básico" },
-    { value: 6, label: "6 Básico" },
-    { value: 7, label: "7 Básico" },
-    { value: 8, label: "8 Básico" },
-  ];
-
   useEffect(() => {
     const fetchData = async () => {
       const dataFetched = await fetchClasses();
       setClasses(dataFetched);
     };
     fetchData();
-    setClasses(cursos);
   }, []);
 
   const onSubmit = async () => {
