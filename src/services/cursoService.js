@@ -1,15 +1,37 @@
 const Curso = require('../models/cursoModel');
+const Profesor = require("../models/profesorModel");
+const Users = require("../models/userModel");
 
 class CursoService {
 
-    async getAllCursos() {
+    async getAllCursos(req) {
         try {
-            const result = await Curso.findAll();
+            const data = await Curso.findAll({
+                include: [
+                    {
+                        model: Profesor,
+                        attributes: {exclude: ["idUsuario", "createdAt", "updatedAt"]},
+                        include: [
+                            {
+                                model: Users,
+                                attributes: ["nombre","apellidos","correo","movil","idRol"],
+                                where: { idEscuela: 1 },
+                            },
+                        ],
+                    },
+                ]
+            });
+            const result = data.map((curso)=>{
+                return {
+                    courseData : { id: curso.id, nombre: curso.nombreCurso},
+                    teacherData : curso.Profesore.User
+                }
+            })
             return result;
         } catch (error) {
-            console.error('Error al obtener los cursos', error);
+            console.error("Error al obtener los cursos: ", error);
         }
-    };
+    }
 
     async getOnCurso(id) {
 

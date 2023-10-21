@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import {
-  Card,
-  CardContent,
   Typography,
   Grid,
   Link,
@@ -10,15 +8,15 @@ import {
 
 import PageContainer from "@containers/PageContainer";
 import { backend_url as backendUrl } from "@variables";
-import TableComponent from "@components/dashboard-tables/TableComponent";
+import { TableComponent } from "@components/tables/";
 
-import FeatherIcon from "feather-icons-react";
 import axios from "axios";
 
 const CursosMainView = () => {
     const [data, setData] = useState([]);
+    const [selected, setSelected] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [page, setPage] = useState(0);
+
 
     useEffect(() => {
         axios
@@ -29,41 +27,34 @@ const CursosMainView = () => {
             },
           })
           .then((res) => {
-            console.log(res.data.data);
             const data = res.data.data;
             setData(data);
             setIsLoading(false);
           })
           .catch((err) => {
-            console.log(err);
-          });
+            if (err.response.status === 401) {
+              localStorage.clear();
+              window.location.reload();
+            }
+        })
       }, []);
-
-      const headCells = [
-        {
-          id: "nombreCurso",
-          label: "Curso",
-        },
-
-      ];
 
       const parseData = (cursos) => {
         const rows = cursos.map((curso) => {
-          const { nombreCurso } = curso;
-          return {
-            nombre: `${nombreCurso}`
-          };
-        });
-        const collapsedContent = cursos.map((curso) => {
-          return {
-            curso: curso.nombreCurso,
-            // asignatura: profesor.asignatura,
-            // jefatura: profesor.jefatura,
-          };
-        });
-        return { rows, collapsedContent };
-      };
+          const { courseData, teacherData } = curso;
+          const { nombre, apellidos, movil, correo, idRol } = teacherData;
 
+          return {
+            curso: courseData.nombre,
+            nombre: `${nombre} ${apellidos}`,
+            movil,
+            correo,
+            idRol,
+          };
+        });
+
+        return rows ;
+      };
 
       return (
         <PageContainer title="Cursos" description="reports detail page">
@@ -83,21 +74,17 @@ const CursosMainView = () => {
           </Grid>
           
           <Grid container>
-            <Card style={{ width: "100%", padding: "0" }}>
-              <CardContent style={{ paddingBottom: 0}}>
                 <TableComponent
-                  headers={headCells}
-                  data={parseData(data).rows}
-                  collapsedContent={parseData(data).collapsedContent}
-                  page={page}
-                  setPage={setPage}
+                  rows={parseData(data)}
+                  setSelected={setSelected}
+                  edit={true}
                   isLoading={isLoading}
+                  search={true}
+                  columnsOnMobile={1}
                 />
-              </CardContent>
-            </Card>
           </Grid>
         </PageContainer>
       );
-}
+};
 
 export default CursosMainView;

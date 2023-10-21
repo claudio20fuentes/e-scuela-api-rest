@@ -27,6 +27,7 @@ const DocentesMainView = () => {
       })
       .then((res) => {
         const data = res.data.body;
+        console.log(data)
         setData(data);
         setIsLoading(false);
       })
