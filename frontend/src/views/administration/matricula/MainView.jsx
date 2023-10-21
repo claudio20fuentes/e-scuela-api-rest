@@ -12,14 +12,14 @@ import { TableComponent } from "@components/tables/";
 
 import axios from "axios";
 
-const DocentesMainView = () => {
+const MatriculaMainView = () => {
   const [data, setData] = useState([]);
   const [selected, setSelected] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     axios
-      .get(`${backendUrl}/api/v1/profesores/`, {
+      .get(`${backendUrl}/api/v1/matricula/`, {
         headers: {
           authorization: "Bearer " + localStorage.getItem("token"),
           token: localStorage.getItem("token"),
@@ -27,7 +27,6 @@ const DocentesMainView = () => {
       })
       .then((res) => {
         const data = res.data.body;
-        console.log(data)
         setData(data);
         setIsLoading(false);
       })
@@ -61,12 +60,12 @@ const DocentesMainView = () => {
     <PageContainer title="Docentes" description="reports detail page">
       <Grid container justifyContent="space-between" pl={3} mb={2}>
         <Grid item xs={12} mb={3}>
-          <Typography variant="h2" fontWeight={500}>
+          <Typography variant="h3" fontWeight={500}>
             Listado de Docentes
           </Typography>
         </Grid>
         <Grid item xs={12} display="flex" justifyContent="flex-end" pr={2}>
-          <Link href={`#/administration/teachers/create`} underline="none">
+          <Link href={`#/settings/company/user/create`} underline="none">
             <Button variant="contained">+ Agregar</Button>
           </Link>
         </Grid>
@@ -85,4 +84,4 @@ const DocentesMainView = () => {
   );
 };
 
-export default DocentesMainView;
+export default MatriculaMainView;

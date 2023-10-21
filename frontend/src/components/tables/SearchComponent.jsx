@@ -1,5 +1,5 @@
-import CustomTextField from "../forms/custom-elements/CustomTextField";
-import CustomFormLabel from "../forms/custom-elements/CustomFormLabel";
+import CustomTextField from "@customElements/CustomTextField";
+import CustomFormLabel from "@customElements/CustomFormLabel";
 
 import { Card, CardContent, Grid } from "@mui/material";
 
