@@ -9,12 +9,13 @@ import {
   Collapse,
   useMediaQuery,
 } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
 import { capitalize } from "@utils/formatter";
 
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
-const RowComponent = ({ rowContent = {}, index, columnsOnMobile = 2 }) => {
+const RowComponent = ({ index, rowContent, edit, setSelected, columnsOnMobile }) => {
   const [open, setOpen] = useState(false);
   const mobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
@@ -43,6 +44,21 @@ const RowComponent = ({ rowContent = {}, index, columnsOnMobile = 2 }) => {
               {content}
             </TableCell>
           )
+        )}
+        {edit && (
+          <TableCell
+            align="center"
+          >
+            <IconButton
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelected(rowContentArray);
+              }}
+              style={{ color: '#1e4db7' }}
+            >
+              <EditIcon />
+            </IconButton>
+          </TableCell>
         )}
       </TableRow>
       {mobile && (

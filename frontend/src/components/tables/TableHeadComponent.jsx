@@ -7,9 +7,11 @@ import {
   TableSortLabel,
   useMediaQuery,
 } from "@mui/material";
+import FeatherIcon from 'feather-icons-react';
 import { visuallyHidden } from "@mui/utils";
 
 const TableHeadComponent = ({
+  options,
   order,
   orderBy,
   setOrder,
@@ -61,6 +63,13 @@ const TableHeadComponent = ({
             </TableCell>
           )
         )}
+        {
+          options && (
+            <TableCell style={{ width: "5px", padding: 0 }} align="center">
+              <FeatherIcon icon="more-vertical" width="18" />
+            </TableCell>
+          )
+        }
       </TableRow>
     </TableHead>
   );

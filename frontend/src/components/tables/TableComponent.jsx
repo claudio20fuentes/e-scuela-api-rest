@@ -20,14 +20,14 @@ import SearchComponent from "./SearchComponent";
 
 const TableComponent = ({
   rows = [],
-  columnsOnMobile = 2,
+  setSelected,
+  edit = false,
   isLoading,
-  page,
-  setPage,
   search = false,
+  columnsOnMobile = 2,
 }) => {
   const [filtered, setFiltered] = useState([]);
-  const [selected, setSelected] = useState([]);
+  const [page, setPage] = useState(0);
   const [searchValue, setSearchValue] = useState("");
   const [order, setOrder] = useState("desc");
   const [orderBy, setOrderBy] = useState("fecha");
@@ -129,6 +129,7 @@ const TableComponent = ({
           <TableContainer>
             <Table>
               <TableHeadComponent
+                options={edit}
                 order={order}
                 orderBy={orderBy}
                 setOrder={setOrder}
@@ -169,8 +170,10 @@ const TableComponent = ({
                       .map((rowContent, index) => {
                         return (
                           <RowComponent
-                            rowContent={rowContent}
                             index={index}
+                            rowContent={rowContent}
+                            edit={edit}
+                            setSelected={setSelected}
                             columnsOnMobile={columnsOnMobile}
                             key={index}
                           />

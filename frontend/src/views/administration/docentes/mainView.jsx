@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import {
-  Card,
-  CardContent,
   Typography,
   Grid,
   Link,
@@ -10,14 +8,14 @@ import {
 
 import PageContainer from "@containers/PageContainer";
 import { backend_url as backendUrl } from "@variables";
-import { TableComponent, SearchComponent } from "@components/tables/";
+import { TableComponent } from "@components/tables/";
 
 import axios from "axios";
 
 const DocentesMainView = () => {
   const [data, setData] = useState([]);
+  const [selected, setSelected] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [page, setPage] = useState(0);
 
   useEffect(() => {
     axios
@@ -75,8 +73,8 @@ const DocentesMainView = () => {
       <Grid container>
         <TableComponent
           rows={parseData(data)}
-          page={page}
-          setPage={setPage}
+          setSelected={setSelected}
+          edit={true}
           isLoading={isLoading}
           search={true}
           columnsOnMobile={2}
