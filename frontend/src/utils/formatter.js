@@ -9,7 +9,7 @@ const formatDate = (date) => {
   return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
 };
 
-const capitalize = (word) => {
+const capitalize = (word = '') => {
   return word?.charAt(0)?.toUpperCase() + word?.slice(1)?.toLowerCase();
 };
 

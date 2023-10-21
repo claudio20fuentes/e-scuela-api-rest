@@ -10,9 +10,8 @@ import {
 
 import PageContainer from "@containers/PageContainer";
 import { backend_url as backendUrl } from "@variables";
-import TableComponent from "@components/dashboard-tables/TableComponent";
+import { TableComponent, SearchComponent } from "@components/tables/";
 
-import FeatherIcon from "feather-icons-react";
 import axios from "axios";
 
 const DocentesMainView = () => {
@@ -38,33 +37,17 @@ const DocentesMainView = () => {
       });
   }, []);
 
-  const headCells = [
-    {
-      id: "nombre",
-      label: "Nombre",
-    },
-    {
-      id: "correo",
-      label: "Correo",
-    },
-  ];
-
   const parseData = (profesores) => {
     const rows = profesores.map((profesor) => {
       const { nombre, apellidos, correo, asignatura, jefatura } = profesor;
       return {
         nombre: `${nombre} ${apellidos}`,
         correo,
+        asignatura: 'ejemplo',
+        jefatura: 'ejemplo jefatura',
       };
     });
-    const collapsedContent = profesores.map((profesor) => {
-      return {
-        correo: profesor.correo,
-        // asignatura: profesor.asignatura,
-        // jefatura: profesor.jefatura,
-      };
-    });
-    return { rows, collapsedContent };
+    return rows;
   };
 
   return (
@@ -76,27 +59,20 @@ const DocentesMainView = () => {
           </Typography>
         </Grid>
         <Grid item xs={12} display="flex" justifyContent="flex-end" pr={2}>
-              <Link href={`#/settings/company/user/create`} underline="none">
-                <Button variant="contained" >
-                  + Agregar
-                </Button>
-              </Link>
-            </Grid>
+          <Link href={`#/settings/company/user/create`} underline="none">
+            <Button variant="contained">+ Agregar</Button>
+          </Link>
+        </Grid>
       </Grid>
-      
       <Grid container>
-        <Card style={{ width: "100%", padding: "0" }}>
-          <CardContent style={{ paddingBottom: 0}}>
-            <TableComponent
-              headers={headCells}
-              data={parseData(data).rows}
-              collapsedContent={parseData(data).collapsedContent}
-              page={page}
-              setPage={setPage}
-              isLoading={isLoading}
-            />
-          </CardContent>
-        </Card>
+        <TableComponent
+          rows={parseData(data)}
+          page={page}
+          setPage={setPage}
+          isLoading={isLoading}
+          search={true}
+          columnsOnMobile={2}
+        />
       </Grid>
     </PageContainer>
   );
