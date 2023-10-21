@@ -48,13 +48,11 @@ const DocentesMainView = () => {
       let headClass = headTeacher.map((classroom) => classroom?.nombreCurso);
       headClass = headClass.length > 0 ? headClass[0] : "No asignado";
 
-
       return {
         nombre: `${nombre} ${apellidos}`,
         correo,
         asignatura: allSubjects,
         jefatura: headClass,
-
       };
     });
     return rows;

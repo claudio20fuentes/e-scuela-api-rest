@@ -19,16 +19,19 @@ class ProfesorService {
           {
             model: Asignatura,
             attributes: ["nombre"],
-          }
+          },
+        ],
+        order: [
+          [Users, "nombre", "ASC"], // 'ASC' for ascending order, 'DESC' for descending order
         ],
       });
 
       const result = data.map((profesor) => {
         const { User, Asignaturas, Cursos } = profesor;
         return {
-          userData: User, 
+          userData: User,
           subjects: Asignaturas,
-          headTeacher: Cursos
+          headTeacher: Cursos,
         };
       });
       return result;
