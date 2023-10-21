@@ -11,8 +11,8 @@ import { visuallyHidden } from "@mui/utils";
 
 const TableHeadComponent = ({
   order,
-  setOrder,
   orderBy,
+  setOrder,
   setOrderBy,
   headers,
   columnsOnMobile = 2,

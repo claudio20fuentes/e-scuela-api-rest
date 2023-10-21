@@ -26,6 +26,7 @@ const TableComponent = ({
   setPage,
   search = false,
 }) => {
+  const [filtered, setFiltered] = useState([]);
   const [selected, setSelected] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [order, setOrder] = useState("desc");
@@ -79,11 +80,6 @@ const TableComponent = ({
     setPage(0);
   };
 
-  const getRowValues = (rows) => {
-    const values = Object.values(rows[0]);
-    return values;
-  };
-
   const getHeaders = (rows) => {
     let headers = [];
     try {
@@ -98,31 +94,29 @@ const TableComponent = ({
     return headers;
   };
 
-  // useEffect(() => {
-  //   const filtered = rows.filter((row) => {
-  //     let response = true;
-  //     const searchLC = searchValue.toLowerCase();
-  //     if (searchValue) {
-  //       const {  } = row;
-  //       const bank = sender ? sender.bank : '';
-  //       const accountType = sender ? sender.account_type : '';
-  //       response =
-  //         token.toLowerCase().includes(searchLC) ||
-  //         id_consumer.toLowerCase().includes(searchLC) ||
-  //         step.toLowerCase().includes(searchLC) ||
-  //         status.toLowerCase().includes(searchLC) ||
-  //         bank.toLowerCase().includes(searchLC) ||
-  //         amount.toString().includes(searchLC) ||
-  //         transferType.toLowerCase().includes(searchLC);
-  //     } else {
-  //       response = payment;
-  //     }
-  //     return response;
-  //   });
-  //   setPayments(filtered);
-  //   setPage(0);
-  //   setTotal(filtered.length);
-  // }, [searchValue, rows]);
+  function filterElements(arr, searchWord) {
+    const lowercaseSearch = searchWord.toLowerCase();
+    return arr.filter((obj) => {
+      for (const key in obj) {
+        if (
+          typeof obj[key] === "string" &&
+          obj[key].toLowerCase().includes(lowercaseSearch)
+        ) {
+          return true;
+        }
+      }
+      return false;
+    });
+  }
+
+  useEffect(() => {
+    setFiltered(rows);
+  }, [rows]);
+
+  useEffect(() => {
+    setFiltered(filterElements(rows, searchValue));
+    setPage(0);
+  }, [searchValue]);
 
   return (
     <>
@@ -135,12 +129,10 @@ const TableComponent = ({
           <TableContainer>
             <Table>
               <TableHeadComponent
-                numSelected={selected.length}
                 order={order}
-                setOrder={setOrder}
                 orderBy={orderBy}
+                setOrder={setOrder}
                 setOrderBy={setOrderBy}
-                rowCount={rows?.length}
                 headers={getHeaders(rows)}
                 columnsOnMobile={columnsOnMobile}
               />
@@ -155,7 +147,7 @@ const TableComponent = ({
                         ))}
                       </TableRow>
                     ))
-                  : (rows?.length === 0 && (
+                  : (filtered?.length === 0 && (
                       <TableRow>
                         <TableCell colSpan="9" style={{ textAlign: "center" }}>
                           <Typography
@@ -169,7 +161,7 @@ const TableComponent = ({
                         </TableCell>
                       </TableRow>
                     )) ||
-                    stableSort(rows, getComparator(order, orderBy))
+                    stableSort(filtered, getComparator(order, orderBy))
                       .slice(
                         page * rowsPerPage,
                         page * rowsPerPage + rowsPerPage
@@ -190,7 +182,7 @@ const TableComponent = ({
           <TablePagination
             rowsPerPageOptions={[5, 10, 25, 50, 100]}
             component="div"
-            count={rows.length}
+            count={filtered.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
