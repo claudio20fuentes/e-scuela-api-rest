@@ -52,6 +52,11 @@ const AdministrarDocentes = Loadable(
   lazy(() => import('../views/administration/docentes/mainView'))
 );
 
+/* ****CURSOS***** */
+const AdministrarCursos = Loadable(
+  lazy(() => import('../views/administration/cursos/mainView'))
+);
+
 /* ****Routes***** */
 
 const Router = [
@@ -68,6 +73,8 @@ const Router = [
       { path: '/settings/user/new-password', element: <UserNewPassword /> },
 
       { path: '/administration/teachers', element: <AdministrarDocentes /> },
+
+      { path: '/administration/courses', element: <AdministrarCursos/>},
     ],
   },
   {

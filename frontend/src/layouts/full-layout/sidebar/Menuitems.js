@@ -64,6 +64,11 @@ const createMenuItems = () => {
           icon: '',
           href: '/administration/school-settings',
         },
+        {
+          title: 'Cursos',
+          icon: '',
+          href: '/administration/courses'
+        }
       ],
     },
     {

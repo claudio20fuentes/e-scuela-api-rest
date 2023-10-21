@@ -4,8 +4,6 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 require("dotenv").config();
 
-
-
 const createUser = async (req, res) => {
 
     const dataUser = req.body;
@@ -56,8 +54,6 @@ const login = async (req, res) => {
     }
     
 }
-
-
 
 module.exports = {
     createUser,
