@@ -12,7 +12,7 @@ const getAllRoles = async (req, res) => {
             
         }
 
-        res.status(200).json({ succes: true, data: allRoles });
+        res.status(200).json({ succes: true, body: allRoles });
 
 
     } catch (error) {

@@ -7,25 +7,22 @@ import CustomTextField from "@customElements/CustomTextField";
 import CustomFormLabel from "@customElements/CustomFormLabel";
 import CustomSelect from "@customElements/CustomSelect";
 
+import { fetchRoles } from "@utils/fetchData";
+
 const DatosPersonalesComponent = ({ user, setUser, classes }) => {
   const [roles, setRoles] = useState([]);
   const [isLoadingRoles, setIsLoadingRoles] = useState(true);
 
-  const { control, handleSubmit } = useForm({
+  const { control } = useForm({
     mode: "onTouched",
   });
 
-  // TODO: get roles from backend
-
-  const rolesDummy = [
-    { value: 1, label: "Administrador" },
-    { value: 2, label: "Profesor" },
-    { value: 3, label: "Profesor Jefe" },
-    { value: 4, label: "Apoderado" },
-  ];
-
   useEffect(() => {
-    setRoles(rolesDummy);
+    const fetchData = async () => {
+      const dataFetched = await fetchRoles();
+      setRoles(dataFetched);
+    };
+    fetchData();
     setIsLoadingRoles(false);
   }, []);
 
@@ -129,7 +126,7 @@ const DatosPersonalesComponent = ({ user, setUser, classes }) => {
                 <CustomSelect
                   name="role"
                   variant="outlined"
-                  value={user.idRol || 2}
+                  value={user.idRol || 3}
                   size="small"
                   fullWidth
                   onChange={(e) => {
@@ -149,7 +146,7 @@ const DatosPersonalesComponent = ({ user, setUser, classes }) => {
                   ))}
                 </CustomSelect>
               </Grid>
-              {user.idRol === 3 && (
+              {user.idRol === 2 && (
                 <Grid item xs={12}>
                   <CustomFormLabel
                     htmlFor="headTeacher"

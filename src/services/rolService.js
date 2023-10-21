@@ -2,7 +2,7 @@ const Rol = require('../models/rolModel');
 
 class RolService{
 
-    async getAllRoles(){
+    async getAllRoles( idEscuela ){
         try {
             const result = await Rol.findAll();
             return result;

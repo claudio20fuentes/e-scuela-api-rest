@@ -28,7 +28,7 @@ const CreateDocente = () => {
     apellidos: "",
     correo: "",
     movil: "",
-    idRol: 2,
+    idRol: 3,
     subjects: [],
     classes: [],
     headTeacher: { state: false, class: {} },
