@@ -19,7 +19,7 @@ const WelcomeCard = ({ name }) => {
           height: '100%',
           background: `url(${imgsvg})`,
           backgroundRepeat: 'no-repeat',
-          backgroundSize: '30%',
+          backgroundSize: '20%',
           transform: (theme) => `${theme.direction === 'rtl' ? '' : 'unset'}`,
           backgroundPosition: {
             xs: 'bottom 40px right 30px',

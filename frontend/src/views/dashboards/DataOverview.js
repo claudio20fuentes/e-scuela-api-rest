@@ -15,19 +15,15 @@ const DataOverview = ({ icon, total, subtitle, isLoading }) => {
   let link = "/";
 
   return (
-    <Card >
-      <CardContent>
+    <Card style={{ height: "150px", width: "100%"}} >
+      <CardContent style={{padding: 0}}>
         <Box>
           <Fab
             component={NavLink}
             to={link}
-            size="medium"
+            size="small"
             aria-label="add"
-            elevation="0"
             color="primary"
-            sx={{
-              boxShadow: "none",
-            }}
           >
             {<FeatherIcon icon={icon} component={NavLink} to={link} />}
           </Fab>

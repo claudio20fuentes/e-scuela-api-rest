@@ -17,8 +17,8 @@ const DataOverview = ({ data = [], isLoading }) => {
         p: 0,
       }}
     >
-      <CardContent>
-        <Grid container display="flex" spacing={2}>
+      <CardContent >
+        <Grid container spacing={2} height="150px">
           {data.map((item, index) => (
             <Grid
               key={index}
