@@ -43,7 +43,7 @@ const UserNewPassword = Loadable(
 
 /* ****DOCENTES***** */
 const AdministrarDocentes = Loadable(
-  lazy(() => import('../views/administration/docentes/mainView'))
+  lazy(() => import('../views/administration/docentes/MainView'))
 );
 const CrearDocente = Loadable(
   lazy(() => import('../views/administration/docentes/CrearDocente'))
@@ -62,6 +62,11 @@ const AdministrarCursos = Loadable(
 // const EditarCurso = Loadable(
 //   lazy(() => import('../views/administration/cursos/EditarCurso'))
 // );
+/* ****REGISTRO DE ASISTENCIA***** */
+const RegistroAsistencia = Loadable(
+  lazy(() => import('../views/registro-asistencia/MainView'))
+);
+
 
 /* ****Routes***** */
 
@@ -79,11 +84,12 @@ const Router = [
       { path: '/administration/teachers', element: <AdministrarDocentes /> },
       { path: '/administration/teachers/create', element: <CrearDocente /> },
       { path: '/administration/teachers/:id', element: <EditarDocente /> },
-
+      
       { path: '/administration/courses', element: <AdministrarCursos/>},
       // { path: '/administration/courses/create', element: <CrearCurso/>},
       // { path: '/administration/courses/:id', element: <EditarCurso/>},
-
+      
+      { path: '/attendance', element: <RegistroAsistencia /> },
     ],
   },
   {

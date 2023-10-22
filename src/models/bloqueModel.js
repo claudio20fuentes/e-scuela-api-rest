@@ -1,20 +1,12 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
-const Asistencia = require("./asistenciaModel");
+const DetalleAsistencia = require("./detalleAsistenciaModel");
 
 const Bloque = sequelize.define("Bloques", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
-  },
-  horaInicio: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  horaFin: {
-    type: DataTypes.STRING,
-    allowNull: false,
   },
   idDia: {
     type: DataTypes.INTEGER,
@@ -36,16 +28,10 @@ const Bloque = sequelize.define("Bloques", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-});
-
-Bloque.hasMany(Asistencia, {
-  foreignKey: "idBloque",
-  sourceKey: "id",
-});
-
-Asistencia.belongsTo(Bloque, {
-  foreignKey: "idBloque",
-  targetKey: "id",
+  idBloqueHora: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
 });
 
 module.exports = Bloque;

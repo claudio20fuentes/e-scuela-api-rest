@@ -20,18 +20,18 @@ const createMenuItems = () => {
     {
       title: 'Mi Reg. Asistencia',
       icon: 'command',
-      href: '/reports',
+      href: '/attendance',
       collapse: true,
       children: [
         {
           title: 'Diario',
           icon: '',
-          href: '/reports/daily',
+          href: '/attendance',
         },
         {
           title: 'Resumen',
           icon: '',
-          href: '/reports/overall',
+          href: '/attendance/overall',
         },
         
       ],

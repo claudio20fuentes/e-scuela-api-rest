@@ -51,7 +51,7 @@ const DocentesMainView = () => {
       <Grid container justifyContent="space-between" pl={3} mb={2}>
         <Grid item xs={12} mb={3}>
           <Typography variant="h2" fontWeight={500}>
-            Listado de Docentes
+            Registro de Asistencia
           </Typography>
         </Grid>
         <Grid item xs={12} display="flex" justifyContent="flex-end" pr={2}>
