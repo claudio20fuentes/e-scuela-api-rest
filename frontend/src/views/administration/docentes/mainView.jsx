@@ -21,7 +21,6 @@ const DocentesMainView = () => {
   }, []);
 
   useEffect(() => {
-    console.log(selected);
     if (selected.length > 0) {
       const id = selected[0];
       window.location.href = `#/administration/teachers/${id}`;
