@@ -49,7 +49,7 @@ const UserNewPassword = Loadable(
 
 /* ****DOCENTES***** */
 const AdministrarDocentes = Loadable(
-  lazy(() => import('../views/administration/docentes/MainView'))
+  lazy(() => import('../views/administration/docentes/mainView'))
 );
 const CrearDocente = Loadable(
   lazy(() => import('../views/administration/docentes/CrearDocente'))

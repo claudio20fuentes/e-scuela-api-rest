@@ -2,11 +2,10 @@ const cursoService = require('../services/cursoService');
 
 const getAllCursos = async (req, res) => {
 
-    const idEscuela = req.user.school;
 
     try {
 
-        const allCursos = await cursoService.getAllCursos(idEscuela);
+        const allCursos = await cursoService.getAllCursos(req);
 
         if (!allCursos || allCursos.lenth === 0) {
             return res.status(404).json({ error: 'No se encontraron cursos' });

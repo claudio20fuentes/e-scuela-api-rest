@@ -32,7 +32,7 @@ router.use("/dias", authenticateToken, diaRoutes);
 router.use("/estudiantes", authenticateToken, estudianteRoutes);
 router.use("/justificativos", authenticateToken, justificativoRoutes);
 router.use("/matriculas", authenticateToken, matriculaRoutes);
-router.use("/profesores", authenticateToken, authenticateToken, profesorRoutes);
+router.use("/profesores", authenticateToken, profesorRoutes);
 router.use("/roles", authenticateToken, rolRoutes);
 router.use("/users", authenticateToken, userRoutes);
 

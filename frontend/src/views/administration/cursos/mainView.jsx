@@ -27,7 +27,7 @@ const CursosMainView = () => {
             },
           })
           .then((res) => {
-            const data = res.data.data;
+            const data = res.data.body;
             setData(data);
             setIsLoading(false);
           })
@@ -39,13 +39,16 @@ const CursosMainView = () => {
         })
       }, []);
 
+
+
       const parseData = (cursos) => {
         const rows = cursos.map((curso) => {
-          const { courseData, teacherData } = curso;
+          const { courseData, teacherData, totalMatriculas } = curso;
           const { nombre, apellidos, movil, correo, idRol } = teacherData;
 
           return {
             curso: courseData.nombre,
+            Matriculas: totalMatriculas,
             nombre: `${nombre} ${apellidos}`,
             movil,
             correo,
@@ -53,8 +56,12 @@ const CursosMainView = () => {
           };
         });
 
+
+
         return rows ;
       };
+
+
 
       return (
         <PageContainer title="Cursos" description="reports detail page">
@@ -77,10 +84,10 @@ const CursosMainView = () => {
                 <TableComponent
                   rows={parseData(data)}
                   setSelected={setSelected}
-                  edit={true}
+                  edit={false}
                   isLoading={isLoading}
                   search={true}
-                  columnsOnMobile={1}
+                  columnsOnMobile={2}
                 />
           </Grid>
         </PageContainer>

@@ -1,9 +1,9 @@
 const Curso = require('../models/cursoModel');
 const Profesor = require("../models/profesorModel");
 const Users = require("../models/userModel");
+const MatriculaService = require("../services/matriculaService");
 
 class CursoService {
-
     async getAllCursos(req) {
         try {
             const data = await Curso.findAll({
@@ -15,18 +15,35 @@ class CursoService {
                             {
                                 model: Users,
                                 attributes: ["nombre","apellidos","correo","movil","idRol"],
-                                where: { idEscuela: 1 },
+                                where: { idEscuela: req.user.school },
                             },
                         ],
                     },
                 ]
             });
-            const result = data.map((curso)=>{
-                return {
-                    courseData : { id: curso.id, nombre: curso.nombreCurso},
-                    teacherData : curso.Profesore.User
-                }
-            })
+
+            // const totalMatriculas = await MatriculaService.getAllMatriculas(1);
+
+            // const result = data.map((curso)=>{
+            //     return {
+            //         courseData : { id: curso.id, nombre: curso.nombreCurso},
+            //         teacherData : curso.Profesore.User,
+            //         totalMatriculas : totalMatriculas
+            //     }
+            // })
+
+            const result = [];
+
+            for (const curso of data) {
+              const totalMatriculas = await MatriculaService.getAllMatriculas(curso.id);
+        
+              result.push({
+                courseData: { id: curso.id, nombre: curso.nombreCurso },
+                teacherData: curso.Profesore.User,
+                totalMatriculas: totalMatriculas,
+              });
+            }
+
             return result;
         } catch (error) {
             console.error("Error al obtener los cursos: ", error);
