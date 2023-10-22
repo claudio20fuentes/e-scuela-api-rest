@@ -64,7 +64,7 @@ const DocentesMainView = () => {
         <TableComponent
           rows={parseData(data)}
           setSelected={setSelected}
-          edit={true}
+          optionIcon={"edit"}
           isLoading={isLoading}
           search={true}
           columnsOnMobile={2}

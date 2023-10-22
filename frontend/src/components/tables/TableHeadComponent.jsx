@@ -34,7 +34,7 @@ const TableHeadComponent = ({
   return (
     <TableHead>
       <TableRow>
-        {mobile && <TableCell style={{ width: "5px", padding: 0 }} />}
+        {mobile && <TableCell style={{ padding: 0 }} />}
         {headers.map((header, index) =>
           index + 1 > columnsOnMobile && mobile || header.value == 'id' ? null : (
             <TableCell
@@ -65,7 +65,7 @@ const TableHeadComponent = ({
         )}
         {
           options && (
-            <TableCell style={{ width: "5px", padding: 0 }} align="center">
+            <TableCell style={{ width: "2px", padding: 0 }} align="center">
               <FeatherIcon icon="more-vertical" width="18" />
             </TableCell>
           )

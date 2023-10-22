@@ -1,19 +1,19 @@
 import { useState, useEffect } from "react";
 import { Grid, Button, useMediaQuery } from "@mui/material";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { es } from "date-fns/locale";
-import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 
-import { backend_url } from "../../config/variables";
-import axios from "axios";
-import PageContainer from "../../components/container/PageContainer";
+import { TableComponent } from "@components/tables/";
+
 import DataOverView from "./DataOverview";
 import DataOverViewXs from "./DataOverviewXs";
 import WelcomeCard from "./WelcomeCard";
+import FeatherIcon from "feather-icons-react"
 
 const Dashboard1 = ({ userData }) => {
   const mobile = useMediaQuery((theme) => theme.breakpoints.down("md"));
   const [overviewInfo, setOverviewInfo] = useState([]);
+  const [data, setData] = useState([]);
+  const [selected, setSelected] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const overviewInfoDummy = [
     { subtitle: "Matricula", total: 10, icon: "bar-chart-2" },
@@ -21,8 +21,42 @@ const Dashboard1 = ({ userData }) => {
     { subtitle: "Ausentes", total: 10, icon: "user-x" },
   ];
 
+  const Checked = () => (
+    <FeatherIcon icon="check" color="#4caf50" />
+  );
+
+  const NotChecked = () => (
+    <FeatherIcon icon="x" color="#f44336" />
+  );
+
+  const dataDummy = [
+    {
+      id: 1,
+      curso: "1 Básico",
+      estado: <Checked />,
+      presentes: "92%",
+      ausentes: "8%",
+    },
+    {
+      id: 2,
+      curso: "2 Básico",
+      estado: <Checked />,
+      presentes: "80%",
+      ausentes: "20%",
+    },
+    {
+      id: 3,
+      curso: "3 Básico",
+      estado: <NotChecked />,
+      presentes: "",
+      ausentes: "",
+    },
+  ];
+
   useEffect(() => {
     setOverviewInfo(overviewInfoDummy);
+    setData(dataDummy);
+    setIsLoading(false);
   }, []);
 
   return (
@@ -44,6 +78,16 @@ const Dashboard1 = ({ userData }) => {
             />
           ))
         )}
+      </Grid>
+      <Grid container>
+        <TableComponent
+          rows={data}
+          setSelected={setSelected}
+          optionIcon={"eye"}
+          isLoading={isLoading}
+          search={false}
+          columnsOnMobile={3}
+        />
       </Grid>
     </Grid>
   );
