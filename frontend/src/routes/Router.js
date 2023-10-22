@@ -29,14 +29,8 @@ const PasswordUpdated = Loadable(
 );
 
 /* ****DASHBOARDS***** */
-const Dashboard1 = Loadable(
-  lazy(() => import('../views/dashboards/Dashboard1'))
-);
-const Dashboard2 = Loadable(
-  lazy(() => import('../views/dashboards/Dashboard2'))
-);
-const Dashboard3 = Loadable(
-  lazy(() => import('../views/dashboards/Dashboard3'))
+const MainDashboard = Loadable(
+  lazy(() => import('../views/dashboards/MainDashboard'))
 );
 
 /* ****CONFIG DE USUARIO***** */
@@ -77,9 +71,7 @@ const Router = [
     element: <FullLayout />,
     children: [
       { path: '/', element: <Navigate to='/dashboard' /> },
-      { path: '/dashboard', exact: true, element: <Dashboard1 /> },
-      { path: '/dashboards/dashboard2', exact: true, element: <Dashboard2 /> },
-      { path: '/dashboards/dashboard3', exact: true, element: <Dashboard3 /> },
+      { path: '/dashboard', exact: true, element: <MainDashboard /> },
 
       { path: '/settings/user', element: <UserProfile /> },
       { path: '/settings/user/new-password', element: <UserNewPassword /> },

@@ -24,6 +24,10 @@ const DetalleAsistencia = sequelize.define('DetallesAsistencias', {
     type: DataTypes.INTEGER,
     allowNull: false
   },
+  fecha: {
+    type: DataTypes.DATE,
+    allowNull: false
+  },
   idAsistencia: {
     type: DataTypes.INTEGER,
     allowNull: false
