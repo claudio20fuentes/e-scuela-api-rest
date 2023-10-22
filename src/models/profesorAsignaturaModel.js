@@ -2,6 +2,7 @@ const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
 const Asignatura = require('./asignaturaModel');
 const Profesor = require('./profesorModel');
+const Bloque = require('./bloqueModel');
 
 const ProfesorAsignatura = sequelize.define('ProfesoresAsignaturas', {
   id: {
@@ -9,6 +10,16 @@ const ProfesorAsignatura = sequelize.define('ProfesoresAsignaturas', {
     primaryKey: true,
     autoIncrement: true
   },
+});
+
+Profesor.hasMany(Bloque, {
+  foreignKey: 'idProfesor',
+  sourceKey: 'id'
+});
+
+Bloque.belongsTo(Profesor, {
+  foreignKey: 'idProfesor',
+  targetKey: 'id'
 });
 
 Profesor.belongsToMany(Asignatura, {

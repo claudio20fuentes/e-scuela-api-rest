@@ -1,5 +1,23 @@
 const BloqueService = require('../services/bloqueService');
 
+const getBloques = async (req, res) => {
+
+    try {
+        const { idDia, idCurso, idAsignatura, idProfesor } = req.query;
+        const idEscuela = req.user.school;
+
+        const allBloques = await BloqueService.getAllBloques(idEscuela, idDia, idCurso, idAsignatura, idProfesor);
+
+        if (!allBloques || allBloques === 0) return res.status(404).json({ error: "No se encontraron bloques" });
+
+        res.status(200).json({ succes: true, body: allBloques });
+
+    } catch (error) {
+        res.status(500).json({ error: "Error en el servidor" });
+    }
+
+};
+
 const getAllBloquesDiaCurso = async (req, res) => {
 
     try {
@@ -103,6 +121,7 @@ const deleteBloque = async (req, res) => {
 
 module.exports = {
     createBloque,
+    getBloques,
     getAllBloquesDiaCurso,
     deleteAllBloquesDiaCurso,
     updateBloque,

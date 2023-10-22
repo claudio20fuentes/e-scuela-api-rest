@@ -36,23 +36,23 @@ const TableHeadComponent = ({
       <TableRow>
         {mobile && <TableCell style={{ width: "5px", padding: 0 }} />}
         {headers.map((header, index) =>
-          index + 1 > columnsOnMobile && mobile ? null : (
+          index + 1 > columnsOnMobile && mobile || header.value == 'id' ? null : (
             <TableCell
-              key={header.id}
-              sortDirection={orderBy === header.id ? order : false}
+              key={header.value}
+              sortDirection={orderBy === header.value ? order : false}
               sx={{
                 paddingLeft: mobile ? 1 : 2,
               }}
             >
               <TableSortLabel
-                active={orderBy === header.id}
-                direction={orderBy === header.id ? order : "asc"}
-                onClick={createSortHandler(header.id)}
+                active={orderBy === header.value}
+                direction={orderBy === header.value ? order : "asc"}
+                onClick={createSortHandler(header.value)}
               >
                 <Typography variant="subtitle1" fontWeight="500">
                   {header.label}
                 </Typography>
-                {orderBy === header.id ? (
+                {orderBy === header.value ? (
                   <Box component="span" sx={visuallyHidden}>
                     {order === "desc"
                       ? "sorted descending"

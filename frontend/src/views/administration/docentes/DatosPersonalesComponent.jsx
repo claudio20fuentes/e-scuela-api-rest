@@ -8,9 +8,11 @@ import CustomFormLabel from "@customElements/CustomFormLabel";
 import CustomSelect from "@customElements/CustomSelect";
 
 import { getAllRoles } from "@services/rolesServices";
+import { getAllCursos } from "@services/cursosServices";
 
-const DatosPersonalesComponent = ({ user, setUser, classes }) => {
+const DatosPersonalesComponent = ({ user, setUser }) => {
   const [roles, setRoles] = useState([]);
+  const [classes, setClasses] = useState([]);
   const [isLoadingRoles, setIsLoadingRoles] = useState(true);
 
   const { control } = useForm({
@@ -19,8 +21,10 @@ const DatosPersonalesComponent = ({ user, setUser, classes }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const dataFetched = await getAllRoles();
-      setRoles(dataFetched);
+      const rols = await getAllRoles();
+      const cursos = await getAllCursos();
+      setClasses(cursos);
+      setRoles(rols);
     };
     fetchData();
     setIsLoadingRoles(false);
@@ -43,6 +47,7 @@ const DatosPersonalesComponent = ({ user, setUser, classes }) => {
                     {...field}
                     ref={null}
                     label="Nombre"
+                    value={user.nombre}
                     id="name"
                     variant="outlined"
                     fullWidth
@@ -64,6 +69,7 @@ const DatosPersonalesComponent = ({ user, setUser, classes }) => {
                     {...field}
                     ref={null}
                     label="Apellidos"
+                    value={user.apellidos}
                     id="lname"
                     variant="outlined"
                     fullWidth
@@ -85,6 +91,7 @@ const DatosPersonalesComponent = ({ user, setUser, classes }) => {
                     {...field}
                     ref={null}
                     label="Email"
+                    value={user.correo}
                     id="mail"
                     variant="outlined"
                     fullWidth
@@ -106,6 +113,7 @@ const DatosPersonalesComponent = ({ user, setUser, classes }) => {
                     {...field}
                     ref={null}
                     label="Teléfono"
+                    value={user.movil}
                     id="phone"
                     variant="outlined"
                     fullWidth
@@ -126,7 +134,7 @@ const DatosPersonalesComponent = ({ user, setUser, classes }) => {
                 <CustomSelect
                   name="role"
                   variant="outlined"
-                  value={user.idRol || 3}
+                  value={user.idRol}
                   size="small"
                   fullWidth
                   onChange={(e) => {
@@ -157,7 +165,7 @@ const DatosPersonalesComponent = ({ user, setUser, classes }) => {
                   <CustomSelect
                     name="classes"
                     variant="outlined"
-                    value={user.headTeacher.class.value || ""}
+                    value={user.headTeacher.classroom.value || ""}
                     size="small"
                     fullWidth
                     onChange={(e) => {
@@ -168,7 +176,7 @@ const DatosPersonalesComponent = ({ user, setUser, classes }) => {
                         ...prevUser,
                         headTeacher: {
                           state: true,
-                          class: selected,
+                          classroom: selected,
                         },
                       }));
                     }}

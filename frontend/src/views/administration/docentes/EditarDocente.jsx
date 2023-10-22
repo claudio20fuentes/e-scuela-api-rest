@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import {
   Grid,
   Typography,
@@ -18,11 +19,14 @@ import PageContainer from "@containers/PageContainer";
 import DatosPersonales from "./DatosPersonalesComponent";
 import AsignaturasCursos from "./AsignaturasCursosComponent";
 
-import { getAllCursos } from "@services/cursosServices";
+import { getOneProfesor } from "@services/profesoresServices";
+import { getAllCursos, getCursosByProfesor } from "@services/cursosServices";
 
-const CreateDocente = () => {
+const EditarDocente = () => {
   const [open, setOpen] = useState(false);
   const [classes, setClasses] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { id } = useParams();
   const [user, setUser] = useState({
     nombre: "",
     apellidos: "",
@@ -38,12 +42,45 @@ const CreateDocente = () => {
     mode: "onTouched",
   });
 
+  const parseAtribute = (data) => {
+    const response = data.map((atribute) => {
+      const { nombre, id } = atribute;
+      return { value: id, label: nombre };
+    });
+    return response;
+  };
+
+  const parseData = (profesor) => {
+    const { nombre, apellidos, correo, idRol, movil } = profesor.userData;
+    const { subjects, headTeacher, cursos } = profesor;
+    const parsedSubjects = parseAtribute(subjects);
+
+    const [parsedHeadTeacher] = headTeacher.map((el) => {
+      const state = headTeacher.length > 0;
+      const { id, nombreCurso } = el;
+      return { state, classroom: { value: id, label: nombreCurso } };
+    });
+
+    const response = {
+      nombre,
+      apellidos,
+      correo,
+      movil,
+      subjects: parsedSubjects,
+      classes: cursos,
+      headTeacher: parsedHeadTeacher,
+      idRol,
+    };
+    return response;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
-      const dataFetched = await getAllCursos();
-      setClasses(dataFetched);
+      const profesor = await getOneProfesor(id);
+      setUser(parseData(profesor));
     };
     fetchData();
+    setIsLoading(false);
   }, []);
 
   const onSubmit = async () => {
@@ -70,23 +107,22 @@ const CreateDocente = () => {
   return (
     <PageContainer title="Profile" description="User profile">
       <Grid container>
+        <Grid item xs={12} pl={3} mb={1}>
+          <Link href={`#/administration/teachers`} underline="hover">
+            <Typography fontSize="12px" color="#8F90A6">
+              {`< Volver a Docentes`}
+            </Typography>
+          </Link>
+        </Grid>
         <Grid item xs={12} pl={3} mb={2}>
-          <Typography variant="h3">Crear Docente</Typography>
+          <Typography variant="h3">Editar Docente</Typography>
         </Grid>
         <Grid item xs={12} md={8} display="flex">
           <Card style={{ width: "100%" }}>
             <CardContent>
               <Grid container gap={3}>
-                <DatosPersonales
-                  user={user}
-                  setUser={setUser}
-                  classes={classes}
-                />
-                <AsignaturasCursos
-                  user={user}
-                  setUser={setUser}
-                  classes={classes}
-                />
+                <DatosPersonales user={user} setUser={setUser} />
+                <AsignaturasCursos user={user} setUser={setUser} />
                 <Divider width="100%" />
               </Grid>
               <Grid
@@ -121,4 +157,4 @@ const CreateDocente = () => {
   );
 };
 
-export default CreateDocente;
+export default EditarDocente;

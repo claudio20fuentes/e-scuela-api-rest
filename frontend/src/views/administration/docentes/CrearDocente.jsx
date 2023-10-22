@@ -31,7 +31,7 @@ const CreateDocente = () => {
     idRol: 3,
     subjects: [],
     classes: [],
-    headTeacher: { state: false, class: {} },
+    headTeacher: { state: false, classroom: {} },
   });
 
   const { handleSubmit } = useForm({
@@ -70,6 +70,13 @@ const CreateDocente = () => {
   return (
     <PageContainer title="Profile" description="User profile">
       <Grid container>
+        <Grid item xs={12} pl={3} mb={1}>
+          <Link href={`#/administration/teachers`} underline="hover">
+            <Typography fontSize="12px" color="#8F90A6">
+              {`< Volver a Docentes`}
+            </Typography>
+          </Link>
+        </Grid>
         <Grid item xs={12} pl={3} mb={2}>
           <Typography variant="h3">Crear Docente</Typography>
         </Grid>

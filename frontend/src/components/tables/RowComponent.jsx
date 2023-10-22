@@ -36,7 +36,7 @@ const RowComponent = ({ index, rowContent, edit, setSelected, columnsOnMobile })
           </TableCell>
         )}
         {rowContentArray?.map((content, index) =>
-          index + 1 > columnsOnMobile && mobile ? null : (
+          index + 1 > columnsOnMobile && mobile || rowValuesArray[index] == 'id' ? null : (
             <TableCell
               key={index}
               sx={{ paddingLeft: mobile ? 1 : 2, height: 70 }}

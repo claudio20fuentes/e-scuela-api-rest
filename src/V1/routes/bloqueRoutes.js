@@ -3,9 +3,9 @@ const router = express.Router();
 const bloqueController = require('../../controllers/bloqueController');
 
 router
-    .get("/:idDia/:idCurso", bloqueController.getAllBloquesDiaCurso)
+    .get("/", bloqueController.getBloques)
     
-    // .get("/:id", bloqueController.getOnBloque)
+    .get("/:idDia/:idCurso", bloqueController.getAllBloquesDiaCurso)
     
     .post("/", bloqueController.createBloque)
     

@@ -1,6 +1,8 @@
 import axios from "axios";
 import { backend_url as backendUrl } from "@variables";
 
+import { getAllBloques } from "@services/bloqueService";
+
 export const getAllCursos = async () => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -26,3 +28,15 @@ export const getAllCursos = async () => {
     }
   });
 };
+
+export const getCursosByProfesor = async (idProfesor) => {
+
+  const bloques = await getAllBloques({ idProfesor });
+  const cursos = bloques.map((bloque) => bloque.curso);
+  const cursosUnicos = [...new Set(cursos.map((curso) => curso.value))];
+  const cursosParsed = cursosUnicos.map((curso) => ({
+    value: curso,
+    label: cursos.find((el) => el.value === curso).label,
+  }));
+  return cursosParsed;
+}

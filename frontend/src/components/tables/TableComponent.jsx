@@ -86,7 +86,7 @@ const TableComponent = ({
       const headersArray = Object.keys(rows[0]);
       headers = headersArray.map((header) => {
         return {
-          id: header,
+          value: header,
           label: capitalize(header),
         };
       });
@@ -117,8 +117,6 @@ const TableComponent = ({
     setFiltered(filterElements(rows, searchValue));
     setPage(0);
   }, [searchValue]);
-
-  console.log(searchValue)
 
   return (
     <>

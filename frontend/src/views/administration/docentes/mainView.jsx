@@ -1,10 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  Typography,
-  Grid,
-  Link,
-  Button,
-} from "@mui/material";
+import { Typography, Grid, Link, Button } from "@mui/material";
 
 import PageContainer from "@containers/PageContainer";
 import { TableComponent } from "@components/tables/";
@@ -21,19 +16,28 @@ const DocentesMainView = () => {
       const dataFetched = await getAllProfesores();
       setData(dataFetched);
       setIsLoading(false);
-    }
+    };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    console.log(selected);
+    if (selected.length > 0) {
+      const id = selected[0];
+      window.location.href = `#/administration/teachers/${id}`;
+    }
+  }, [selected]);
 
   const parseData = (profesores) => {
     const rows = profesores.map((profesor) => {
       const { nombre, apellidos, correo } = profesor.userData;
-      const { subjects, headTeacher } = profesor;
+      const { id, subjects, headTeacher } = profesor;
       const allSubjects = subjects.map((subject) => subject.nombre).join(", ");
       let headClass = headTeacher.map((classroom) => classroom?.nombreCurso);
       headClass = headClass.length > 0 ? headClass[0] : "No asignado";
 
       return {
+        id,
         nombre: `${nombre} ${apellidos}`,
         asignatura: allSubjects,
         jefatura: headClass,

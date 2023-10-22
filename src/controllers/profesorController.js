@@ -24,7 +24,8 @@ const getAllProfesores = async (req, res) => {
 const getOnProfesor = async (req, res) => {
 
     const profesorId = req.params.id;
-    const profesor = await ProfesorService.getOnProfesor(profesorId);
+    const { school: idEdcuela } = req.user;
+    const profesor = await ProfesorService.getOnProfesor(idEdcuela, profesorId);
 
     try {
 
@@ -34,7 +35,7 @@ const getOnProfesor = async (req, res) => {
         
         }
 
-        res.status(200).json({ succes: true, data: profesor });
+        res.status(200).json({ succes: true, body: profesor });
 
     } catch (error) {
 

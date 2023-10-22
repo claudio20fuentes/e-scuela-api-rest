@@ -3,6 +3,7 @@
 const cursos = [1, 2, 3, 4, 5, 6, 7, 8];
 const asignaturas = [1, 2, 3, 4, 5, 6, 7, 8];
 const dias = [1, 2, 3, 4, 5];
+const profesores = [1, 2, 3, 4, 5, 6, 7, 8];
 const horarios = [
   {
     inicio: '08:00:00',
@@ -38,6 +39,7 @@ module.exports = {
               idAsignatura: asignaturas[randomIndex],
               idCurso: curso,
               idEscuela: 1,
+              idProfesor: profesores[randomIndex],
               createdAt: new Date(),
               updatedAt: new Date(),
             };

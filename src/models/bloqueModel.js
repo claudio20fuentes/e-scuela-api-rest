@@ -32,6 +32,10 @@ const Bloque = sequelize.define("Bloques", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  idProfesor: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
 });
 
 Bloque.hasMany(Asistencia, {

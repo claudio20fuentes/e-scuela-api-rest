@@ -1,7 +1,7 @@
-const Asignatura = require("../models/asignaturaModel");
-const Curso = require("../models/cursoModel");
-const Profesor = require("../models/profesorModel");
 const Users = require("../models/userModel");
+const Profesor = require("../models/profesorModel");
+const Curso = require("../models/cursoModel");
+const Asignatura = require("../models/asignaturaModel");
 class ProfesorService {
   async getAllProfesores(req) {
     try {
@@ -27,8 +27,9 @@ class ProfesorService {
       });
 
       const result = data.map((profesor) => {
-        const { User, Asignaturas, Cursos } = profesor;
+        const { User, Asignaturas, Cursos, id } = profesor;
         return {
+          id,
           userData: User,
           subjects: Asignaturas,
           headTeacher: Cursos,
@@ -40,10 +41,33 @@ class ProfesorService {
     }
   }
 
-  async getOnProfesor(id) {
+  async getOnProfesor(idEscuela = false, id) {
     try {
-      const profesor = await Profesor.findByPk(id);
-      return profesor;
+      const data = await Profesor.findByPk( id,
+        {
+          include: [
+            {
+              model: Users,
+              attributes: { exclude: ["contrasena"] },
+              where: idEscuela ? { idEscuela } : {},
+            },
+            {
+              model: Curso,
+              attributes: ["id","nombreCurso"],
+            },
+            {
+              model: Asignatura,
+              attributes: ["id","nombre"],
+            },
+          ],
+        }
+      );
+        const { User, Asignaturas, Cursos } = data;
+        return {
+          userData: User,
+          subjects: Asignaturas,
+          headTeacher: Cursos,
+        };
     } catch (error) {
       console.error(`Error al obtener el profesor con ID ${id}:`, error);
     }

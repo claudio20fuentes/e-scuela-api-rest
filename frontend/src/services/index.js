@@ -1,12 +1,14 @@
-const profesores = require('./profesores');
-const asignatura = require('./asignaturas');
-const cursos = require('./cursos');
-const roles = require('./roles');
+const profesores = require('./profesoresServices');
+const asignatura = require('./asignaturasServices');
+const cursos = require('./cursosServices');
+const roles = require('./rolesServices');
+const bloques = require('./bloquesServices');
 
 
 export default {
     profesores,
     asignatura,
     cursos,
-    roles
+    roles,
+    bloques
 }
