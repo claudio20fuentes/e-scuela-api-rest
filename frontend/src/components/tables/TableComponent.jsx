@@ -86,7 +86,7 @@ const TableComponent = ({
       const headersArray = Object.keys(rows[0]);
       headers = headersArray.map((header) => {
         return {
-          id: header,
+          value: header,
           label: capitalize(header),
         };
       });

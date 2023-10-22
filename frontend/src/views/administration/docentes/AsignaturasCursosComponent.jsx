@@ -15,17 +15,21 @@ import FeatherIcon from "feather-icons-react";
 import CustomFormLabel from "@customElements/CustomFormLabel";
 import CustomSelect from "@customElements/CustomSelect";
 
-import { fetchSubjects } from "@utils/fetchData";
+import { getAllAsignaturas } from "@services/asignaturasServices";
+import { getAllCursos } from "@services/cursosServices";
 
-const CreateDocente = ({ user, setUser, classes }) => {
+const CreateDocente = ({ user, setUser }) => {
   const [subjects, setSubjects] = useState([]);
   const [newSubject, setNewSubject] = useState([]);
   const [newClassroom, setNewClassroom] = useState([]);
+  const [classes, setClasses] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const dataFetched = await fetchSubjects();
-      setSubjects(dataFetched);
+      const asignaturas = await getAllAsignaturas();
+      const cursos = await getAllCursos();
+      setSubjects(asignaturas);
+      setClasses(cursos);
     };
     fetchData();
   }, []);
@@ -56,7 +60,7 @@ const CreateDocente = ({ user, setUser, classes }) => {
         ...prevUser,
         classes: [...prevUser.classes, newClassroom],
       }));
-    setNewSubject("");
+    setNewClassroom("");
   };
 
   const removeClassroom = (value) => {

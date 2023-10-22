@@ -1,16 +1,10 @@
 import { useState, useEffect } from "react";
-import {
-  Typography,
-  Grid,
-  Link,
-  Button,
-} from "@mui/material";
+import { Typography, Grid, Link, Button } from "@mui/material";
 
 import PageContainer from "@containers/PageContainer";
-import { backend_url as backendUrl } from "@variables";
 import { TableComponent } from "@components/tables/";
 
-import axios from "axios";
+import { getAllProfesores } from "@services/profesoresServices";
 
 const DocentesMainView = () => {
   const [data, setData] = useState([]);
@@ -18,36 +12,31 @@ const DocentesMainView = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    axios
-      .get(`${backendUrl}/api/v1/profesores/`, {
-        headers: {
-          authorization: "Bearer " + localStorage.getItem("token"),
-          token: localStorage.getItem("token"),
-        },
-      })
-      .then((res) => {
-        const data = res.data.body;
-        console.log(data)
-        setData(data);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        if (err.response.status === 401) {
-          localStorage.clear();
-          window.location.reload();
-        }
-      });
+    const fetchData = async () => {
+      const dataFetched = await getAllProfesores();
+      setData(dataFetched);
+      setIsLoading(false);
+    };
+    fetchData();
   }, []);
+
+  useEffect(() => {
+    if (selected.length > 0) {
+      const id = selected[0];
+      window.location.href = `#/administration/teachers/${id}`;
+    }
+  }, [selected]);
 
   const parseData = (profesores) => {
     const rows = profesores.map((profesor) => {
       const { nombre, apellidos, correo } = profesor.userData;
-      const { subjects, headTeacher } = profesor;
+      const { id, subjects, headTeacher } = profesor;
       const allSubjects = subjects.map((subject) => subject.nombre).join(", ");
       let headClass = headTeacher.map((classroom) => classroom?.nombreCurso);
       headClass = headClass.length > 0 ? headClass[0] : "No asignado";
 
       return {
+        id,
         nombre: `${nombre} ${apellidos}`,
         asignatura: allSubjects,
         jefatura: headClass,

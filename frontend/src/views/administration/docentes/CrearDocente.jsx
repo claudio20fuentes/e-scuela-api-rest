@@ -18,7 +18,7 @@ import PageContainer from "@containers/PageContainer";
 import DatosPersonales from "./DatosPersonalesComponent";
 import AsignaturasCursos from "./AsignaturasCursosComponent";
 
-import { fetchClasses } from "@utils/fetchData";
+import { getAllCursos } from "@services/cursosServices";
 
 const CreateDocente = () => {
   const [open, setOpen] = useState(false);
@@ -31,7 +31,7 @@ const CreateDocente = () => {
     idRol: 3,
     subjects: [],
     classes: [],
-    headTeacher: { state: false, class: {} },
+    headTeacher: { state: false, classroom: {} },
   });
 
   const { handleSubmit } = useForm({
@@ -40,7 +40,7 @@ const CreateDocente = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const dataFetched = await fetchClasses();
+      const dataFetched = await getAllCursos();
       setClasses(dataFetched);
     };
     fetchData();
@@ -70,6 +70,13 @@ const CreateDocente = () => {
   return (
     <PageContainer title="Profile" description="User profile">
       <Grid container>
+        <Grid item xs={12} pl={3} mb={1}>
+          <Link href={`#/administration/teachers`} underline="hover">
+            <Typography fontSize="12px" color="#8F90A6">
+              {`< Volver a Docentes`}
+            </Typography>
+          </Link>
+        </Grid>
         <Grid item xs={12} pl={3} mb={2}>
           <Typography variant="h3">Crear Docente</Typography>
         </Grid>
