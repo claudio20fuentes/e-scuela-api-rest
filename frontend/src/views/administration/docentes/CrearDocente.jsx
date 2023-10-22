@@ -18,7 +18,7 @@ import PageContainer from "@containers/PageContainer";
 import DatosPersonales from "./DatosPersonalesComponent";
 import AsignaturasCursos from "./AsignaturasCursosComponent";
 
-import { fetchClasses } from "@utils/fetchData";
+import { getAllCursos } from "@services/cursosServices";
 
 const CreateDocente = () => {
   const [open, setOpen] = useState(false);
@@ -40,7 +40,7 @@ const CreateDocente = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const dataFetched = await fetchClasses();
+      const dataFetched = await getAllCursos();
       setClasses(dataFetched);
     };
     fetchData();

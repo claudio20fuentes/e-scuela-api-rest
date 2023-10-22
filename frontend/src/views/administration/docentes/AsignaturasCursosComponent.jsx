@@ -15,7 +15,7 @@ import FeatherIcon from "feather-icons-react";
 import CustomFormLabel from "@customElements/CustomFormLabel";
 import CustomSelect from "@customElements/CustomSelect";
 
-import { fetchSubjects } from "@utils/fetchData";
+import { getAllAsignaturas } from "@services/asignaturasServices";
 
 const CreateDocente = ({ user, setUser, classes }) => {
   const [subjects, setSubjects] = useState([]);
@@ -24,7 +24,7 @@ const CreateDocente = ({ user, setUser, classes }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const dataFetched = await fetchSubjects();
+      const dataFetched = await getAllAsignaturas();
       setSubjects(dataFetched);
     };
     fetchData();

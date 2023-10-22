@@ -7,7 +7,7 @@ import CustomTextField from "@customElements/CustomTextField";
 import CustomFormLabel from "@customElements/CustomFormLabel";
 import CustomSelect from "@customElements/CustomSelect";
 
-import { fetchRoles } from "@utils/fetchData";
+import { getAllRoles } from "@services/rolesServices";
 
 const DatosPersonalesComponent = ({ user, setUser, classes }) => {
   const [roles, setRoles] = useState([]);
@@ -19,7 +19,7 @@ const DatosPersonalesComponent = ({ user, setUser, classes }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const dataFetched = await fetchRoles();
+      const dataFetched = await getAllRoles();
       setRoles(dataFetched);
     };
     fetchData();

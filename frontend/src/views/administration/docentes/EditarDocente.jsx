@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from "react";
 import {
   Grid,
   Typography,
@@ -6,43 +6,47 @@ import {
   CardContent,
   Divider,
   Button,
-  IconButton,
   Link,
-} from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
+} from "@mui/material";
 
-import { UserContext } from '@context/UserContext';
-import { Controller, useForm } from 'react-hook-form';
-import { backend_url } from '@variables';
-import axios from 'axios';
+import { useForm } from "react-hook-form";
+import { backend_url } from "@variables";
+import axios from "axios";
 
 import PageContainer from "@containers/PageContainer";
-import CustomTextField from '@customElements/CustomTextField';
-import CustomFormLabel from '@customElements/CustomFormLabel';
+
+import DatosPersonales from "./DatosPersonalesComponent";
+import AsignaturasCursos from "./AsignaturasCursosComponent";
+
+import { getAllCursos } from "@services/cursosServices";
 
 const CreateDocente = () => {
   const [open, setOpen] = useState(false);
-  const [userName, setUserName] = useState('');
-  const [userPhone, setUserPhone] = useState('');
-  const [userMail, setUserMail] = useState('');
+  const [classes, setClasses] = useState([]);
   const [user, setUser] = useState({
-    nombre: '',
-    apellido: '',
-    celular: '',
-    mail: '',
-  });
-  const { user: userData } = useContext(UserContext);
-
-  const {
-    control,
-    handleSubmit,
-    // register,
-    // formState: { errors },
-  } = useForm({
-    mode: 'onTouched',
+    nombre: "",
+    apellidos: "",
+    correo: "",
+    movil: "",
+    idRol: 3,
+    subjects: [],
+    classes: [],
+    headTeacher: { state: false, class: {} },
   });
 
-  const onSubmit = async (data) => {
+  const { handleSubmit } = useForm({
+    mode: "onTouched",
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const dataFetched = await getAllCursos();
+      setClasses(dataFetched);
+    };
+    fetchData();
+  }, []);
+
+  const onSubmit = async () => {
     try {
       await axios
         .put(
@@ -50,8 +54,8 @@ const CreateDocente = () => {
           { nombre: userName, celular: userPhone },
           {
             headers: {
-              authorization: 'Bearer ' + localStorage.getItem('token'),
-              cliente: localStorage.getItem('cliente'),
+              authorization: "Bearer " + localStorage.getItem("token"),
+              cliente: localStorage.getItem("cliente"),
             },
           }
         )
@@ -63,184 +67,51 @@ const CreateDocente = () => {
     }
   };
 
-  const rolType = (rol) => {
-    switch (rol) {
-      case 1:
-        return 'Administrador';
-      case 2:
-        return 'Profesor de Asignatura';
-      case 3:
-        return 'Profesor Guía';
-      case 4:
-        return 'Apoderado';
-      default:
-        return 'Sin rol';
-    }
-  };
-
   return (
-    <PageContainer title='Profile' description='User profile'>
+    <PageContainer title="Profile" description="User profile">
       <Grid container>
         <Grid item xs={12} pl={3} mb={2}>
-          <Typography variant='h3'>Editar Docente</Typography>
+          <Typography variant="h3">Crear Docente</Typography>
         </Grid>
-        <Grid item xs={12} md={8} display='flex'>
-          <Card style={{ width: '100%' }}>
+        <Grid item xs={12} md={8} display="flex">
+          <Card style={{ width: "100%" }}>
             <CardContent>
-              <Grid container>
-                <Grid item xs={12} display='flex' justifyContent='flex-end'>
-                  {!open && (
-                    <IconButton
-                      aria-label='expand row'
-                      size='small'
-                      onClick={() => setOpen(!open)}>
-                      <EditIcon color='primary' />
-                    </IconButton>
-                  )}
-                </Grid>
-                <Grid item xs={12}>
-                  <Grid container display='flex' spacing={1}>
-                    <Grid item xs={12}>
-                      <Controller
-                        name='userName'
-                        control={control}
-                        render={({ field }) => (
-                          <>
-                            <CustomFormLabel htmlFor='userName'>
-                              Nombre Completo
-                            </CustomFormLabel>
-                            <CustomTextField
-                              {...field}
-                              ref={null}
-                              id='userName'
-                              variant='outlined'
-                              fullWidth
-                              value={userData.name}
-                              onChange={(e) => setUserName(e.target.value)}
-                              disabled={!open}
-                            />
-                          </>
-                        )}
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <CustomFormLabel htmlFor='email'>Email</CustomFormLabel>
-                      <CustomTextField
-                        id='email'
-                        variant='outlined'
-                        fullWidth
-                        value={userData.mail}
-                        disabled={true}
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <CustomFormLabel htmlFor='role'>Tipo de Perfil</CustomFormLabel>
-                      <CustomTextField
-                        id='role'
-                        variant='outlined'
-                        fullWidth
-                        value={rolType(userData.role)}
-                        disabled={true}
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Controller
-                        name='userPhone'
-                        control={control}
-                        render={({ field }) => (
-                          <>
-                            <CustomFormLabel htmlFor='userPhone'>
-                              Teléfono
-                            </CustomFormLabel>
-                            <CustomTextField
-                              {...field}
-                              ref={null}
-                              id='userPhone'
-                              variant='outlined'
-                              value={userData.phone}
-                              onChange={(e) => setUserPhone(e.target.value)}
-                              fullWidth
-                              disabled={!open}
-                            />
-                          </>
-                        )}
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <CustomFormLabel htmlFor='pwd'>
-                        Contraseña
-                      </CustomFormLabel>
-                      <CustomTextField
-                        id='pwd'
-                        variant='outlined'
-                        fullWidth
-                        disabled={true}
-                        value={'thisisapassword'}
-                        type='password'
-                      />
-                    </Grid>
-                    <Grid
-                      item
-                      xs={12}
-                      display='flex'
-                      justifyContent='flex-end'
-                      pr={1}>
-                      <Link
-                        underline='none'
-                        href='#/settings/user/new-password'>
-                        <Typography
-                          fontStyle='italic'
-                          fontSize='16px'
-                          fontWeight='400'
-                          color='#5DB5A9'>
-                          Cambiar contraseña
-                        </Typography>
-                      </Link>
-                    </Grid>
-                  </Grid>
-                </Grid>
+              <Grid container gap={3}>
+                <DatosPersonales
+                  user={user}
+                  setUser={setUser}
+                  classes={classes}
+                />
+                <AsignaturasCursos
+                  user={user}
+                  setUser={setUser}
+                  classes={classes}
+                />
+                <Divider width="100%" />
               </Grid>
-              <Grid item container xs={12} mt={4}>
-                <Grid item xs={12}>
-                  <Divider
-                    style={{
-                      marginTop: 0,
-                      marginBottom: 0,
-                    }}
-                  />
-                </Grid>
-                {open && (
-                  <Grid
-                    item
-                    container
-                    display='flex'
-                    justifyContent='flex-end'
-                    gap={2}
-                    mt={4}>
-                    <Button
-                      sx={{
-                        marginTop: '15px',
-                      }}
-                      variant='contained'
-                      color='primary'
-                      onClick={handleSubmit(onSubmit)}>
-                      Guardar cambios
-                    </Button>
-                    <Button
-                      sx={{
-                        marginTop: '15px',
-                      }}
-                      variant='contained'
-                      color='error'
-                      onClick={() => {
-                        setUserName(`${user.nombre} ${user.apellido || ''}`);
-                        setUserPhone(user.celular || '');
-                        setOpen(false);
-                      }}>
-                      Cancelar
-                    </Button>
-                  </Grid>
-                )}
+              <Grid
+                container
+                display="flex"
+                justifyContent="flex-end"
+                gap={2}
+                mt={4}
+              >
+                <Link
+                  underline="none"
+                  component={Button}
+                  variant="outlined"
+                  color="primary"
+                  href="#/administration/teachers"
+                >
+                  Cancelar
+                </Link>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleSubmit(onSubmit)}
+                >
+                  Guardar cambios
+                </Button>
               </Grid>
             </CardContent>
           </Card>

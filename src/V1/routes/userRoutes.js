@@ -7,11 +7,9 @@ router
 
     .get("/:id", userController.getOnUser)
     
-    .post("/registrar", userController.createUser)//register
+    .post("/", userController.createUser)
     
     .delete("/:id", userController.deleteUser)
-
-    .post("/login", userController.login)
     
     .put("/:id", userController.updateUser);
 

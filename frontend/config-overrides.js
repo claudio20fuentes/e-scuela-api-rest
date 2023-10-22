@@ -10,6 +10,7 @@ module.exports = function override(config) {
     '@variables': 'src/config/variables.js',
     '@customElements': 'src/components/forms/custom-elements',
     '@containers': 'src/components/container',
+    '@services': 'src/services',
   })(config)
 
   return config

@@ -118,6 +118,8 @@ const TableComponent = ({
     setPage(0);
   }, [searchValue]);
 
+  console.log(searchValue)
+
   return (
     <>
       {search && <SearchComponent setSearchValue={setSearchValue} />}

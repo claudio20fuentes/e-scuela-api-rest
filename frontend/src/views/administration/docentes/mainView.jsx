@@ -7,10 +7,9 @@ import {
 } from "@mui/material";
 
 import PageContainer from "@containers/PageContainer";
-import { backend_url as backendUrl } from "@variables";
 import { TableComponent } from "@components/tables/";
 
-import axios from "axios";
+import { getAllProfesores } from "@services/profesoresServices";
 
 const DocentesMainView = () => {
   const [data, setData] = useState([]);
@@ -18,24 +17,12 @@ const DocentesMainView = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    axios
-      .get(`${backendUrl}/api/v1/profesores/`, {
-        headers: {
-          authorization: "Bearer " + localStorage.getItem("token"),
-          token: localStorage.getItem("token"),
-        },
-      })
-      .then((res) => {
-        const data = res.data.body;
-        setData(data);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        if (err.response.status === 401) {
-          localStorage.clear();
-          window.location.reload();
-        }
-      });
+    const fetchData = async () => {
+      const dataFetched = await getAllProfesores();
+      setData(dataFetched);
+      setIsLoading(false);
+    }
+    fetchData();
   }, []);
 
   const parseData = (profesores) => {
