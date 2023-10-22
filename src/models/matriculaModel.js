@@ -13,6 +13,10 @@ const Matricula = sequelize.define('Matriculas', {
     type: DataTypes.DATE,
     allowNull: false
   },
+  idEscuela: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
   // idEstudiante: {
   //   type: DataTypes.INTEGER,
   //   allowNull: false

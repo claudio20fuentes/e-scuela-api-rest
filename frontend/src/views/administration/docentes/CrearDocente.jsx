@@ -18,16 +18,17 @@ import PageContainer from "@containers/PageContainer";
 import DatosPersonales from "./DatosPersonalesComponent";
 import AsignaturasCursos from "./AsignaturasCursosComponent";
 
+import { fetchClasses } from "@utils/fetchData";
+
 const CreateDocente = () => {
   const [open, setOpen] = useState(false);
-  const [subjects, setSubjects] = useState([]);
   const [classes, setClasses] = useState([]);
   const [user, setUser] = useState({
     nombre: "",
     apellidos: "",
     correo: "",
     movil: "",
-    idRol: 2,
+    idRol: 3,
     subjects: [],
     classes: [],
     headTeacher: { state: false, class: {} },
@@ -37,31 +38,12 @@ const CreateDocente = () => {
     mode: "onTouched",
   });
 
-  // TODO: call ASIGNATURAS and get them all
-
-  // TODO: call CURSOS and get them all
-
-  const asignaturas = [
-    { value: 1, label: "Matemática" },
-    { value: 2, label: "Lenguaje" },
-    { value: 3, label: "Historia" },
-    { value: 4, label: "Ciencias" },
-  ];
-
-  const cursos = [
-    { value: 1, label: "1 Básico" },
-    { value: 2, label: "2 Básico" },
-    { value: 3, label: "3 Básico" },
-    { value: 4, label: "4 Básico" },
-    { value: 5, label: "5 Básico" },
-    { value: 6, label: "6 Básico" },
-    { value: 7, label: "7 Básico" },
-    { value: 8, label: "8 Básico" },
-  ];
-
   useEffect(() => {
-    setSubjects(asignaturas);
-    setClasses(cursos);
+    const fetchData = async () => {
+      const dataFetched = await fetchClasses();
+      setClasses(dataFetched);
+    };
+    fetchData();
   }, []);
 
   const onSubmit = async () => {
@@ -85,7 +67,6 @@ const CreateDocente = () => {
     }
   };
 
-  console.log(user);
   return (
     <PageContainer title="Profile" description="User profile">
       <Grid container>
@@ -101,7 +82,6 @@ const CreateDocente = () => {
                   setUser={setUser}
                   classes={classes}
                 />
-                <Divider width="100%" />
                 <AsignaturasCursos
                   user={user}
                   setUser={setUser}

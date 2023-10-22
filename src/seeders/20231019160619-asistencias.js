@@ -9,6 +9,7 @@ module.exports = {
     response.map((asistencia, index) => {
       return {
         idBloque: index + 1 ,
+        idEscuela: 1,
         createdAt: new Date(),
         updatedAt: new Date(),
       };
