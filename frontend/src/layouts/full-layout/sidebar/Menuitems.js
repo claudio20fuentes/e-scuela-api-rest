@@ -20,18 +20,18 @@ const createMenuItems = () => {
     {
       title: 'Mi Reg. Asistencia',
       icon: 'command',
-      href: '/reports',
+      href: '/attendance',
       collapse: true,
       children: [
         {
           title: 'Diario',
           icon: '',
-          href: '/reports/daily',
+          href: '/attendance',
         },
         {
           title: 'Resumen',
           icon: '',
-          href: '/reports/overall',
+          href: '/attendance/overall',
         },
         
       ],
@@ -60,41 +60,12 @@ const createMenuItems = () => {
           href: '/administration/teachers',
         },
         {
-          title: 'Escuela',
-          icon: '',
-          href: '/administration/school-settings',
-        },
-        {
           title: 'Cursos',
           icon: '',
           href: '/administration/courses'
         }
       ],
     },
-    {
-      title: 'Cursos',
-      icon: 'mouse-pointer',
-      href: '/school/classes',
-      collapse: true,
-      children: [
-        {
-          title: 'Primero Básico',
-          icon: '',
-          href: '/school/classes/a',
-        },
-        {
-          title: 'Segundo Básico',
-          icon: '',
-          href: '/school/classes/b',
-        },
-        {
-          title: 'Tercero Básico',
-          icon: '',
-          href: '/school/classes/c',
-        },
-      ],
-    },
-
   ];
   return menu;
 }

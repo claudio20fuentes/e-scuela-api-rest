@@ -1,7 +1,7 @@
 import axios from "axios";
 import { backend_url as backendUrl } from "@variables";
 
-import { getAllBloques } from "@services/bloqueService";
+import { getAllBloques } from "@services/bloquesServices";
 
 export const getAllCursos = async () => {
   return new Promise(async (resolve, reject) => {

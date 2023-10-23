@@ -21,7 +21,7 @@ import SearchComponent from "./SearchComponent";
 const TableComponent = ({
   rows = [],
   setSelected,
-  edit = false,
+  optionIcon = false,
   isLoading,
   search = false,
   columnsOnMobile = 2,
@@ -129,7 +129,7 @@ const TableComponent = ({
           <TableContainer>
             <Table>
               <TableHeadComponent
-                options={edit}
+                options={!!optionIcon}
                 order={order}
                 orderBy={orderBy}
                 setOrder={setOrder}
@@ -172,7 +172,7 @@ const TableComponent = ({
                           <RowComponent
                             index={index}
                             rowContent={rowContent}
-                            edit={edit}
+                            optionIcon={optionIcon}
                             setSelected={setSelected}
                             columnsOnMobile={columnsOnMobile}
                             key={index}

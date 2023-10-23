@@ -10,13 +10,13 @@ import {
 } from '@mui/material';
 import PageContainer from '../../components/container/PageContainer';
 import { Controller, useForm } from 'react-hook-form';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useContext } from 'react';
 import { backend_url } from '../../config/variables';
 import axios from 'axios';
 import CustomTextField from '../../components/forms/custom-elements/CustomTextField';
 import CustomFormLabel from '../../components/forms/custom-elements/CustomFormLabel';
 import EditIcon from '@mui/icons-material/Edit';
-import { UserContext } from '../../context/UserContext';
+import { UserContext } from '@context/UserContext';
 // import PageContainer from '../../components/container/PageContainer';
 
 const UserProfile = () => {

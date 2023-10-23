@@ -4,14 +4,20 @@ const Dia = require("../models/diaModel");
 const Curso = require("../models/cursoModel");
 const Profesor = require("../models/profesorModel");
 const Usuario = require("../models/userModel");
+const BloqueHora = require("../models/bloqueHoraModel");
 
-class BloqueService {
+const BloqueHoraService = require("./bloqueHoraService");
+
+const { Op } = require("sequelize");
+
+class BloquesServices {
   async getAllBloques(
     idEscuela,
     idDia = false,
     idCurso = false,
     idAsignatura = false,
-    idProfesor = false
+    idProfesor = false,
+    hora = false
   ) {
     try {
       const whereClause = { idEscuela };
@@ -32,6 +38,18 @@ class BloqueService {
         whereClause.idProfesor = Number(idProfesor);
       }
 
+      if (hora !== false) {
+        const bloquesHora = await BloqueHoraService.getBloqueHora({ hora });
+        const bloquesHoraId = bloquesHora.map((bloqueHora) => bloqueHora.id);
+        if (bloquesHoraId.length === 0) {
+          return [];
+        }
+        const maxBloqueHoraId = Math.max(...bloquesHoraId);
+        whereClause.idBloqueHora = {
+          [Op.lte]: maxBloqueHoraId,
+        };
+      }
+
       const result = await Bloque.findAll({
         where: whereClause,
 
@@ -49,13 +67,17 @@ class BloqueService {
             attributes: ["id", "nombreCurso"],
           },
           {
+            model: BloqueHora,
+            attributes: ["id", "horaInicio", "horaFin"],
+          },
+          {
             model: Profesor,
             attributes: ["id"],
             include: {
               model: Usuario,
               attributes: ["id", "nombre", "apellidos"],
             },
-          }
+          },
         ],
       });
 
@@ -138,4 +160,4 @@ class BloqueService {
   }
 }
 
-module.exports = new BloqueService();
+module.exports = new BloquesServices();

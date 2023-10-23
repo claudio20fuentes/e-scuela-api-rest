@@ -40,6 +40,8 @@ const login = async (req, res) => {
             role: user.idRol,
             phone: user.movil,
             school: user.idEscuela,
+            teacher: user?.Profesore?.id || false,
+            parent: user?.Apoderado?.id || false,
         };
 
         const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });

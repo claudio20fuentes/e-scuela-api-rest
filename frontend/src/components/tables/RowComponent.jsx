@@ -14,8 +14,9 @@ import { capitalize } from "@utils/formatter";
 
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import FeatherIcon from "feather-icons-react";
 
-const RowComponent = ({ index, rowContent, edit, setSelected, columnsOnMobile }) => {
+const RowComponent = ({ index, rowContent, optionIcon, setSelected, columnsOnMobile }) => {
   const [open, setOpen] = useState(false);
   const mobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
@@ -26,7 +27,7 @@ const RowComponent = ({ index, rowContent, edit, setSelected, columnsOnMobile })
     <>
       <TableRow onClick={() => setOpen(!open)}>
         {mobile && (
-          <TableCell style={{ padding: 0 }}>
+          <TableCell style={{ padding: 0, borderBottom: 0 }}>
             <IconButton
               aria-label="expand row"
               size="small"
@@ -39,15 +40,16 @@ const RowComponent = ({ index, rowContent, edit, setSelected, columnsOnMobile })
           index + 1 > columnsOnMobile && mobile || rowValuesArray[index] == 'id' ? null : (
             <TableCell
               key={index}
-              sx={{ paddingLeft: mobile ? 1 : 2, height: 70 }}
+              sx={{ paddingLeft: mobile ? 1 : 2, height: 70, borderBottom: mobile ? 0 : '1px solid #e0e0e0' }}
             >
               {content}
             </TableCell>
           )
         )}
-        {edit && (
+        {optionIcon && (
           <TableCell
             align="center"
+            style={{ width: "2px", padding: 0, borderBottom: mobile ? 0 : '1px solid #e0e0e0'}}
           >
             <IconButton
               onClick={(e) => {
@@ -56,25 +58,25 @@ const RowComponent = ({ index, rowContent, edit, setSelected, columnsOnMobile })
               }}
               style={{ color: '#1e4db7' }}
             >
-              <EditIcon />
+              <FeatherIcon icon={optionIcon} />
             </IconButton>
           </TableCell>
         )}
       </TableRow>
       {mobile && (
         <TableRow>
-          <TableCell sx={{ padding: 0 }} colSpan={rowContentArray.length + 1}>
+          <TableCell sx={{ padding: 0 }} colSpan={rowContentArray.length - 1}>
             <Collapse in={open} timeout="auto" unmountOnExit>
-              <Box style={{ backgroundColor: "#f2f6fc" }} pl={3}>
+              <Box style={{ backgroundColor: "#f2f6fc" }} >
                 <Table size="small">
                   <TableBody>
                     {rowContentArray?.map((content, index) =>
                       index < columnsOnMobile ? null : (
                         <TableRow key={index}>
-                          <TableCell style={{ width: 2, fontWeight: 700 }}>
+                          <TableCell style={{ width: '45%', fontWeight: 700, borderBottom: 0 }}>
                             {capitalize(rowValuesArray[index])}{":"}
                           </TableCell>
-                          <TableCell>{content}</TableCell>
+                          <TableCell style={{ borderBottom: 0 }}>{content}</TableCell>
                         </TableRow>
                       )
                     )}

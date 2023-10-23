@@ -1,57 +1,24 @@
-import React from 'react';
-import { Grid } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { Grid, Button } from '@mui/material';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { es } from 'date-fns/locale';
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 
+
+import { backend_url } from '../../config/variables';
+import axios from 'axios';
 import PageContainer from '../../components/container/PageContainer';
 
-const Dashboard3 = () => (
-  // 2
+const Dashboard1 = () => {
 
-  <PageContainer
-    title='Floid Dashboard'
-    description='this is Analytical Dashboard'>
-    <Grid container spacing={0}>
-      {/* ------------------------- row 1 ------------------------- */}
-      <Grid item xs={12} sm={4} lg={5}>
-        <WelcomeCard />
-      </Grid>
-      <Grid item xs={12} sm={4} lg={3}>
-        <Purchases />
-      </Grid>
-      <Grid item xs={12} sm={4} lg={4}>
-        <TotalEarnings />
-      </Grid>
-      <Grid item xs={12} lg={8}>
-        <RevenueUpdates />
-      </Grid>
-      <Grid item xs={12} lg={4}>
-        <MonthlyEarnings />
-        <Customers />
-      </Grid>
-      <Grid item xs={12} lg={4}>
-        <TotalSales />
-      </Grid>
-      <Grid item xs={12} lg={8}>
-        <ProductsPerformance />
-      </Grid>
-      <Grid item xs={12} lg={6}>
-        <DailyActivities />
-      </Grid>
 
-      <Grid item xs={12} lg={6}>
-        <SalesOverview />
-      </Grid>
 
-      {/* ------------------------- row 3 ------------------------- */}
-      <Grid item xs={12} lg={4}>
-        <BlogCard />
-      </Grid>
-      <Grid item xs={12} lg={4}>
-        <WeeklyStats />
-      </Grid>
-      <Grid item xs={12} lg={4}>
-        <MedicalProBranding />
-      </Grid>
-    </Grid>
-  </PageContainer>
-);
-export default Dashboard3;
+  return (
+    <PageContainer
+      title='E-scuela Dashboard'
+      description='this is Analytical Dashboard'>
+        dashboard apoderado
+    </PageContainer>
+  );
+};
+export default Dashboard1;

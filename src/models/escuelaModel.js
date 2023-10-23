@@ -2,7 +2,6 @@ const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
 const User = require('./userModel');
 const Asignatura = require('./asignaturaModel');
-const Asistencia = require('./asistenciaModel');
 const Bloque = require('./bloqueModel');
 const Curso = require('./cursoModel');
 const Estudiante = require('./estudianteModel');
@@ -38,16 +37,6 @@ Escuela.hasMany(Asignatura, {
 })
 
 Asignatura.belongsTo(Escuela, {
-  foreignKey: 'idEscuela',
-  targetKey: 'id'
-})
-
-Escuela.hasMany(Asistencia, {
-  foreignKey: 'idEscuela',
-  sourceKey: 'id'
-})
-
-Asistencia.belongsTo(Escuela, {
   foreignKey: 'idEscuela',
   targetKey: 'id'
 })

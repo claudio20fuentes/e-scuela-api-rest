@@ -29,14 +29,8 @@ const PasswordUpdated = Loadable(
 );
 
 /* ****DASHBOARDS***** */
-const Dashboard1 = Loadable(
-  lazy(() => import('../views/dashboards/Dashboard1'))
-);
-const Dashboard2 = Loadable(
-  lazy(() => import('../views/dashboards/Dashboard2'))
-);
-const Dashboard3 = Loadable(
-  lazy(() => import('../views/dashboards/Dashboard3'))
+const MainDashboard = Loadable(
+  lazy(() => import('../views/dashboards/MainDashboard'))
 );
 
 /* ****CONFIG DE USUARIO***** */
@@ -49,7 +43,7 @@ const UserNewPassword = Loadable(
 
 /* ****DOCENTES***** */
 const AdministrarDocentes = Loadable(
-  lazy(() => import('../views/administration/docentes/mainView'))
+  lazy(() => import('../views/administration/docentes/MainView'))
 );
 const CrearDocente = Loadable(
   lazy(() => import('../views/administration/docentes/CrearDocente'))
@@ -68,6 +62,11 @@ const AdministrarCursos = Loadable(
 // const EditarCurso = Loadable(
 //   lazy(() => import('../views/administration/cursos/EditarCurso'))
 // );
+/* ****REGISTRO DE ASISTENCIA***** */
+const RegistroAsistencia = Loadable(
+  lazy(() => import('../views/registro-asistencia/MainView'))
+);
+
 
 /* ****Routes***** */
 
@@ -77,9 +76,7 @@ const Router = [
     element: <FullLayout />,
     children: [
       { path: '/', element: <Navigate to='/dashboard' /> },
-      { path: '/dashboard', exact: true, element: <Dashboard1 /> },
-      { path: '/dashboards/dashboard2', exact: true, element: <Dashboard2 /> },
-      { path: '/dashboards/dashboard3', exact: true, element: <Dashboard3 /> },
+      { path: '/dashboard', exact: true, element: <MainDashboard /> },
 
       { path: '/settings/user', element: <UserProfile /> },
       { path: '/settings/user/new-password', element: <UserNewPassword /> },
@@ -87,11 +84,12 @@ const Router = [
       { path: '/administration/teachers', element: <AdministrarDocentes /> },
       { path: '/administration/teachers/create', element: <CrearDocente /> },
       { path: '/administration/teachers/:id', element: <EditarDocente /> },
-
+      
       { path: '/administration/courses', element: <AdministrarCursos/>},
       // { path: '/administration/courses/create', element: <CrearCurso/>},
       // { path: '/administration/courses/:id', element: <EditarCurso/>},
-
+      
+      { path: '/attendance', element: <RegistroAsistencia /> },
     ],
   },
   {

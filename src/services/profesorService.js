@@ -64,6 +64,7 @@ class ProfesorService {
       );
         const { User, Asignaturas, Cursos } = data;
         return {
+          id: data.id,
           userData: User,
           subjects: Asignaturas,
           headTeacher: Cursos,
