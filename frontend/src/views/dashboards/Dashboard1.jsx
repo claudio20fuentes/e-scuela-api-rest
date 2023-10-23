@@ -16,9 +16,9 @@ const Dashboard1 = ({ userData }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const overviewInfoDummy = [
-    { subtitle: "Matricula", total: 10, icon: "bar-chart-2" },
-    { subtitle: "Presentes", total: 20, icon: "check-circle" },
-    { subtitle: "Ausentes", total: 10, icon: "user-x" },
+    { subtitle: "Matricula", total: 246, icon: "bar-chart-2" },
+    { subtitle: "Presentes", total: 187, icon: "check-circle" },
+    { subtitle: "Ausentes", total: 59, icon: "user-x" },
   ];
 
   const Checked = () => (
