@@ -5,16 +5,20 @@ const Curso = require("../models/cursoModel");
 const Profesor = require("../models/profesorModel");
 const Usuario = require("../models/userModel");
 
-class BloqueService {
+const { Op } = require('sequelize');
+
+class BloquesServices {
   async getAllBloques(
     idEscuela,
     idDia = false,
     idCurso = false,
     idAsignatura = false,
-    idProfesor = false
+    idProfesor = false,
+    idUsuario = false,
   ) {
     try {
       const whereClause = { idEscuela };
+      const userId = idUsuario !== false ? Number(idUsuario) : false;
 
       if (idDia !== false) {
         whereClause.idDia = Number(idDia);
@@ -138,4 +142,4 @@ class BloqueService {
   }
 }
 
-module.exports = new BloqueService();
+module.exports = new BloquesServices();

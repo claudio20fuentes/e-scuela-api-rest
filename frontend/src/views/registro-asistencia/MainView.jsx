@@ -1,25 +1,41 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Typography, Grid, Link, Button } from "@mui/material";
 
 import PageContainer from "@containers/PageContainer";
 import { TableComponent } from "@components/tables/";
 
+import { formatDate } from "@utils/formatter";
+import { UserContext } from "@context/UserContext";
+
 import { getAllProfesores } from "@services/profesoresServices";
+import { getAllBloques } from "@services/bloquesServices";
 
 const DocentesMainView = () => {
   const [data, setData] = useState([]);
   const [selected, setSelected] = useState([]);
+  const [date, setDate] = useState(formatDate(new Date()));
   const [isLoading, setIsLoading] = useState(true);
 
+  // USER CONTEXT
+
+  const { user: userData } = useContext(UserContext);
+
+  // DEPENDING ON THE ROLE, THE USER WILL BE ABLE TO SEE DIFFERENT COLUMNS
+
+  // DATA FETCHING
   useEffect(() => {
     const fetchData = async () => {
       const dataFetched = await getAllProfesores();
+      const bloques = await getAllBloques();
+      console.log(bloques)
       setData(dataFetched);
       setIsLoading(false);
     };
     fetchData();
   }, []);
 
+  console.log(userData)
+  // REDIRECT TO PAGE WHEN BUTTON IS PRESSED
   useEffect(() => {
     if (selected.length > 0) {
       const id = selected[0];
@@ -27,6 +43,7 @@ const DocentesMainView = () => {
     }
   }, [selected]);
 
+  // DATA PARSING TO FIT TABLE COMPONENT
   const parseData = (profesores) => {
     const rows = profesores.map((profesor) => {
       const { nombre, apellidos, correo } = profesor.userData;

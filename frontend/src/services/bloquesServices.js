@@ -21,6 +21,8 @@ export const getAllBloques = async (query = false) => {
 
       const data = res.data.body;
 
+      console.log(data)
+
       const formatter = (value) => {
         return {
           value: value.id,

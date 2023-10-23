@@ -1,5 +1,7 @@
 const User = require('../models/userModel');
 const Rol = require('../models/rolModel');
+const Profesor = require('../models/profesorModel');
+const Apoderado = require('../models/apoderadoModel');
 const bcrypt = require('bcrypt');
 const sequelize = require('../config/config');
 
@@ -107,7 +109,7 @@ class UserService {
 
     async authenticateUser(correo, contrasena) {
         try {
-            const user = await User.findOne({ where: { correo }, include: Rol });
+            const user = await User.findOne({ where: { correo }, include: [Rol, Profesor, Apoderado] });
 
             if (!user) {
                 return null;

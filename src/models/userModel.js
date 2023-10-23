@@ -41,7 +41,7 @@ const Users = sequelize.define('Users',{
     }
 });
 
-Users.hasMany(Apoderado, {
+Users.hasOne(Apoderado, {
     foreignKey: 'idUsuario',
     sourceKey: 'id'
 })
@@ -51,7 +51,7 @@ Apoderado.belongsTo(Users, {
     targetKey: 'id'
 })
 
-Users.hasMany(Profesor, {
+Users.hasOne(Profesor, {
     foreignKey: 'idUsuario',
     sourceKey: 'id'
 })

@@ -5,6 +5,11 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     return queryInterface.bulkInsert('Apoderados', [
       {
+        idUsuario: 5,        
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
         idUsuario: 16,        
         createdAt: new Date(),
         updatedAt: new Date(),
