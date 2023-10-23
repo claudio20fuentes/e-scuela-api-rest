@@ -3,7 +3,7 @@ const ProfesorService = require("../services/profesorService");
 
 const getBloques = async (req, res) => {
   try {
-    const { idDia, idCurso, idAsignatura, idProfesor } = req.query;
+    const { idDia, idCurso, idAsignatura, idProfesor, hora } = req.query;
 
     const { school: idEscuela, role: idRol, teacher: userIdProfesor, parent: idApoderado  } = req.user;
 
@@ -17,7 +17,8 @@ const getBloques = async (req, res) => {
           idDia,
           idCurso,
           idAsignatura,
-          idProfesor
+          idProfesor,
+          hora
         );
         break;
       // DOCENTE JEFATURA
@@ -28,6 +29,7 @@ const getBloques = async (req, res) => {
           idCurso,
           idAsignatura,
           userIdProfesor,
+          hora
         );
         break;
       // DOCENTE
@@ -37,7 +39,8 @@ const getBloques = async (req, res) => {
           idDia,
           idCurso,
           idAsignatura,
-          idProfesor
+          idProfesor,
+          hora,
         );
         break;
       // TODO: Create service to match students and grades to get their blocks
@@ -54,8 +57,8 @@ const getBloques = async (req, res) => {
         throw new Error(`Unknown id: ${idRol}`);
     }
 
-    if (!response || response === 0)
-      return res.status(404).json({ error: "No se encontraron bloques" });
+    if (!response || response.length === 0)
+      return res.status(400).json({ error: "No se encontraron bloques" });
 
     res.status(200).json({ succes: true, body: response });
   } catch (error) {

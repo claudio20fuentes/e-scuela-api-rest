@@ -25,16 +25,13 @@ const DocentesMainView = () => {
   // DATA FETCHING
   useEffect(() => {
     const fetchData = async () => {
-      const dataFetched = await getAllProfesores();
       const bloques = await getAllBloques();
-      console.log(bloques)
-      setData(dataFetched);
+      setData(bloques);
       setIsLoading(false);
     };
     fetchData();
   }, []);
 
-  console.log(userData)
   // REDIRECT TO PAGE WHEN BUTTON IS PRESSED
   useEffect(() => {
     if (selected.length > 0) {
@@ -44,20 +41,13 @@ const DocentesMainView = () => {
   }, [selected]);
 
   // DATA PARSING TO FIT TABLE COMPONENT
-  const parseData = (profesores) => {
-    const rows = profesores.map((profesor) => {
-      const { nombre, apellidos, correo } = profesor.userData;
-      const { id, subjects, headTeacher } = profesor;
-      const allSubjects = subjects.map((subject) => subject.nombre).join(", ");
-      let headClass = headTeacher.map((classroom) => classroom?.nombreCurso);
-      headClass = headClass.length > 0 ? headClass[0] : "No asignado";
+  const parseData = (bloques) => {
+    const rows = bloques.map((bloque) => {
 
+      const { dia, curso, asignatura, profesore } = bloque;
       return {
-        id,
-        nombre: `${nombre} ${apellidos}`,
-        asignatura: allSubjects,
-        jefatura: headClass,
-        correo,
+        filas: dia.label,
+        hora: bloque.horarioBloque,
       };
     });
     return rows;
@@ -83,7 +73,7 @@ const DocentesMainView = () => {
           setSelected={setSelected}
           optionIcon={"edit"}
           isLoading={isLoading}
-          search={true}
+          search={false}
           columnsOnMobile={3}
         />
       </Grid>
