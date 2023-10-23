@@ -51,6 +51,41 @@ const Dashboard1 = ({ userData }) => {
       presentes: "",
       ausentes: "",
     },
+    {
+      id: 4,
+      curso: "4 Básico",
+      estado: <NotChecked />,
+      presentes: "",
+      ausentes: "",
+    },
+    {
+      id: 5,
+      curso: "5 Básico",
+      estado: <Checked />,
+      presentes: "80%",
+      ausentes: "20%",
+    },
+    {
+      id: 6,
+      curso: "6 Básico",
+      estado: <NotChecked />,
+      presentes: "",
+      ausentes: "",
+    },
+    {
+      id: 7,
+      curso: "7 Básico",
+      estado: <NotChecked />,
+      presentes: "",
+      ausentes: "",
+    },
+    {
+      id: 8,
+      curso: "8 Básico",
+      estado: <Checked />,
+      presentes: "80%",
+      ausentes: "20%",
+    },
   ];
 
   useEffect(() => {
