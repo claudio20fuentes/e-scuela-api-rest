@@ -15,7 +15,7 @@ const Dashboard2 = () => {
 
   const horario = getHorarioFromBloques(userBloques);
 
-  console.log(horario)
+  console.log(horario);
   return (
     <PageContainer
       title="E-scuela Dashboard"

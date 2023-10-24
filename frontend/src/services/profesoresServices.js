@@ -36,7 +36,7 @@ export const getOneProfesor = async (id) => {
       const parsed = {
         ...data,
         cursos,
-      }
+      };
       resolve(parsed);
     } catch (error) {
       if (error.response && error.response.status === 401) {
@@ -75,19 +75,17 @@ export const getHorarioFromBloques = (bloques) => {
     const { dia, curso, asignatura, horarioBloque, profesor } = item;
 
     // Find the day in the result array or create a new day entry
-    let dayEntry = result.find((entry) => entry.dia.value === dia.label);
+    let dayEntry = result.find((entry) => entry.value === dia.label);
     if (!dayEntry) {
       dayEntry = {
-        dia: {
-          id: dia.value,
-          value: dia.label,
-          bloque: [],
-        },
+        id: dia.value,
+        value: dia.label,
+        bloques: [],
       };
       result.push(dayEntry);
     }
 
-    let bloqueEntry = dayEntry.dia.bloque.find(
+    let bloqueEntry = dayEntry.bloques.find(
       (entry) => entry.id === horarioBloque
     );
     if (!bloqueEntry) {
@@ -96,9 +94,9 @@ export const getHorarioFromBloques = (bloques) => {
         asignatura: { id: asignatura.value, value: asignatura.label },
         curso: { id: curso.value, value: curso.label },
       };
-      dayEntry.dia.bloque.push(bloqueEntry);
+      dayEntry.bloques.push(bloqueEntry);
     }
   });
 
-  return result;
+  return result.sort((a, b) => a.id - b.id);
 };
