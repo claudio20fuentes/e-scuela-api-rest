@@ -22,7 +22,13 @@ const Dashboard2 = () => {
       description="this is Analytical Dashboard"
     >
       <Grid container spacing={3}>
-        
+        {horario.map((dia) => {
+          return (
+            <Grid key={dia.id} item display="flex" justifyContent="center">
+              <Button variant="contained">{dia.value}</Button>
+            </Grid>
+          );
+        })}
       </Grid>
     </PageContainer>
   );
