@@ -12,9 +12,12 @@ import Dashboard3 from "./Dashboard3";
 import { UserContext } from "@context/UserContext";
 
 const MainDashboard = () => {
-  const { user: userData } = useContext(UserContext);
+  const { user: userData, userBloques } = useContext(UserContext);
 
   useEffect(() => {}, []);
+
+  console.log(userData)
+  console.log(userBloques)
 
   return (
     <PageContainer
@@ -22,8 +25,8 @@ const MainDashboard = () => {
     >
 
       {userData.role === 1 && <Dashboard1 userData={userData} />}
-      {userData.role === 2 && <Dashboard2 userData={userData} />}
-      {userData.role === 3 && <Dashboard3 userData={userData} />}
+      {userData.role === 2 || userData.role === 3 && <Dashboard2 userData={userData} />}
+      {userData.role === 4 && <Dashboard3 userData={userData} />}
     </PageContainer>
   );
 };

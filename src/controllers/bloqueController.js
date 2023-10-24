@@ -39,7 +39,7 @@ const getBloques = async (req, res) => {
           idDia,
           idCurso,
           idAsignatura,
-          idProfesor,
+          userIdProfesor,
           hora,
         );
         break;

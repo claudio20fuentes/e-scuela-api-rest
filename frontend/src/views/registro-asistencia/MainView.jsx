@@ -18,19 +18,8 @@ const DocentesMainView = () => {
 
   // USER CONTEXT
 
-  const { user: userData } = useContext(UserContext);
+  const { user: userData, bloques } = useContext(UserContext);
 
-  // DEPENDING ON THE ROLE, THE USER WILL BE ABLE TO SEE DIFFERENT COLUMNS
-
-  // DATA FETCHING
-  useEffect(() => {
-    const fetchData = async () => {
-      const bloques = await getAllBloques();
-      setData(bloques);
-      setIsLoading(false);
-    };
-    fetchData();
-  }, []);
 
   // REDIRECT TO PAGE WHEN BUTTON IS PRESSED
   useEffect(() => {
@@ -53,8 +42,10 @@ const DocentesMainView = () => {
     return rows;
   };
 
+  console.log(data)
+
   return (
-    <PageContainer title="Docentes" description="reports detail page">
+    <PageContainer title="Asistencia" description="reports detail page">
       <Grid container justifyContent="space-between" pl={3} mb={2}>
         <Grid item xs={12} mb={3}>
           <Typography variant="h2" fontWeight={500}>

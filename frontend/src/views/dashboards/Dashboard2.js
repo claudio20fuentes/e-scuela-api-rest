@@ -1,24 +1,30 @@
-import { useState, useEffect } from 'react';
-import { Grid, Button } from '@mui/material';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { es } from 'date-fns/locale';
-import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import { useState, useEffect, useContext } from "react";
+import { Grid, Button } from "@mui/material";
 
+import { backend_url } from "../../config/variables";
+import axios from "axios";
+import PageContainer from "../../components/container/PageContainer";
 
-import { backend_url } from '../../config/variables';
-import axios from 'axios';
-import PageContainer from '../../components/container/PageContainer';
+import { getHorarioFromBloques } from "@services/profesoresServices";
+import { getCursosFromBloques } from "@services/cursosServices";
 
-const Dashboard1 = () => {
+import { UserContext } from "@context/UserContext";
 
+const Dashboard2 = () => {
+  const { user: userData, userBloques, getBloques } = useContext(UserContext);
 
+  const horario = getHorarioFromBloques(userBloques);
 
+  console.log(horario)
   return (
     <PageContainer
-      title='E-scuela Dashboard'
-      description='this is Analytical Dashboard'>
-        dashboard profe
+      title="E-scuela Dashboard"
+      description="this is Analytical Dashboard"
+    >
+      <Grid container spacing={3}>
+        
+      </Grid>
     </PageContainer>
   );
 };
-export default Dashboard1;
+export default Dashboard2;

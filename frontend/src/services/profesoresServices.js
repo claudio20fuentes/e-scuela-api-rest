@@ -67,3 +67,38 @@ export const updateProfesor = async (id) => {
     }
   });
 };
+
+export const getHorarioFromBloques = (bloques) => {
+  const result = [];
+
+  bloques.forEach((item) => {
+    const { dia, curso, asignatura, horarioBloque, profesor } = item;
+
+    // Find the day in the result array or create a new day entry
+    let dayEntry = result.find((entry) => entry.dia.value === dia.label);
+    if (!dayEntry) {
+      dayEntry = {
+        dia: {
+          id: dia.value,
+          value: dia.label,
+          bloque: [],
+        },
+      };
+      result.push(dayEntry);
+    }
+
+    let bloqueEntry = dayEntry.dia.bloque.find(
+      (entry) => entry.id === horarioBloque
+    );
+    if (!bloqueEntry) {
+      bloqueEntry = {
+        id: horarioBloque,
+        asignatura: { id: asignatura.value, value: asignatura.label },
+        curso: { id: curso.value, value: curso.label },
+      };
+      dayEntry.dia.bloque.push(bloqueEntry);
+    }
+  });
+
+  return result;
+};
