@@ -9,9 +9,17 @@ const BloqueHora = require("../models/bloqueHoraModel");
 const BloqueHoraService = require("./bloqueHoraService");
 
 const { Op } = require("sequelize");
+const DetalleAsistencia = require("../models/detalleAsistenciaModel");
 
 class BloquesServices {
-  async getAllBloques({idEscuela, idDia, idCurso, idAsignatura, idProfesor, hora}) {
+  async getAllBloques({
+    idEscuela,
+    idDia,
+    idCurso,
+    idAsignatura,
+    idProfesor,
+    hora,
+  }) {
     try {
       const whereClause = { idEscuela };
 
@@ -71,6 +79,9 @@ class BloquesServices {
               attributes: ["id", "nombre", "apellidos"],
             },
           },
+          {
+            model: DetalleAsistencia,
+          },
         ],
       });
 
@@ -88,10 +99,15 @@ class BloquesServices {
           idDia: idDia,
           idCurso: idCurso,
         },
-        include: {
-          model: Asignatura,
-          attributes: ["id", "nombre"],
-        },
+        include: [
+          {
+            model: Asignatura,
+            attributes: ["id", "nombre"],
+          },
+          {
+            model: DetalleAsistencia,
+          },
+        ],
       });
 
       return result;

@@ -2,6 +2,7 @@ const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
 const Estudiante = require('./estudianteModel');
 const Curso = require('./cursoModel');
+const DetalleAsistencia = require('./detalleAsistenciaModel');
 
 const Matricula = sequelize.define('Matriculas', {
   id: {
@@ -45,6 +46,16 @@ Curso.belongsToMany(Estudiante, {
   through: Matricula,
   foreignKey: 'idCurso',     // Name of the foreign key in the join table
   otherKey: 'idEstudiante'
+});
+
+Matricula.hasMany(DetalleAsistencia, {
+  foreignKey: 'idMatricula',
+  sourceKey: 'id'
+});
+
+DetalleAsistencia.belongsTo(Matricula, {
+  foreignKey: 'idMatricula',
+  targetKey: 'id'
 });
 
 

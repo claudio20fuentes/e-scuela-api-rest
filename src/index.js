@@ -26,14 +26,14 @@ app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
 
-// (async () => {
-//   try {
-//     await sequelize.sync({ force: true }); // Opción force: true solo para desarrollo
-//     console.log("Los modelos han sido sincronizados con la base de datos.");
-//   } catch (error) {
-//     console.error("Error al sincronizar los modelos:", error);
-//   }
-// })();
+(async () => {
+  try {
+    await sequelize.sync({ force: true }); // Opción force: true solo para desarrollo
+    console.log("Los modelos han sido sincronizados con la base de datos.");
+  } catch (error) {
+    console.error("Error al sincronizar los modelos:", error);
+  }
+})();
 
 async function testConnection() {
   try {

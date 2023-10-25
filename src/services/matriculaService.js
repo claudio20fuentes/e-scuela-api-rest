@@ -1,6 +1,7 @@
 const Estudiante = require("../models/estudianteModel");
 const Matricula = require("../models/matriculaModel");
 const Curso = require("../models/cursoModel");
+const DetalleAsistencia = require("../models/detalleAsistenciaModel");
 
 class MatriculaService {
   async getAllMatriculasByCurso(req) {

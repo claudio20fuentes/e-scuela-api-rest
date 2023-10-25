@@ -13,7 +13,6 @@ const getAllMatriculas = async (req,res) => {
         console.error("Error al traer matriculas", error);
         
     }
-
 }
 
 module.exports = {

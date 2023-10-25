@@ -3,8 +3,6 @@ const sequelize = require('../config/db');
 const AlertaProfesor = require('./alertaProfesorModel');
 const AlertaApoderado = require('./alertaApoderadoModel');
 const Justificativo = require('./justificativoModel');
-const Matricula = require('./matriculaModel');
-const Bloque= require('./bloqueModel');
 
 const DetalleAsistencia = sequelize.define('DetallesAsistencias', {
   id: {
@@ -12,15 +10,7 @@ const DetalleAsistencia = sequelize.define('DetallesAsistencias', {
     primaryKey: true,
     autoIncrement: true
   },
-  presente: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  ausente: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  atraso: {
+  estado: {
     type: DataTypes.INTEGER,
     allowNull: false
   },
@@ -36,10 +26,11 @@ const DetalleAsistencia = sequelize.define('DetallesAsistencias', {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  idBloque: {
+  idAsistencia: {
     type: DataTypes.INTEGER,
     allowNull: false,
-  }
+  },
+
 });
 
 DetalleAsistencia.hasMany(AlertaProfesor, {
@@ -68,15 +59,6 @@ DetalleAsistencia.hasOne(Justificativo, {
 });
 
 Justificativo.belongsTo(DetalleAsistencia, {
-  foreignKey: 'idDetalleAsistencia',
-  targetKey: 'id'
-});
-
-DetalleAsistencia.hasMany(Bloque, {
-  foreignKey: 'idDetalleAsistencia',
-  sourceKey: 'id'
-});
-Bloque.belongsTo(DetalleAsistencia, {
   foreignKey: 'idDetalleAsistencia',
   targetKey: 'id'
 });

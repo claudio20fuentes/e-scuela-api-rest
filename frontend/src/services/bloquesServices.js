@@ -28,6 +28,7 @@ export const getAllBloques = async (
       );
 
       const data = res.data.body;
+      console.log("DATA", data)
 
       resolve(parser(data));
     } catch (error) {
