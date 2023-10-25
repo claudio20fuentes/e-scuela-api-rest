@@ -1,8 +1,7 @@
 import { useState, useEffect, useContext } from "react";
-import { Grid, Button } from "@mui/material";
+import { Grid, Button, Typography } from "@mui/material";
 
-import { backend_url } from "../../config/variables";
-import axios from "axios";
+import WelcomeCard from "./WelcomeCard";
 import PageContainer from "../../components/container/PageContainer";
 
 import { getHorarioFromBloques } from "@services/profesoresServices";
@@ -22,10 +21,40 @@ const Dashboard2 = () => {
       description="this is Analytical Dashboard"
     >
       <Grid container spacing={3}>
+      <Grid item sm={5} display={{ xs: "none", sm: "flex" }}>
+        <WelcomeCard name={userData.name} />
+      </Grid>
         {horario.map((dia) => {
           return (
             <Grid key={dia.id} item display="flex" justifyContent="center">
-              <Button variant="contained">{dia.value}</Button>
+              <Typography
+                variant="h3"
+                fontWeight={500}
+                textAlign="center"
+                mb={2}
+              >
+                {dia.value}
+              </Typography>
+              {dia.bloques.map((bloque) => {
+                return (
+                  <Grid
+                    key={bloque.id}
+                    item
+                    display="flex"
+                    justifyContent="center"
+                  >
+                    <Typography
+                      variant="h3"
+                      fontWeight={500}
+                      textAlign="center"
+                      mb={2}
+                    >
+                      {bloque.id}
+                    </Typography>
+                    {bloque.curso.value}
+                  </Grid>
+                );
+              })}
             </Grid>
           );
         })}

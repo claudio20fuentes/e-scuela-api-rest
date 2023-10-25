@@ -38,7 +38,7 @@ const WelcomeCard = ({ name }) => {
           }}
           variant='h3'
           gutterBottom>
-          Hola {firstName}!, Bienvenido a <br /> E-scuela <br />
+          Hola {firstName}! Bienvenido a <br /> E-scuela <br />
         </Typography>
       </CardContent>
     </Card>
