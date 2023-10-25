@@ -4,9 +4,8 @@ import { Grid, Button, useMediaQuery } from "@mui/material";
 import { TableComponent } from "@components/tables/";
 
 import DataOverView from "./DataOverview";
-import DataOverViewXs from "./DataOverviewXs";
 import WelcomeCard from "./WelcomeCard";
-import FeatherIcon from "feather-icons-react"
+import FeatherIcon from "feather-icons-react";
 
 const Dashboard1 = ({ userData }) => {
   const mobile = useMediaQuery((theme) => theme.breakpoints.down("md"));
@@ -21,13 +20,9 @@ const Dashboard1 = ({ userData }) => {
     { subtitle: "Ausentes", total: 59, icon: "user-x" },
   ];
 
-  const Checked = () => (
-    <FeatherIcon icon="check" color="#4caf50" />
-  );
+  const Checked = () => <FeatherIcon icon="check" color="#4caf50" />;
 
-  const NotChecked = () => (
-    <FeatherIcon icon="x" color="#f44336" />
-  );
+  const NotChecked = () => <FeatherIcon icon="x" color="#f44336" />;
 
   const dataDummy = [
     {
@@ -100,19 +95,7 @@ const Dashboard1 = ({ userData }) => {
         <WelcomeCard name={userData.name} />
       </Grid>
       <Grid item sm={7} display="flex">
-        {mobile ? (
-          <DataOverViewXs data={overviewInfo} isLoading={false} />
-        ) : (
-          overviewInfo.map((item, index) => (
-            <DataOverView
-              key={index}
-              total={item.total}
-              subtitle={item.subtitle}
-              icon={item.icon}
-              isLoading={false}
-            />
-          ))
-        )}
+        <DataOverView data={overviewInfo} />
       </Grid>
       <Grid container>
         <TableComponent
