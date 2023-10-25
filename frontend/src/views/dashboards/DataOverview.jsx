@@ -13,104 +13,110 @@ import {
 import FeatherIcon from "feather-icons-react";
 import { NavLink } from "react-router-dom";
 
-const DataOverview = ({data=[], isLoading }) => {
-  console.log('-1-',data)
+const DataOverview = ({ data = [], isLoading }) => {
+  console.log("-1-", data);
   const mobile = useMediaQuery((theme) => theme.breakpoints.down("md"));
   let link = "/";
 
-  const MobileComponent = ({data}) => (
-      <Card
-        sx={{
-          width: "100%",
-          p: 0,
-        }}
-      >
-        <CardContent >
-          <Grid container spacing={2} height="150px">
-            {data?.map((item, index) => (
-              <Grid
-                key={index}
-                item
-                xs={4}
-                justifyContent="center"
-                display="flex"
-              >
-                <Grid container justifyContent="center" spacing={1}>
-                  <Grid
-                    item
-                    xs={12}
-                    display="flex"
-                    justifyContent="center"
-                    height="40px"
+  const MobileComponent = ({ data }) => (
+    <Card
+      sx={{
+        width: "100%",
+        p: 0,
+      }}
+    >
+      <CardContent style={{ height: "100%", paddingBottom: 0}}>
+        <Grid container spacing={2} height="100%">
+          {data?.map((item, index) => (
+            <Grid
+              key={index}
+              item
+              xs={12 / data.length}
+              justifyContent="center"
+              display="flex"
+            >
+              <Grid container justifyContent="center" height="100%" spacing={1}>
+                <Grid
+                  item
+                  xs={12}
+                  display="flex"
+                  justifyContent="center"
+                >
+                  <Button
+                    sx={{
+                      color: (theme) => theme.palette.primary.main,
+                      boxShadow: "none",
+                      width: "40px",
+                      height: "40px",
+                      borderRadius: "10px",
+                    }}
                   >
-                    <Button
-                      sx={{
-                        color: (theme) => theme.palette.primary.main,
-                        boxShadow: "none",
-                        width: "40px",
-                        height: "40px",
-                        borderRadius: "10px",
-                      }}
-                    >
-                      <FeatherIcon icon={item.icon} width="25" height="25" />
-                    </Button>
-                  </Grid>
-                  <Grid item display="flex" justifyContent="center" height="50px">
-                    <Typography variant="h1" align="center">
-                      {isLoading ? <CircularProgress /> : item.total}
-                    </Typography>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    display="flex"
-                    justifyContent="center"
-                    justifyItems="center"
+                    <FeatherIcon
+                      icon={item.icon || ""}
+                      width="25"
+                      height="25"
+                    />
+                  </Button>
+                </Grid>
+                <Grid item display="flex" justifyContent="center">
+                  <Typography variant="h1" align="center">
+                    {isLoading ? <CircularProgress /> : item.total}
+                  </Typography>
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  display="flex"
+                  justifyContent="center"
+                  alignSelf="flex-end"
+                >
+                  <Typography
+                    variant="h5"
+                    color="textSecondary"
+                    sx={{
+                      wordBreak: "break-word",
+                    }}
                   >
-                    <Typography
-                      variant="h5"
-                      color="textSecondary"
-                      sx={{
-                        mt: "1px",
-                        mb: "0px",
-                        wordBreak: "break-word",
-                      }}
-                      gutterBottom
-                    >
-                      {item.subtitle}
-                    </Typography>
-                  </Grid>
+                    {item.subtitle}
+                  </Typography>
                 </Grid>
               </Grid>
-            ))}
-          </Grid>
-        </CardContent>
-      </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </CardContent>
+    </Card>
   );
 
-  const RegularComponent = ({data}) => (
+  const RegularComponent = ({ data }) => (
     <>
-      {data?.map((item, index) => (    
-        <Card key={index} style={{ height: "150px", width: "100%"}} >
-          <CardContent style={{padding: 0}}>
-            <Box>
-              <Fab
-                component={NavLink}
-                to={link}
-                size="small"
-                aria-label="add"
-                color="primary"
-              >
-                {<FeatherIcon icon={item.icon} component={NavLink} to={link} />}
-              </Fab>
-            </Box>
-            <Grid container display="flex" spacing={2}>
+      {data?.map((item, index) => (
+        <Card key={index} style={{ height: "150px", width: "100%" }}>
+          <CardContent style={{ padding: 0, height: "100%" }}>
+            <Grid container height="100%">
+              <Grid item>
+                <Fab
+                  component={NavLink}
+                  to={link}
+                  size="small"
+                  aria-label="add"
+                  color="primary"
+                >
+                  {
+                    <FeatherIcon
+                      icon={item.icon || ""}
+                      component={NavLink}
+                      to={link}
+                    />
+                  }
+                </Fab>
+              </Grid>
               <Grid item xs={12}>
                 <Typography variant="h1" align="center">
                   {isLoading ? <CircularProgress /> : item.total}
                 </Typography>
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} display="flex" alignItems="flex-end">
                 <Typography
                   variant="h5"
                   color="textSecondary"
@@ -138,7 +144,7 @@ const DataOverview = ({data=[], isLoading }) => {
         <RegularComponent data={data} />
       )}
     </>
-  )
+  );
 };
 
 export default DataOverview;
