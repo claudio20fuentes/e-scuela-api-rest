@@ -15,7 +15,7 @@ const createMenuItems = () => {
     {
       title: 'Mis cursos',
       icon: 'book-open',
-      href: '/classes',
+      href: '/teacher/courses',
     },
     {
       title: 'Mi Reg. Asistencia',

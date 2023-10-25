@@ -13,7 +13,7 @@ const ClaseActual = ({ bloque }) => {
         Clases Actual
       </Typography>
       <Grid item display="flex" xs={12} mb={5}>
-        <Card style={{ width: "100%" }}>
+        <Card style={{ width: "100%", backgroundColor: "#fca49d" }}>
           <CardContent>
             <Grid
               container

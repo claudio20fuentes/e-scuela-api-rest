@@ -13,12 +13,8 @@ export const getAllCursos = async () => {
       });
 
       const data = res.data.body;
-      const parsedClasses = data.map((subject) => ({
-        value: subject.id,
-        label: subject.nombreCurso,
-      }));
 
-      resolve(parsedClasses);
+      resolve(data);
     } catch (error) {
       if (error.response && error.response.status === 401) {
         localStorage.clear();
@@ -30,6 +26,7 @@ export const getAllCursos = async () => {
 };
 
 export const getCursosByProfesor = async (idProfesor) => {
+  // const todosCursos = await getAllCursos();
   const bloques = await getAllBloques({ idProfesor });
   const cursos = getCursosFromBloques(bloques);
   return cursos;

@@ -101,5 +101,5 @@ export const getHorarioFromBloques = (bloques) => {
       dayEntry.bloques.push(bloqueEntry);
     }
   });
-  return result.sort((a, b) => a.id - b.id);
+  return result.sort((a, b) => a.idHora - b.idHora);
 };

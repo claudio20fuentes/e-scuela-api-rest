@@ -7,17 +7,20 @@ import FeatherIcon from "feather-icons-react";
 
 import PageContainer from "@components/container/PageContainer";
 
-import { formatDate } from "@utils/formatter";
-
 import { getHorarioFromBloques } from "@services/profesoresServices";
 import { getCursosFromBloques } from "@services/cursosServices";
-import { ClasesProfesor } from "@views/registro-asistencia";
+import ClasesProfesor from "@views/docente/ClasesProfesor";
 
 import { UserContext } from "@context/UserContext";
 
 const Dashboard2 = () => {
-  const [overviewInfo, setOverviewInfo] = useState([])
-  const { user: userData, userBloques, getBloques } = useContext(UserContext);
+  const [overviewInfo, setOverviewInfo] = useState([]);
+  const {
+    user: userData,
+    userBloques,
+    getBloques,
+    setDateContext,
+  } = useContext(UserContext);
 
   const horario = getHorarioFromBloques(userBloques);
 
@@ -29,6 +32,7 @@ const Dashboard2 = () => {
 
   useEffect(() => {
     setOverviewInfo(overviewInfoDummy);
+    setDateContext(new Date("2023-10-10T10:00:00"));
   }, []);
 
   return (
@@ -44,10 +48,8 @@ const Dashboard2 = () => {
           <DataOverView data={overviewInfo} />
         </Grid>
         <Grid item xs={12} display="flex">
-          <ClasesProfesor horario={horario} date={formatDate(new Date())} />
+          <ClasesProfesor horario={horario} />
         </Grid>
-        
-
       </Grid>
     </PageContainer>
   );

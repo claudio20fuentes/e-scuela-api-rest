@@ -6,22 +6,37 @@ import { useNavigate } from "react-router-dom";
 import { getAllBloques } from "@services/bloquesServices";
 import { getOneProfesor } from "@services/profesoresServices";
 
+import { formatDate } from "@utils/formatter";
+
 export const UserContext = createContext();
 
 export const UserProvider = (props) => {
-  const [user, setUser] = useState({ name: "", mail: "", phone: "", roleId: 5 });
+  const [user, setUser] = useState({
+    name: "",
+    mail: "",
+    phone: "",
+    roleId: 5,
+  });
   const [userBloques, setUserBloques] = useState([]);
-  const [cusos, setCursos] = useState([]);
+  const [date, setDate] = useState({ day: "", time: "", fullDate: "" });
   const navigate = useNavigate();
 
   useEffect(() => {
     setUserData();
+    setDateContext();
   }, []);
+
+  const setDateContext = (date) => {
+    const formattedDate = formatDate(date);
+    if (formattedDate) {
+      setDate(formattedDate);
+    }
+  };
 
   const getBloques = async (query = false, date = false) => {
     const bloques = await getAllBloques(query, date);
     setUserBloques(bloques);
-  }
+  };
 
   const setUserData = async () => {
     const token = localStorage.getItem("token");
@@ -43,10 +58,20 @@ export const UserProvider = (props) => {
       localStorage.clear();
       navigate("/auth/login");
     }
-  }
+  };
 
   return (
-    <UserContext.Provider value={{ user, setUser, setUserData, userBloques, getBloques }}>
+    <UserContext.Provider
+      value={{
+        user,
+        setUser,
+        setUserData,
+        userBloques,
+        getBloques,
+        setDateContext,
+        date,
+      }}
+    >
       {props.children}
     </UserContext.Provider>
   );
