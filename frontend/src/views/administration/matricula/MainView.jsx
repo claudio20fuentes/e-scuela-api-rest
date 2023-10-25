@@ -19,7 +19,7 @@ const MatriculaMainView = () => {
 
   useEffect(() => {
     axios
-      .get(`${backendUrl}/api/v1/matricula/`, {
+      .get(`${backendUrl}/api/v1/matriculas/`, {
         headers: {
           authorization: "Bearer " + localStorage.getItem("token"),
           token: localStorage.getItem("token"),
@@ -27,6 +27,7 @@ const MatriculaMainView = () => {
       })
       .then((res) => {
         const data = res.data.body;
+        console.log(data);
         setData(data);
         setIsLoading(false);
       })
@@ -38,34 +39,32 @@ const MatriculaMainView = () => {
       });
   }, []);
 
-  const parseData = (profesores) => {
-    const rows = profesores.map((profesor) => {
-      const { nombre, apellidos, correo } = profesor.userData;
-      const { subjects, headTeacher } = profesor;
-      const allSubjects = subjects.map((subject) => subject.nombre).join(", ");
-      let headClass = headTeacher.map((classroom) => classroom?.nombreCurso);
-      headClass = headClass.length > 0 ? headClass[0] : "No asignado";
+  const parseData = (matriculas) => {
+    const rows = matriculas.map((matricula) => {
+      const { nombre, apellido, rut } = matricula.estudiantes;
+      const { fecha, id } = matricula.matricula;
+      const Fecha = new Date(fecha);
 
       return {
-        nombre: `${nombre} ${apellidos}`,
-        asignatura: allSubjects,
-        jefatura: headClass,
-        correo,
+        nMatricula: id,
+        Rut: rut,
+        nombre: `${nombre} ${apellido}`,
+        Fecha: `${Fecha.getFullYear()}/${Fecha.getMonth()}/${Fecha.getDay()}`
       };
     });
     return rows;
   };
 
   return (
-    <PageContainer title="Docentes" description="reports detail page">
+    <PageContainer title="Matriculas" description="reports detail page">
       <Grid container justifyContent="space-between" pl={3} mb={2}>
         <Grid item xs={12} mb={3}>
           <Typography variant="h3" fontWeight={500}>
-            Listado de Docentes
+            Matrículas
           </Typography>
         </Grid>
         <Grid item xs={12} display="flex" justifyContent="flex-end" pr={2}>
-          <Link href={`#/settings/company/user/create`} underline="none">
+          <Link href={`#/administration/matriculas`} underline="none">
             <Button variant="contained">+ Agregar</Button>
           </Link>
         </Grid>

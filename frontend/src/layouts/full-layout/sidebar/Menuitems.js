@@ -52,7 +52,7 @@ const createMenuItems = () => {
         {
           title: 'Matrícula',
           icon: '',
-          href: '/administration/enrollment',
+          href: '/administration/matriculas',
         },
         {
           title: 'Docentes',

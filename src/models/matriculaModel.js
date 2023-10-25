@@ -17,15 +17,18 @@ const Matricula = sequelize.define('Matriculas', {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  // idEstudiante: {
-  //   type: DataTypes.INTEGER,
-  //   allowNull: false
-  // },
+  idEstudiante: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
   // idCurso: {
   //   type: DataTypes.INTEGER,
   //   allowNull: false
   // }
 });
+
+Matricula.belongsTo(Estudiante, { foreignKey: 'idEstudiante' });
+
 
 Estudiante.belongsToMany(Curso, {
   through: Matricula,

@@ -1,8 +1,9 @@
+const Estudiante = require('../models/estudianteModel');
 const Matricula = require('../models/matriculaModel');
 
 class MatriculaService {
 
-async getAllMatriculas(req) {
+  async getAllMatriculasByCurso(req) {
     try {
       const totalMatriculas = await Matricula.count({ where: { idCurso: req } });
       return totalMatriculas;
@@ -11,6 +12,39 @@ async getAllMatriculas(req) {
       throw error;
     }
   }
-  
+
+  async getAllMatriculas(req) {
+    try {
+      ;
+
+      const data = await Matricula.findAll(
+        {
+          attributes: ["fechaMatricula", "id"],
+          include: [
+            {
+              model: Estudiante,
+              attributes: ["nombre", "apellido", "rut"]
+            }
+          ],
+          where: { idEscuela: req.user.school }
+        },
+
+      )
+
+      const result = data.map((matricula) => {
+        return {
+          estudiantes: matricula.Estudiante,
+          matricula: { id: matricula.id, fecha: matricula.fechaMatricula }
+        }
+      })
+
+      return result;
+    } catch (error) {
+
+      console.error("Error al traer las matriculas", error)
+
+    }
+  }
+
 }
 module.exports = new MatriculaService();

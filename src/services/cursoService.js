@@ -35,7 +35,7 @@ class CursoService {
             const result = [];
 
             for (const curso of data) {
-              const totalMatriculas = await MatriculaService.getAllMatriculas(curso.id);
+              const totalMatriculas = await MatriculaService.getAllMatriculasByCurso(curso.id);
         
               result.push({
                 courseData: { id: curso.id, nombre: curso.nombreCurso },
