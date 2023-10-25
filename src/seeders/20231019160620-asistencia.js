@@ -32,12 +32,14 @@ module.exports = {
       {
         fecha: new Date(dates[randomIndex()]),
         idBloque: 1,
+        idEscuela: 1,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         fecha: new Date(dates[randomIndex()]),
         idBloque: 1,
+        idEscuela: 1,
         createdAt: new Date(),
         updatedAt: new Date(),
       },

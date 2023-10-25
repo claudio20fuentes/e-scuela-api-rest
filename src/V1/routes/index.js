@@ -25,7 +25,7 @@ router.use("/apoderados", authenticateToken, apoderadoRoutes);
 router.use("/asignaturas", authenticateToken, asignaturaRoutes);
 router.use("/bloques", authenticateToken, bloqueRoutes);
 router.use("/cursos", authenticateToken, cursoRoutes);
-router.use("/detalleAsistencia", authenticateToken, detalleAsistenciaRoutes);
+router.use("/asistencia", authenticateToken, detalleAsistenciaRoutes);
 router.use("/dias", authenticateToken, diaRoutes);
 router.use("/estudiantes", authenticateToken, estudianteRoutes);
 router.use("/justificativos", authenticateToken, justificativoRoutes);

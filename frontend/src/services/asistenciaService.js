@@ -6,16 +6,16 @@ import { getAllBloques } from "@services/bloquesServices";
 export const getAsistencia = async () => {
   return new Promise(async (resolve, reject) => {
     try {
-      const cursos = await axios
-      .get(`${backendUrl}/api/v1/matriculas/`, {
+      const asistencia = await axios
+      .get(`${backendUrl}/api/v1/asistencia/`, {
         headers: {
           authorization: "Bearer " + localStorage.getItem("token"),
           token: localStorage.getItem("token"),
         },
       })
-      
-      const data = cursos.data.body;
 
+      const data = asistencia.data.body;
+      console.log("ASISTENCIA",data)
       resolve(data);
     } catch (error) {
       if (error.response && error.response.status === 401) {

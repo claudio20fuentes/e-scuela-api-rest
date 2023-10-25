@@ -11,6 +11,7 @@ import {
 import ClaseActual from "./ClaseActual";
 
 import { getHorarioFromBloquesByDay } from "@services/profesoresServices";
+import { getAsistencia } from "@services/asistenciaService";
 
 import { UserContext } from "@context/UserContext";
 
@@ -18,8 +19,7 @@ const ClasesProfesor = ({ bloques }) => {
   const { date } = useContext(UserContext);
   const bloquesDiarios = getHorarioFromBloquesByDay(bloques, date);
   const { currentBloque, todayClasses, horario } = bloquesDiarios;
-
-  console.log(todayClasses)
+  const asistencia = getAsistencia();
 
   return (
     <Grid container>
