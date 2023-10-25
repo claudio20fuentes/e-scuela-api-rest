@@ -32,7 +32,7 @@ const Dashboard2 = () => {
 
   useEffect(() => {
     setOverviewInfo(overviewInfoDummy);
-    setDateContext(new Date("2023-10-10T10:00:00"));
+    setDateContext(new Date("2023-10-10T11:40:00"));
   }, []);
 
   return (

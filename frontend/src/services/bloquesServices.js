@@ -28,7 +28,6 @@ export const getAllBloques = async (
       );
 
       const data = res.data.body;
-      console.log("DATA", data)
 
       resolve(parser(data));
     } catch (error) {
@@ -52,32 +51,42 @@ const formatter = (value) => {
 };
 
 const parser = (data) => {
-  return data.map((el) => {
-    const {
-      Profesore: { User },
-      Dia,
-      Curso,
-      Asignatura,
-      BloquesHora,
-      id,
-    } = el;
-    
-    const { horaInicio, horaFin } = BloquesHora;
+  return data
+    .map((el) => {
+      const {
+        Profesore: { User },
+        Dia,
+        Curso,
+        Asignatura,
+        BloquesHora,
+        id,
+      } = el;
 
-    return {
-      profesor: {
-        nombre: User.nombre,
-        apellido: User.apellidos,
-        id: el.id,
-        idUser: User.id,
-      },
-      id,
-      dia: formatter(Dia),
-      curso: formatter(Curso),
-      asignatura: formatter(Asignatura),
-      idHora: BloquesHora.id,
-      horaInicio,
-      horaFin,
-    };
-  });
+      const { horaInicio, horaFin } = BloquesHora;
+
+      return {
+        profesor: {
+          nombre: User.nombre,
+          apellido: User.apellidos,
+          id: el.id,
+          idUser: User.id,
+        },
+        id,
+        dia: formatter(Dia),
+        curso: formatter(Curso),
+        asignatura: formatter(Asignatura),
+        idHora: BloquesHora.id,
+        horaInicio,
+        horaFin,
+      };
+    })
+    .sort((a, b) => {
+      if (a.idHora < b.idHora) {
+        return -1;
+      }
+      if (a.idHora > b.idHora) {
+        return 1;
+      }
+      return 0;
+    });
 };

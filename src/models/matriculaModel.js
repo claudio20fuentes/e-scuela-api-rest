@@ -28,25 +28,36 @@ const Matricula = sequelize.define('Matriculas', {
   }
 });
 
+Estudiante.hasMany(Matricula, {
+  foreignKey: 'idEstudiante',
+  sourceKey: 'id'
+});
+
 Matricula.belongsTo(Estudiante, { 
-  foreignKey: 'idEstudiante' 
+  foreignKey: 'idEstudiante',
+  sourceKey: 'id' 
 });
 
 Matricula.belongsTo(Curso, {
   foreignKey: 'idCurso'
 });
 
-Estudiante.belongsToMany(Curso, {
-  through: Matricula,
-  foreignKey: 'idEstudiante',     // Name of the foreign key in the join table
-  otherKey: 'idCurso' 
+Curso.hasMany(Matricula, {
+  foreignKey: 'idCurso',
+  sourceKey: 'id'
 });
 
-Curso.belongsToMany(Estudiante, {
-  through: Matricula,
-  foreignKey: 'idCurso',     // Name of the foreign key in the join table
-  otherKey: 'idEstudiante'
-});
+// Estudiante.belongsToMany(Curso, {
+//   through: Matricula,
+//   foreignKey: 'idEstudiante',     // Name of the foreign key in the join table
+//   otherKey: 'idCurso' 
+// });
+
+// Curso.belongsToMany(Estudiante, {
+//   through: Matricula,
+//   foreignKey: 'idCurso',     // Name of the foreign key in the join table
+//   otherKey: 'idEstudiante'
+// });
 
 Matricula.hasMany(DetalleAsistencia, {
   foreignKey: 'idMatricula',

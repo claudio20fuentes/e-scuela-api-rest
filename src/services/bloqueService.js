@@ -5,11 +5,14 @@ const Curso = require("../models/cursoModel");
 const Profesor = require("../models/profesorModel");
 const Usuario = require("../models/userModel");
 const BloqueHora = require("../models/bloqueHoraModel");
+const Asistencia = require("../models/asistenciaModel");
+const DetalleAsistencia = require("../models/detalleAsistenciaModel");
+const Estudiante = require("../models/estudianteModel");
+const Matricula = require("../models/matriculaModel");
 
 const BloqueHoraService = require("./bloqueHoraService");
 
 const { Op } = require("sequelize");
-const DetalleAsistencia = require("../models/detalleAsistenciaModel");
 
 class BloquesServices {
   async getAllBloques({
@@ -80,7 +83,16 @@ class BloquesServices {
             },
           },
           {
-            model: DetalleAsistencia,
+            model: Asistencia,
+            include: {
+              model: DetalleAsistencia,
+              include: {
+                model: Matricula,
+                Include: {
+                  model: Estudiante,
+                }
+              }
+            }
           },
         ],
       });

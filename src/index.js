@@ -1,6 +1,7 @@
 const express = require("express");
 require("dotenv").config();
 const cors = require("cors");
+const databaseInit = require("./config/databaseInit");
 
 const app = express();
 const PORT = process.env.PORT || 3004;
@@ -26,14 +27,9 @@ app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
 
-(async () => {
-  try {
-    await sequelize.sync({ force: true }); // Opción force: true solo para desarrollo
-    console.log("Los modelos han sido sincronizados con la base de datos.");
-  } catch (error) {
-    console.error("Error al sincronizar los modelos:", error);
-  }
-})();
+// TODO: REINICIA Y POBLA LA BD. USAR CON PRECAUCIÓN
+
+// databaseInit();
 
 async function testConnection() {
   try {
