@@ -30,14 +30,12 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     return queryInterface.bulkInsert("Asistencia", [
       {
-        estado: 0,
         fecha: new Date(dates[randomIndex()]),
         idBloque: 1,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        estado: 0,
         fecha: new Date(dates[randomIndex()]),
         idBloque: 1,
         createdAt: new Date(),

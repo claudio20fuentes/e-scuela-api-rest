@@ -28,8 +28,9 @@ export const getAllBloques = async (
       );
 
       const data = res.data.body;
-
-      resolve(parser(data));
+      console.log("ANTES", data);
+      const parsedData = parser(data);
+      resolve(parsedData);
     } catch (error) {
       if (error.response && error.response.status === 401) {
         localStorage.clear();
@@ -60,9 +61,21 @@ const parser = (data) => {
         Asignatura,
         BloquesHora,
         id,
+        Asistencia,
       } = el;
 
       const { horaInicio, horaFin } = BloquesHora;
+
+      const estadoNames = ["ausentes", "presentes", "atrasados", "retirados"];
+
+      const asistencia = Asistencia.length === 0 ? false : Asistencia.map((el) => {
+        const detalles = el.DetallesAsistencias.reduce((counts, detalleArray) => {
+          counts[estadoNames[detalleArray.estado]]++; // Use estadoNames to label the count
+          return counts;
+        }, { ausentes: 0, presentes: 0, atrasados: 0, retirados: 0 }); // Initialize counts with named keys
+      
+        return { id: el.id, fecha: el.fecha, detalles };
+      });
 
       return {
         profesor: {
@@ -75,6 +88,7 @@ const parser = (data) => {
         dia: formatter(Dia),
         curso: formatter(Curso),
         asignatura: formatter(Asignatura),
+        asistencia,
         idHora: BloquesHora.id,
         horaInicio,
         horaFin,

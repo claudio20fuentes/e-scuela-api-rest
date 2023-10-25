@@ -8,10 +8,10 @@ const Asistencia = sequelize.define("Asistencia", {
     primaryKey: true,
     autoIncrement: true,
   },
-  estado: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
+  // estado: {
+  //   type: DataTypes.INTEGER,
+  //   allowNull: false,
+  // },
   fecha: {
     type: DataTypes.DATE,
     allowNull: false,

@@ -84,8 +84,10 @@ class BloquesServices {
           },
           {
             model: Asistencia,
+            attributes: ["id", "fecha"],
             include: {
               model: DetalleAsistencia,
+              attributes: ["id", "estado",],
               include: {
                 model: Matricula,
                 Include: {
