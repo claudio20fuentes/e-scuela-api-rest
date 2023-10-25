@@ -3,22 +3,20 @@ import { backend_url as backendUrl } from "@variables";
 
 import { getAllBloques } from "@services/bloquesServices";
 
-export const getAllCursos = async () => {
+export const getMatricula = async () => {
   return new Promise(async (resolve, reject) => {
     try {
-      const res = await axios.get(`${backendUrl}/api/v1/cursos/`, {
+      const cursos = await axios
+      .get(`${backendUrl}/api/v1/matriculas/`, {
         headers: {
           authorization: "Bearer " + localStorage.getItem("token"),
+          token: localStorage.getItem("token"),
         },
-      });
+      })
+      
+      const data = cursos.data.body;
 
-      const data = res.data.body;
-      const parsedClasses = data.map((subject) => ({
-        value: subject.id,
-        label: subject.nombreCurso,
-      }));
-
-      resolve(parsedClasses);
+      resolve(data);
     } catch (error) {
       if (error.response && error.response.status === 401) {
         localStorage.clear();
@@ -30,6 +28,7 @@ export const getAllCursos = async () => {
 };
 
 export const getCursosByProfesor = async (idProfesor) => {
+  // const todosCursos = await getAllCursos();
   const bloques = await getAllBloques({ idProfesor });
   const cursos = getCursosFromBloques(bloques);
   return cursos;
@@ -44,3 +43,28 @@ export const getCursosFromBloques = (bloques) => {
   }));
   return cursosParsed;
 };
+
+export const getAllCursos = async () => {
+
+  const matricula = await getMatricula();
+  console.log("MATRICULA",matricula)
+
+  const cursos = matricula.reduce((acc, student) => {
+    const courseId = student.curso.id;
+    if (!acc[courseId]) {
+      acc[courseId] = {
+        idCurso: courseId,
+        curso: student.curso.nombre,
+        estudiantes: [],
+      };
+    }
+    const studentInfo = {
+      id: student.matricula.id,
+      nombre: `${student.estudiantes.nombre} ${student.estudiantes.apellido}`,
+    };
+    acc[courseId].estudiantes.push(studentInfo);
+    return acc;
+  }, [])?.filter((item) => item !== null);
+  return cursos;
+
+}

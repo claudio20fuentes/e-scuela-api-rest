@@ -7,55 +7,30 @@ const getBloques = async (req, res) => {
 
     const { school: idEscuela, role: idRol, teacher: userIdProfesor, parent: idApoderado  } = req.user;
 
-    let response = {};
+    let query = {}
 
     switch (idRol) {
       // ADMIN
       case 1:
-        response = await BloqueService.getAllBloques(
-          idEscuela,
-          idDia,
-          idCurso,
-          idAsignatura,
-          idProfesor,
-          hora
-        );
+        query = { ...req.query, idEscuela };
         break;
       // DOCENTE JEFATURA
       case 2:
-        response = await BloqueService.getAllBloques(
-          idEscuela,
-          idDia,
-          idCurso,
-          idAsignatura,
-          userIdProfesor,
-          hora
-        );
+        query = { ...req.query, idProfesor: userIdProfesor, idEscuela };
         break;
       // DOCENTE
       case 3:
-        response = await BloqueService.getAllBloques(
-          idEscuela,
-          idDia,
-          idCurso,
-          idAsignatura,
-          userIdProfesor,
-          hora,
-        );
+        query = { ...req.query, idProfesor: userIdProfesor, idEscuela };
         break;
       // TODO: Create service to match students and grades to get their blocks
       case 4:
-        response = await BloqueService.getAllBloques(
-          idEscuela,
-          idDia,
-          idCurso,
-          idAsignatura,
-          idProfesor
-        );
+        query = { ...req.query, idCurso: 1, idEscuela };
         break;
       default:
         throw new Error(`Unknown id: ${idRol}`);
     }
+
+    const response = await BloqueService.getAllBloques(query);
 
     if (!response || response.length === 0)
       return res.status(400).json({ error: "No se encontraron bloques" });

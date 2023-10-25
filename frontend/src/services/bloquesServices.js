@@ -9,17 +9,17 @@ export const getAllBloques = async (
     let queryString = "";
     let dateString = "";
     if (query) {
-      queryString = `${Object.keys(query)
+      queryString = `?${Object.keys(query)
         .map((key) => `${key}=${query[key]}`)
         .join("&")}`;
     }
     if (date.day) {
       const { day, time } = date;
-      dateString = `hora=${time}&idDia=${day}`;
+      dateString = `&hora=${time}&idDia=${day}`;
     }
     try {
       const res = await axios.get(
-        `${backendUrl}/api/v1/bloques?${queryString}&${dateString}`,
+        `${backendUrl}/api/v1/bloques${queryString}${dateString}`,
         {
           headers: {
             authorization: "Bearer " + localStorage.getItem("token"),
@@ -58,7 +58,10 @@ const parser = (data) => {
       Curso,
       Asignatura,
       BloquesHora,
+      id,
     } = el;
+    
+    const { horaInicio, horaFin } = BloquesHora;
 
     return {
       profesor: {
@@ -67,10 +70,13 @@ const parser = (data) => {
         id: el.id,
         idUser: User.id,
       },
+      id,
       dia: formatter(Dia),
       curso: formatter(Curso),
       asignatura: formatter(Asignatura),
-      horarioBloque: BloquesHora.id,
+      idHora: BloquesHora.id,
+      horaInicio,
+      horaFin,
     };
   });
 };

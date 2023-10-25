@@ -20,7 +20,7 @@ import DatosPersonales from "./DatosPersonalesComponent";
 import AsignaturasCursos from "./AsignaturasCursosComponent";
 
 import { getOneProfesor } from "@services/profesoresServices";
-import { getAllCursos, getCursosByProfesor } from "@services/cursosServices";
+import { getMatricula, getCursosByProfesor } from "@services/cursosServices";
 
 const EditarDocente = () => {
   const [open, setOpen] = useState(false);

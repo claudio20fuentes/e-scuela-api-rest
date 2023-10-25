@@ -18,48 +18,10 @@ createRoot(root).render(
       <HashRouter>
         <App />
       </HashRouter>
-      {/* <EventListeners /> Add the EventListeners component */}
     </Suspense>
   </Provider>
 );
 
-
-// function EventListeners() {
-//   useEffect(() => {
-//     if (environment === 'prodssh' || environment === 'local') {
-//     const handleKeyDown = (event) => {
-//       if (event.ctrlKey) {
-//         event.preventDefault();
-//       }
-//       if (event.keyCode === 123) {
-//         event.preventDefault();
-//       }
-//     };
-
-//     const handleContextMenu = (event) => {
-//       event.preventDefault();
-//     };
-
-//     document.addEventListener('keydown', handleKeyDown);
-//     document.addEventListener('contextmenu', handleContextMenu);
-
-//     return () => {
-//       document.removeEventListener('keydown', handleKeyDown);
-//       document.removeEventListener('contextmenu', handleContextMenu);
-//     };
-//   } else {
-//     return ;
-//   }
-//   }, []);
-
-//   return null;
-// }
-
-
-// If you want to enable client cache, register instead.
 serviceWorker.unregister();
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

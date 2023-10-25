@@ -11,6 +11,7 @@ module.exports = function override(config) {
     '@customElements': 'src/components/forms/custom-elements',
     '@containers': 'src/components/container',
     '@services': 'src/services',
+    '@views': 'src/views',
   })(config)
 
   return config

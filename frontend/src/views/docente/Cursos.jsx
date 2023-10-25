@@ -4,36 +4,44 @@ import { Typography, Grid, Link, Button } from "@mui/material";
 import PageContainer from "@containers/PageContainer";
 import { TableComponent } from "@components/tables/";
 
-import { getMatricula, getAllCursos } from "@services/cursosServices";
+import { getCursosByProfesor } from "@services/cursosServices";
+import { UserContext } from "@context/UserContext";
 
-const CursosMainView = () => {
+
+const CursosProfesor = () => {
   const [data, setData] = useState([]);
   const [selected, setSelected] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const parseData = (cursos) => {
-    const rows = cursos.map((curso) => {
-      const { idCurso, curso: nombre, estudiantes } = curso;
-      return {
-        curso: nombre,
-        ["total Estudiantes"]: estudiantes.length,
-        id: idCurso,
-      };
-    });
-    return rows;
-  };
-
   useEffect(() => {
-    const fetchData = async () => {
-      // const cursos = await getMatricula();
-      const cursos = await getAllCursos();
-      setData(parseData(cursos));
+    const getData = async () => {
+      const cursos = await getCursosByProfesor();
+      setData(cursos);
       setIsLoading(false);
     };
-    fetchData();
+
+    getData();
   }, []);
 
-  console.log(data);
+  console.log(data)
+
+  const parseData = (cursos) => {
+    const rows = cursos.map((curso) => {
+      const { courseData, teacherData, totalMatriculas } = curso;
+      const { nombre, apellidos, movil, correo, idRol } = teacherData;
+
+      return {
+        curso: courseData.nombre,
+        Matriculas: totalMatriculas,
+        nombre: `${nombre} ${apellidos}`,
+        movil,
+        correo,
+        idRol,
+      };
+    });
+
+    return rows;
+  };
 
   return (
     <PageContainer title="Cursos" description="reports detail page">
@@ -52,7 +60,7 @@ const CursosMainView = () => {
 
       <Grid container>
         <TableComponent
-          rows={data}
+          rows={parseData(data)}
           setSelected={setSelected}
           edit={false}
           isLoading={isLoading}
@@ -64,4 +72,4 @@ const CursosMainView = () => {
   );
 };
 
-export default CursosMainView;
+export default CursosProfesor;

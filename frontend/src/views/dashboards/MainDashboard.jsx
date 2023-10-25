@@ -16,9 +16,6 @@ const MainDashboard = () => {
 
   useEffect(() => {}, []);
 
-  console.log(userData)
-  console.log(userBloques)
-
   return (
     <PageContainer
       title="E-scuela Dashboard"

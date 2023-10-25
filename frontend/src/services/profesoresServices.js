@@ -72,7 +72,7 @@ export const getHorarioFromBloques = (bloques) => {
   const result = [];
 
   bloques.forEach((item) => {
-    const { dia, curso, asignatura, horarioBloque, profesor } = item;
+    const { dia, curso, asignatura, horarioBloque, profesor, id } = item;
 
     // Find the day in the result array or create a new day entry
     let dayEntry = result.find((entry) => entry.value === dia.label);
@@ -90,13 +90,16 @@ export const getHorarioFromBloques = (bloques) => {
     );
     if (!bloqueEntry) {
       bloqueEntry = {
-        id: horarioBloque,
+        id: item.id,
+        idHora: item.idHora,
+        horaInicio: item.horaInicio,
+        horaFin: item.horaFin,
         asignatura: { id: asignatura.value, value: asignatura.label },
         curso: { id: curso.value, value: curso.label },
+        profesor: { id: profesor.id, value: `${profesor.nombre || ""} ${profesor.apellido || ""}` },
       };
       dayEntry.bloques.push(bloqueEntry);
     }
   });
-
-  return result.sort((a, b) => a.id - b.id);
+  return result.sort((a, b) => a.idHora - b.idHora);
 };

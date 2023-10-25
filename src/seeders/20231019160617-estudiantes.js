@@ -557,11 +557,102 @@ module.exports = {
         rut: "6161616-6",
         nombre: "Elisa",
         apellido: "Medina",
-        idApoderado: 19,
+        idApoderado: null,
         idEscuela: 1,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
+      // ID 61
+      {
+        "rut": "7272727-7",
+        "nombre": "Nicolás",
+        "apellido": "González",
+        "idApoderado": null,
+        "idEscuela": 1,
+        "createdAt": new Date(),
+        "updatedAt": new Date()
+      },
+      {
+        "rut": "8383838-8",
+        "nombre": "Valentina",
+        "apellido": "Torres",
+        "idApoderado": null,
+        "idEscuela": 1,
+        "createdAt": new Date(),
+        "updatedAt": new Date()
+      },
+      {
+        "rut": "9494949-9",
+        "nombre": "Sebastián",
+        "apellido": "López",
+        "idApoderado": null,
+        "idEscuela": 1,
+        "createdAt": new Date(),
+        "updatedAt": new Date()
+      },
+      {
+        "rut": "5555555-5",
+        "nombre": "Camila",
+        "apellido": "Pérez",
+        "idApoderado": null,
+        "idEscuela": 1,
+        "createdAt": new Date(),
+        "updatedAt": new Date()
+      },
+      {
+        "rut": "6666666-6",
+        "nombre": "Matías",
+        "apellido": "Silva",
+        "idApoderado": 1,
+        "idEscuela": 1,
+        "createdAt": new Date(),
+        "updatedAt": new Date()
+      },
+      {
+        "rut": "7777777-7",
+        "nombre": "Isabella",
+        "apellido": "Martínez",
+        "idApoderado": 2,
+        "idEscuela": 1,
+        "createdAt": new Date(),
+        "updatedAt": new Date()
+      },
+      {
+        "rut": "8888888-8",
+        "nombre": "Antonio",
+        "apellido": "Hernández",
+        "idApoderado": 3,
+        "idEscuela": 1,
+        "createdAt": new Date(),
+        "updatedAt": new Date()
+      },
+      {
+        "rut": "9999999-9",
+        "nombre": "Lorena",
+        "apellido": "Gómez",
+        "idApoderado": 10,
+        "idEscuela": 1,
+        "createdAt": new Date(),
+        "updatedAt": new Date()
+      },
+      {
+        "rut": "10101010-0",
+        "nombre": "Felipe",
+        "apellido": "Paredes",
+        "idApoderado": 8,
+        "idEscuela": 1,
+        "createdAt": new Date(),
+        "updatedAt": new Date()
+      },
+      {
+        "rut": "1111111-1",
+        "nombre": "Javiera",
+        "apellido": "Romero",
+        "idApoderado": 9,
+        "idEscuela": 1,
+        "createdAt": new Date(),
+        "updatedAt": new Date()
+      }
     ]);
   },
 
