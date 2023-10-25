@@ -93,9 +93,6 @@ const Router = [
       // { path: '/administration/courses/:id', element: <EditarCurso/>},
       
       { path: '/administration/matriculas',element: <AdministrarMatriculas/> },
-
-      { path: '/attendance', element: <RegistroAsistencia /> },
-
       { path: '/teacher/courses', element: <CursosProfesor/>},
     ],
   },
