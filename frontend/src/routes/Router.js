@@ -43,7 +43,10 @@ const UserNewPassword = Loadable(
 /* ****Matriculas**** */
 const AdministrarMatriculas = Loadable(
   lazy(() => import('../views/administration/matricula/MainView'))
-)
+);
+const CrearMatricula = Loadable(
+  lazy(() => import('../views/administration/matricula/CrearMatricula'))
+);
 /* ****DOCENTES***** */
 const AdministrarDocentes = Loadable(
   lazy(() => import('../views/administration/docentes/MainView'))
@@ -93,6 +96,7 @@ const Router = [
       // { path: '/administration/courses/:id', element: <EditarCurso/>},
       
       { path: '/administration/matriculas',element: <AdministrarMatriculas/> },
+      { path: '/administration/matriculas/create', element: <CrearMatricula/>},
 
       { path: '/attendance', element: <RegistroAsistencia /> },
     ],

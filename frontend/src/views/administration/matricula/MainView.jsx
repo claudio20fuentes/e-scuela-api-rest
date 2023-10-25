@@ -64,7 +64,7 @@ const MatriculaMainView = () => {
           </Typography>
         </Grid>
         <Grid item xs={12} display="flex" justifyContent="flex-end" pr={2}>
-          <Link href={`#/administration/matriculas`} underline="none">
+          <Link href={`#/administration/matriculas/create`} underline="none">
             <Button variant="contained">+ Agregar</Button>
           </Link>
         </Grid>
