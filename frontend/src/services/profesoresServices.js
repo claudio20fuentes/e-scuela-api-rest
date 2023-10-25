@@ -96,10 +96,29 @@ export const getHorarioFromBloques = (bloques) => {
         horaFin: item.horaFin,
         asignatura: { id: asignatura.value, value: asignatura.label },
         curso: { id: curso.value, value: curso.label },
-        profesor: { id: profesor.id, value: `${profesor.nombre || ""} ${profesor.apellido || ""}` },
+        profesor: {
+          id: profesor.id,
+          value: `${profesor.nombre || ""} ${profesor.apellido || ""}`,
+        },
       };
       dayEntry.bloques.push(bloqueEntry);
     }
   });
   return result.sort((a, b) => a.idHora - b.idHora);
+};
+
+export const getHorarioFromBloquesByDay = (bloques, date) => {
+  const horario = getHorarioFromBloques(bloques);
+
+  const todayClasses = horario
+    .find((dia) => dia.id === date.day)
+    ?.bloques?.sort((a, b) => a.idHorario - b.idHorario);
+
+  // Gets current bloque or 0 if there is no current bloque
+  const currentBloque =
+    todayClasses?.find(
+      (bloque) => bloque.horaInicio < date.time && bloque.horaFin > date.time
+    ) || false;
+
+    return { horario, todayClasses, currentBloque };
 };

@@ -3,12 +3,10 @@ import { Grid, Button, Typography } from "@mui/material";
 
 import DataOverView from "./DataOverview";
 import WelcomeCard from "./WelcomeCard";
-import FeatherIcon from "feather-icons-react";
 
 import PageContainer from "@components/container/PageContainer";
 
 import { getHorarioFromBloques } from "@services/profesoresServices";
-import { getCursosFromBloques } from "@services/cursosServices";
 import ClasesProfesor from "@views/docente/ClasesProfesor";
 
 import { UserContext } from "@context/UserContext";
@@ -18,11 +16,10 @@ const Dashboard2 = () => {
   const {
     user: userData,
     userBloques,
-    getBloques,
     setDateContext,
   } = useContext(UserContext);
 
-  const horario = getHorarioFromBloques(userBloques);
+  // const horario = getHorarioFromBloques(userBloques);
 
   const overviewInfoDummy = [
     { subtitle: "Clases de hoy", total: 6, icon: "bar-chart-2" },
@@ -32,7 +29,7 @@ const Dashboard2 = () => {
 
   useEffect(() => {
     setOverviewInfo(overviewInfoDummy);
-    setDateContext(new Date("2023-10-10T11:40:00"));
+    setDateContext(new Date("2023-10-11T08:46:00"));
   }, []);
 
   return (
@@ -48,7 +45,7 @@ const Dashboard2 = () => {
           <DataOverView data={overviewInfo} />
         </Grid>
         <Grid item xs={12} display="flex">
-          <ClasesProfesor horario={horario} />
+          <ClasesProfesor bloques={userBloques} />
         </Grid>
       </Grid>
     </PageContainer>

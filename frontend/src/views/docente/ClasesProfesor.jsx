@@ -10,19 +10,16 @@ import {
 
 import ClaseActual from "./ClaseActual";
 
+import { getHorarioFromBloquesByDay } from "@services/profesoresServices";
+
 import { UserContext } from "@context/UserContext";
 
-const ClasesProfesor = ({ horario }) => {
+const ClasesProfesor = ({ bloques }) => {
   const { date } = useContext(UserContext);
-  const todayClasses = horario
-    .find((dia) => dia.id === date.day)
-    ?.bloques?.sort((a, b) => a.idHorario - b.idHorario);
+  const bloquesDiarios = getHorarioFromBloquesByDay(bloques, date);
+  const { currentBloque, todayClasses, horario } = bloquesDiarios;
 
-  // Gets current bloque or 0 if there is no current bloque
-  const currentBloque =
-    todayClasses?.find(
-      (bloque) => bloque.horaInicio < date.time && bloque.horaFin > date.time
-    ) || false;
+  console.log(todayClasses)
 
   return (
     <Grid container>
