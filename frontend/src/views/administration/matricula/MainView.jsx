@@ -46,10 +46,10 @@ const MatriculaMainView = () => {
       const Fecha = new Date(fecha);
 
       return {
-        nMatricula: id,
-        Rut: rut,
+        ["N° Matricula"]: id,
         nombre: `${nombre} ${apellido}`,
-        Fecha: `${Fecha.getFullYear()}/${Fecha.getMonth()}/${Fecha.getDay()}`
+        rut: rut,
+        ["fecha de ingreso"]: new Date(fecha).toLocaleDateString('en-GB')
       };
     });
     return rows;
