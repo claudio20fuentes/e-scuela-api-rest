@@ -14,7 +14,6 @@ import FeatherIcon from "feather-icons-react";
 import { NavLink } from "react-router-dom";
 
 const DataOverview = ({ data = [], isLoading }) => {
-  console.log("-1-", data);
   const mobile = useMediaQuery((theme) => theme.breakpoints.down("md"));
   let link = "/";
 
@@ -25,7 +24,7 @@ const DataOverview = ({ data = [], isLoading }) => {
         p: 0,
       }}
     >
-      <CardContent style={{ height: "100%", paddingBottom: 0}}>
+      <CardContent style={{ height: "100%", paddingBottom: 10}}>
         <Grid container spacing={2} height="100%">
           {data?.map((item, index) => (
             <Grid
@@ -71,11 +70,9 @@ const DataOverview = ({ data = [], isLoading }) => {
                   alignSelf="flex-end"
                 >
                   <Typography
-                    variant="h5"
+                    variant="h6"
                     color="textSecondary"
-                    sx={{
-                      wordBreak: "break-word",
-                    }}
+                    align="center"
                   >
                     {item.subtitle}
                   </Typography>

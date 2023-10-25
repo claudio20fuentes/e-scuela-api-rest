@@ -5,10 +5,17 @@ class MatriculaService {
 
   async getAllMatriculasByCurso(req) {
     try {
-      const totalMatriculas = await Matricula.count({ where: { idCurso: req } });
+      const totalMatriculas = await Matricula.findAll({
+        where: { idCurso: req },
+        include: [
+          {
+            model: Estudiante,
+          },
+        ],
+      });
       return totalMatriculas;
     } catch (error) {
-      console.error('Error al obtener el total de matrículas: ', error);
+      console.error("Error al obtener matrículas: ", error);
       throw error;
     }
   }

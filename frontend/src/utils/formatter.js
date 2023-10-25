@@ -19,7 +19,10 @@ const formatCLP = (value) => {
   return `$${formatted}`;
 };
 
-const formatDate = (date) => {
+const formatDate = (date = false) => {
+  if (!date) {
+    return false;
+  }
   const day = date.getDay() === 0 ? 7 : date.getDay();
   const time = date.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false });
   const fullDate = date.toString();

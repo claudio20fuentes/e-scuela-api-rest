@@ -58,7 +58,10 @@ const parser = (data) => {
       Curso,
       Asignatura,
       BloquesHora,
+      id,
     } = el;
+    
+    const { horaInicio, horaFin } = BloquesHora;
 
     return {
       profesor: {
@@ -67,10 +70,13 @@ const parser = (data) => {
         id: el.id,
         idUser: User.id,
       },
+      id,
       dia: formatter(Dia),
       curso: formatter(Curso),
       asignatura: formatter(Asignatura),
-      horarioBloque: BloquesHora.id,
+      idHora: BloquesHora.id,
+      horaInicio,
+      horaFin,
     };
   });
 };
