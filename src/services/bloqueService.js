@@ -11,34 +11,27 @@ const BloqueHoraService = require("./bloqueHoraService");
 const { Op } = require("sequelize");
 
 class BloquesServices {
-  async getAllBloques(
-    idEscuela,
-    idDia = false,
-    idCurso = false,
-    idAsignatura = false,
-    idProfesor = false,
-    hora = false
-  ) {
+  async getAllBloques({idEscuela, idDia, idCurso, idAsignatura, idProfesor, hora}) {
     try {
       const whereClause = { idEscuela };
 
-      if (idDia !== false) {
+      if (idDia) {
         whereClause.idDia = Number(idDia);
       }
 
-      if (idCurso !== false) {
+      if (idCurso) {
         whereClause.idCurso = Number(idCurso);
       }
 
-      if (idAsignatura !== false) {
+      if (idAsignatura) {
         whereClause.idAsignatura = Number(idAsignatura);
       }
 
-      if (idProfesor !== false) {
+      if (idProfesor) {
         whereClause.idProfesor = Number(idProfesor);
       }
 
-      if (hora !== false) {
+      if (hora) {
         const bloquesHora = await BloqueHoraService.getBloqueHora({ hora });
         const bloquesHoraId = bloquesHora.map((bloqueHora) => bloqueHora.id);
         if (bloquesHoraId.length === 0) {

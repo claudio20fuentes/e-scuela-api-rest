@@ -3,16 +3,18 @@ import { backend_url as backendUrl } from "@variables";
 
 import { getAllBloques } from "@services/bloquesServices";
 
-export const getAllCursos = async () => {
+export const getMatricula = async () => {
   return new Promise(async (resolve, reject) => {
     try {
-      const res = await axios.get(`${backendUrl}/api/v1/cursos/`, {
+      const cursos = await axios
+      .get(`${backendUrl}/api/v1/matriculas/`, {
         headers: {
           authorization: "Bearer " + localStorage.getItem("token"),
+          token: localStorage.getItem("token"),
         },
-      });
-
-      const data = res.data.body;
+      })
+      
+      const data = cursos.data.body;
 
       resolve(data);
     } catch (error) {
@@ -41,3 +43,4 @@ export const getCursosFromBloques = (bloques) => {
   }));
   return cursosParsed;
 };
+

@@ -35,6 +35,7 @@ export const UserProvider = (props) => {
 
   const getBloques = async (query = false, date = false) => {
     const bloques = await getAllBloques(query, date);
+    console.log(bloques)
     setUserBloques(bloques);
   };
 

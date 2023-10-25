@@ -9,17 +9,17 @@ export const getAllBloques = async (
     let queryString = "";
     let dateString = "";
     if (query) {
-      queryString = `${Object.keys(query)
+      queryString = `?${Object.keys(query)
         .map((key) => `${key}=${query[key]}`)
         .join("&")}`;
     }
     if (date.day) {
       const { day, time } = date;
-      dateString = `hora=${time}&idDia=${day}`;
+      dateString = `&hora=${time}&idDia=${day}`;
     }
     try {
       const res = await axios.get(
-        `${backendUrl}/api/v1/bloques?${queryString}&${dateString}`,
+        `${backendUrl}/api/v1/bloques${queryString}${dateString}`,
         {
           headers: {
             authorization: "Bearer " + localStorage.getItem("token"),

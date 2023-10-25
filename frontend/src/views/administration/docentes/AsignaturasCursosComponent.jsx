@@ -16,7 +16,7 @@ import CustomFormLabel from "@customElements/CustomFormLabel";
 import CustomSelect from "@customElements/CustomSelect";
 
 import { getAllAsignaturas } from "@services/asignaturasServices";
-import { getAllCursos } from "@services/cursosServices";
+import { getMatricula } from "@services/cursosServices";
 
 const CreateDocente = ({ user, setUser }) => {
   const [subjects, setSubjects] = useState([]);
@@ -27,7 +27,7 @@ const CreateDocente = ({ user, setUser }) => {
   useEffect(() => {
     const fetchData = async () => {
       const asignaturas = await getAllAsignaturas();
-      const cursos = await getAllCursos();
+      const cursos = await getMatricula();
       setSubjects(asignaturas);
       setClasses(cursos);
     };
@@ -90,8 +90,8 @@ const CreateDocente = ({ user, setUser }) => {
                   setNewSubject(selected);
                 }}
               >
-                {subjects?.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
+                {subjects?.map((option, index) => (
+                  <MenuItem key={index} value={option.value}>
                     {option.label}
                   </MenuItem>
                 ))}
@@ -148,8 +148,8 @@ const CreateDocente = ({ user, setUser }) => {
                   setNewClassroom(selected);
                 }}
               >
-                {classes.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
+                {classes.map((option, index) => (
+                  <MenuItem key={index} value={option.value}>
                     {option.label}
                   </MenuItem>
                 ))}

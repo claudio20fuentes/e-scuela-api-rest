@@ -7,10 +7,9 @@ import {
 } from "@mui/material";
 
 import PageContainer from "@containers/PageContainer";
-import { backend_url as backendUrl } from "@variables";
 import { TableComponent } from "@components/tables/";
+import { getMatricula } from "@services/cursosServices";
 
-import axios from "axios";
 
 const MatriculaMainView = () => {
   const [data, setData] = useState([]);
@@ -18,25 +17,12 @@ const MatriculaMainView = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    axios
-      .get(`${backendUrl}/api/v1/matriculas/`, {
-        headers: {
-          authorization: "Bearer " + localStorage.getItem("token"),
-          token: localStorage.getItem("token"),
-        },
-      })
-      .then((res) => {
-        const data = res.data.body;
-        console.log(data);
-        setData(data);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        if (err.response.status === 401) {
-          localStorage.clear();
-          window.location.reload();
-        }
-      });
+    const fetchData = async () => {
+      const cursos = await getMatricula();
+      setData(cursos);
+      setIsLoading(false);
+    };
+    fetchData();
   }, []);
 
   const parseData = (matriculas) => {
@@ -46,10 +32,11 @@ const MatriculaMainView = () => {
       const Fecha = new Date(fecha);
 
       return {
-        ["N° Matricula"]: id,
+        curso: matricula.curso.nombre,
         nombre: `${nombre} ${apellido}`,
         rut: rut,
-        ["fecha de ingreso"]: new Date(fecha).toLocaleDateString('en-GB')
+        ["fecha de ingreso"]: new Date(fecha).toLocaleDateString('en-GB'),
+        ["N° Matricula"]: id,
       };
     });
     return rows;
