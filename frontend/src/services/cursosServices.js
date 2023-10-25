@@ -44,3 +44,27 @@ export const getCursosFromBloques = (bloques) => {
   return cursosParsed;
 };
 
+export const getAllCursos = async () => {
+
+  const matricula = await getMatricula();
+  console.log("MATRICULA",matricula)
+
+  const cursos = matricula.reduce((acc, student) => {
+    const courseId = student.curso.id;
+    if (!acc[courseId]) {
+      acc[courseId] = {
+        idCurso: courseId,
+        curso: student.curso.nombre,
+        estudiantes: [],
+      };
+    }
+    const studentInfo = {
+      id: student.matricula.id,
+      nombre: `${student.estudiantes.nombre} ${student.estudiantes.apellido}`,
+    };
+    acc[courseId].estudiantes.push(studentInfo);
+    return acc;
+  }, [])?.filter((item) => item !== null);
+  return cursos;
+
+}

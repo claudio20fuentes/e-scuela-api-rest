@@ -4,38 +4,36 @@ import { Typography, Grid, Link, Button } from "@mui/material";
 import PageContainer from "@containers/PageContainer";
 import { TableComponent } from "@components/tables/";
 
-import { getMatricula } from "@services/cursosServices";
+import { getMatricula, getAllCursos } from "@services/cursosServices";
 
 const CursosMainView = () => {
   const [data, setData] = useState([]);
   const [selected, setSelected] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const parseData = (cursos) => {
+    const rows = cursos.map((curso) => {
+      const { idCurso, curso: nombre, estudiantes } = curso;
+      return {
+        curso: nombre,
+        ["total Estudiantes"]: estudiantes.length,
+        id: idCurso,
+      };
+    });
+    return rows;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
-      const cursos = await getMatricula();
-      setData(cursos);
+      // const cursos = await getMatricula();
+      const cursos = await getAllCursos();
+      setData(parseData(cursos));
       setIsLoading(false);
     };
     fetchData();
   }, []);
 
-  // const parseData = (matriculas) => {
-  //   const rows = matriculas.map((matricula) => {
-  //     const { nombre, apellido, rut } = matricula.estudiantes;
-  //     const { fecha, id } = matricula.matricula;
-  //     const Fecha = new Date(fecha);
-
-  //     return {
-  //       curso: matricula.curso.nombre,
-  //       nombre: `${nombre} ${apellido}`,
-  //       rut: rut,
-  //       ["fecha de ingreso"]: new Date(fecha).toLocaleDateString('en-GB'),
-  //       ["N° Matricula"]: id,
-  //     };
-  //   });
-  //   return rows;
-  // };
+  console.log(data);
 
   return (
     <PageContainer title="Cursos" description="reports detail page">
