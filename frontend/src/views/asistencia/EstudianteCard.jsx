@@ -39,7 +39,7 @@ const AsistenciaMainView = ({
         (student) => student.idMatricula !== selected.idMatricula
       ),
     }));
-  }, [selectedButton, selected, setAsistencia]);
+  }, [selected, setAsistencia]);
   
   useEffect(() => {
     setSelectedStudents(asistencia[selectedButton]);

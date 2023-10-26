@@ -40,7 +40,7 @@ const AsistenciaMainView = () => {
   };
 
   const handleStudentStatus = (
-    { idMatricula: id, nombre, apellido },
+    { idMatricula, nombre, apellido },
     statusKey
   ) => {
     setAsistencia((prevAsistencia) => {
@@ -51,21 +51,21 @@ const AsistenciaMainView = () => {
       Object.keys(updatedAsistencia).forEach((key) => {
         if (key !== statusKey) {
           updatedAsistencia[key] = updatedAsistencia[key].filter(
-            (student) => student.id !== id
+            (student) => student.idMatricula !== idMatricula
           );
         }
       });
 
       // Find the student in the current status
       const studentInStatus = updatedAsistencia[statusKey].find(
-        (student) => student.id === id
+        (student) => student.idMatricula === idMatricula
       );
 
       // If the student is not in the current status, add them
       if (!studentInStatus) {
         updatedAsistencia[statusKey] = [
           ...updatedAsistencia[statusKey],
-          { id, nombre, apellido },
+          { idMatricula, nombre, apellido },
         ];
       }
 
@@ -82,8 +82,6 @@ const AsistenciaMainView = () => {
     fetchData();
     setIsLoading(false);
   }, []);
-
-  console.log(asistencia);
 
   return isLoading ? (
     <Spinner />
