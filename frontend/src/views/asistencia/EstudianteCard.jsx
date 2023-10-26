@@ -1,6 +1,13 @@
 import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router";
-import { Card, Button, CardContent, Typography, Grid, Fab } from "@mui/material";
+import {
+  Card,
+  Button,
+  CardContent,
+  Typography,
+  Grid,
+  Fab,
+} from "@mui/material";
 import FeatherIcon from "feather-icons-react";
 import { capitalize } from "@utils/formatter";
 
@@ -17,20 +24,38 @@ const useStyles = {
   },
 };
 
-const AsistenciaMainView = ({ estudiantes = [], handleStudentStatus, asistencia }) => {
-  const [selectedButton, setSelectedButton] = useState('restantes');
+const AsistenciaMainView = ({
+  estudiantes = [],
+  handleStudentStatus,
+  asistencia,
+  setAsistencia,
+}) => {
+  const [selected, setSelected] = useState({}); // {idMatricula, nombre, apellido}
+  const [selectedButton, setSelectedButton] = useState("restantes");
+  const [selectedStudents, setSelectedStudents] = useState(estudiantes);
 
   useEffect(() => {
-    setSelectedButton('restantes');
+    setSelectedButton("restantes");
+    setSelectedStudents(estudiantes);
+    setAsistencia((prev) => ({
+      ...prev,
+      restantes: estudiantes,
+    }));
+  }, [estudiantes]);
+
+  useEffect(() => {
+    setAsistencia((prevAsistencia) => ({
+      ...prevAsistencia,
+      [selectedButton]: prevAsistencia[selectedButton].filter(
+        (student) => student.idMatricula !== selected.idMatricula
+      ),
+    }));
+  }, [selectedButton, selected, setAsistencia]);
+  
+  useEffect(() => {
+    setSelectedStudents(asistencia[selectedButton]);
   }
-  , [estudiantes]);
-
-  const pending = [
-    ...estudiantes.sort((a, b) => a.apellido.localeCompare(b.apellido, "es")),
-  ];
-  const done = [];
-
-  // HANDLER
+  , [asistencia, selectedButton]);
 
   const RoundButton = ({
     color = { backgroundColor: "primary", color: "white" },
@@ -53,21 +78,19 @@ const AsistenciaMainView = ({ estudiantes = [], handleStudentStatus, asistencia 
     </Grid>
   );
 
-  const buttons = [
-    "restantes",
-    "presentes",
-    "ausentes",
-    "atrasados",
-  ]
+  const buttons = ["restantes", "presentes", "ausentes", "atrasados"];
 
-  console.log(asistencia["presentes"]?.length)
   return (
     <Grid container>
       <Grid container style={{ borderBottom: "1px solid #8F90A6" }} mx={2}>
         {buttons.map((button, index) => {
           let total = asistencia[button]?.length || 0;
           if (button === "restantes") {
-            total = estudiantes.length - asistencia["presentes"]?.length - asistencia["ausentes"]?.length - asistencia["atrasados"]?.length;
+            total =
+              estudiantes.length -
+              asistencia["presentes"]?.length -
+              asistencia["ausentes"]?.length -
+              asistencia["atrasados"]?.length;
           }
           return (
             <Button
@@ -80,14 +103,14 @@ const AsistenciaMainView = ({ estudiantes = [], handleStudentStatus, asistencia 
                 borderBottom:
                   selectedButton === button ? "2px solid #00A693" : "none",
               }}
-              onClick={() => handleClick(button)}
+              onClick={() => setSelectedButton(button)}
             >
               {`${capitalize(button)} (${total})`}
             </Button>
-          )
+          );
         })}
       </Grid>
-      {pending.map((estudiante, index) => (
+      {selectedStudents.map((estudiante, index) => (
         <Grid key={index} item display="flex" xs={12} sm={6} md={4} xl={3}>
           <Card style={{ width: "100%" }}>
             <CardContent style={{ paddingBottom: "16px", paddingLeft: 0 }}>
@@ -111,17 +134,26 @@ const AsistenciaMainView = ({ estudiantes = [], handleStudentStatus, asistencia 
                   <RoundButton
                     color={{ backgroundColor: "#E6F3E5", color: "#4EAF51" }}
                     icon={"check-circle"}
-                    onClick={() => handleStudentStatus(estudiante, "presentes")}
+                    onClick={() => {
+                      setSelected(estudiante);
+                      handleStudentStatus(estudiante, "presentes");
+                    }}
                   />
                   <RoundButton
                     color={{ backgroundColor: "#fdc4cc", color: "#f50007" }}
                     icon={"x-circle"}
-                    onClick={() => handleStudentStatus(estudiante, "ausentes")}
+                    onClick={() => {
+                      setSelected(estudiante);
+                      handleStudentStatus(estudiante, "ausentes");
+                    }}
                   />
                   <RoundButton
                     color={{ backgroundColor: "#EFFEFF", color: "#18c0ce" }}
                     icon={"clock"}
-                    onClick={() => handleStudentStatus(estudiante, "atrasados")}
+                    onClick={() => {
+                      setSelected(estudiante);
+                      handleStudentStatus(estudiante, "atrasados");
+                    }}
                   />
                 </Grid>
               </Grid>

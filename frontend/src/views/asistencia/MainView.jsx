@@ -23,12 +23,13 @@ const AsistenciaMainView = () => {
     profesor: { nombre: "", apellido: "" },
     asignatura: { nombre: "", id: "" },
   });
+  const [estudiantes, setEstudiantes] = useState([]);
   const [asistencia, setAsistencia] = useState({
+    restantes: [],
     presentes: [],
     ausentes: [],
     atrasados: [],
   });
-  const [estudiantes, setEstudiantes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const { id: idBloque } = useParams();
@@ -103,6 +104,7 @@ const AsistenciaMainView = () => {
           estudiantes={estudiantes}
           asistencia={asistencia}
           handleStudentStatus={handleStudentStatus}
+          setAsistencia={setAsistencia}
         />
       </Grid>
     </Grid>
