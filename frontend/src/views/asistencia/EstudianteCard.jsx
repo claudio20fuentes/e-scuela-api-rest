@@ -40,13 +40,49 @@ const AsistenciaMainView = ({
       ),
     }));
   }, [selected, setAsistencia]);
-  
+
   useEffect(() => {
     setSelectedStudents(asistencia[selectedButton]);
-  }
-  , [asistencia, selectedButton]);
+  }, [asistencia, selectedButton]);
 
   const buttons = ["restantes", "presentes", "ausentes", "atrasados"];
+
+  const bgColor = {
+    presentes: "#E6F3E5",
+    ausentes: "#fdc4cc",
+    atrasados: "#EFFEFF",
+  };
+
+  const itemStyle = {
+    width: "100%",
+    backgroundColor: bgColor[selectedButton],
+  };
+
+  const getStatusColors = (status) => {
+    switch (status) {
+      case "presentes":
+        return { backgroundColor: "#E6F3E5", color: "#4EAF51" };
+      case "ausentes":
+        return { backgroundColor: "#fdc4cc", color: "#f50007" };
+      case "atrasados":
+        return { backgroundColor: "#EFFEFF", color: "#18c0ce" };
+      default:
+        return { backgroundColor: "", color: "" }; // Default colors if status is unknown
+    }
+  };
+
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case "presentes":
+        return "check-circle";
+      case "ausentes":
+        return "x-circle";
+      case "atrasados":
+        return "clock";
+      default:
+        return ""; // Default icon if status is unknown
+    }
+  };
 
   return (
     <Grid container>
@@ -73,7 +109,7 @@ const AsistenciaMainView = ({
       </Grid>
       {selectedStudents.map((estudiante, index) => (
         <Grid key={index} item display="flex" xs={12} sm={6} md={4} xl={3}>
-          <Card style={{ width: "100%" }}>
+          <Card style={itemStyle}>
             <CardContent style={{ paddingBottom: "16px", paddingLeft: 0 }}>
               <Grid container>
                 <Grid item xs={6}>
@@ -91,31 +127,25 @@ const AsistenciaMainView = ({
                   flexDirection="row"
                   gap={1}
                   alignItems="center"
+                  justifyContent="flex-end"
                 >
-                  <RoundButton
-                    color={{ backgroundColor: "#E6F3E5", color: "#4EAF51" }}
-                    icon={"check-circle"}
-                    onClick={() => {
-                      setSelected(estudiante);
-                      handleStudentStatus(estudiante, "presentes");
-                    }}
-                  />
-                  <RoundButton
-                    color={{ backgroundColor: "#fdc4cc", color: "#f50007" }}
-                    icon={"x-circle"}
-                    onClick={() => {
-                      setSelected(estudiante);
-                      handleStudentStatus(estudiante, "ausentes");
-                    }}
-                  />
-                  <RoundButton
-                    color={{ backgroundColor: "#EFFEFF", color: "#18c0ce" }}
-                    icon={"clock"}
-                    onClick={() => {
-                      setSelected(estudiante);
-                      handleStudentStatus(estudiante, "atrasados");
-                    }}
-                  />
+                  {["presentes", "ausentes", "atrasados"].map(
+                    (status, index) => {
+                      if (selectedButton === status) {
+                        return null;
+                      }
+                      return (
+                        <RoundButton
+                          key={index}
+                          color={getStatusColors(status)}
+                          icon={getStatusIcon(status)}
+                          onClick={() =>
+                            handleStudentStatus(estudiante, status)
+                          }
+                        />
+                      );
+                    }
+                  )}
                 </Grid>
               </Grid>
             </CardContent>
