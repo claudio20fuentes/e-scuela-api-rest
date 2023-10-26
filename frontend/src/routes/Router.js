@@ -71,6 +71,11 @@ const CursosProfesor = Loadable(
   lazy(() => import('../views/docente/Cursos'))
 );
 
+/* ****ASISTENCIA BLOQUE***** */
+const AsistenciaMainView = Loadable(
+  lazy(() => import('../views/asistencia/MainView'))
+);
+
 /* ****Routes***** */
 
 const Router = [
@@ -94,6 +99,8 @@ const Router = [
       
       { path: '/administration/matriculas',element: <AdministrarMatriculas/> },
       { path: '/teacher/courses', element: <CursosProfesor/>},
+
+      { path: '/attendance/:id', element: <AsistenciaMainView /> },
     ],
   },
   {

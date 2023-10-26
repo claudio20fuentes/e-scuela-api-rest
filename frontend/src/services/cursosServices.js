@@ -1,7 +1,34 @@
 import axios from "axios";
 import { backend_url as backendUrl } from "@variables";
 
-import { getAllBloques } from "@services/bloquesServices";
+import { getAllBloques, getBloqueById } from "@services/bloquesServices";
+
+export const getCursoByBloqueId = async (idBloque) => {
+  const bloques = await getBloqueById(idBloque);
+
+  return bloques;
+  // return new Promise(async (resolve, reject) => {
+  //   try {
+  //     const curso = await axios
+  //     .get(`${backendUrl}/api/v1/bloques/${idBloque}`, {
+  //       headers: {
+  //         authorization: "Bearer " + localStorage.getItem("token"),
+  //         token: localStorage.getItem("token"),
+  //       },
+  //     })
+
+  //     console.log("BLOQUES", bloques)
+  //     const data = bloques[0].curso;
+  //     resolve(data);
+  //   } catch (error) {
+  //     if (error.response && error.response.status === 401) {
+  //       localStorage.clear();
+  //       window.location.reload();
+  //     }
+  //     reject(error);
+  //   }
+  // });
+};
 
 export const getMatricula = async () => {
   return new Promise(async (resolve, reject) => {
@@ -47,8 +74,6 @@ export const getCursosFromBloques = (bloques) => {
 export const getAllCursos = async () => {
 
   const matricula = await getMatricula();
-  console.log("MATRICULA",matricula)
-
   const cursos = matricula.reduce((acc, student) => {
     const courseId = student.curso.id;
     if (!acc[courseId]) {

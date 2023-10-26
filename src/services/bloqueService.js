@@ -87,14 +87,14 @@ class BloquesServices {
             attributes: ["id", "fecha"],
             include: {
               model: DetalleAsistencia,
-              attributes: ["id", "estado",],
+              attributes: ["id", "estado"],
               include: {
                 model: Matricula,
                 Include: {
                   model: Estudiante,
-                }
-              }
-            }
+                },
+              },
+            },
           },
         ],
       });
@@ -120,6 +120,55 @@ class BloquesServices {
           },
           {
             model: DetalleAsistencia,
+          },
+        ],
+      });
+
+      return result;
+    } catch (error) {
+      console.error("Error al traer los bloques", error);
+    }
+  }
+
+  //Trae todos los bloques del dia de cada curso
+  async getBloqueById(id) {
+    try {
+      const result = await Bloque.findByPk(id, {
+        attributes: [],
+        include: [
+          {
+            model: Asistencia,
+            attributes: ["id", "fecha"],
+            include: {
+              model: DetalleAsistencia,
+              attributes: ["id", "estado", "idMatricula"],
+            },
+          },
+          {
+            model: Curso,
+            attributes: ["id", "nombreCurso"],
+            include: {
+              model: Matricula,
+              attributes: ["id"],
+              include: [
+                {
+                  model: Estudiante,
+                  attributes: ["id", "nombre", "apellido"],
+                },
+              ],
+            },
+          },
+          {
+            model: Asignatura,
+            attributes: ["id", "nombre"],
+          },
+          {
+            model: Profesor,
+            attributes: ["id"],
+            include: {
+              model: Usuario,
+              attributes: ["id", "nombre", "apellidos"],
+            },
           },
         ],
       });
