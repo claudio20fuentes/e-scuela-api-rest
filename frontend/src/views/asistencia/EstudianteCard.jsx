@@ -1,5 +1,4 @@
-import { useState, useEffect, useContext } from "react";
-import { useParams } from "react-router";
+import { useState, useEffect } from "react";
 import {
   Card,
   Button,
@@ -8,21 +7,11 @@ import {
   Grid,
   Fab,
 } from "@mui/material";
+import RoundButton from "./RoundButtonComponent";
 import FeatherIcon from "feather-icons-react";
 import { capitalize } from "@utils/formatter";
 
 import Spinner from "@views/spinner/Spinner";
-
-const useStyles = {
-  circularButton: {
-    borderRadius: "50%", // Make the button circular
-    width: "60px", // Adjust the size as needed
-    height: "60px", // Adjust the size as needed
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-};
 
 const AsistenciaMainView = ({
   estudiantes = [],
@@ -57,27 +46,6 @@ const AsistenciaMainView = ({
   }
   , [asistencia, selectedButton]);
 
-  const RoundButton = ({
-    color = { backgroundColor: "primary", color: "white" },
-    icon = "",
-    onClick,
-  }) => (
-    <Grid item>
-      <Fab
-        // component={NavLink}
-        size="small"
-        aria-label="add"
-        style={{
-          backgroundColor: color.backgroundColor,
-          color: color.color,
-        }}
-        onClick={onClick}
-      >
-        {<FeatherIcon icon={icon} />}
-      </Fab>
-    </Grid>
-  );
-
   const buttons = ["restantes", "presentes", "ausentes", "atrasados"];
 
   return (
@@ -85,13 +53,6 @@ const AsistenciaMainView = ({
       <Grid container style={{ borderBottom: "1px solid #8F90A6" }} mx={2}>
         {buttons.map((button, index) => {
           let total = asistencia[button]?.length || 0;
-          if (button === "restantes") {
-            total =
-              estudiantes.length -
-              asistencia["presentes"]?.length -
-              asistencia["ausentes"]?.length -
-              asistencia["atrasados"]?.length;
-          }
           return (
             <Button
               key={index}
