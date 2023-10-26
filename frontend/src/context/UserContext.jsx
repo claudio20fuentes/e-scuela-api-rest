@@ -17,6 +17,7 @@ export const UserProvider = (props) => {
     phone: "",
     roleId: 5,
   });
+  const [success, setSuccess] = useState({});
   const [userBloques, setUserBloques] = useState([]);
   const [date, setDate] = useState({ day: "", time: "", fullDate: "" });
   const navigate = useNavigate();
@@ -70,6 +71,8 @@ export const UserProvider = (props) => {
         getBloques,
         setDateContext,
         date,
+        success,
+        setSuccess,
       }}
     >
       {props.children}

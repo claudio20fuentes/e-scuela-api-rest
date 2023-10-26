@@ -15,6 +15,7 @@ const matriculaRoutes = require("./matriculaRoutes");
 const profesorRoutes = require("./profesorRoutes");
 const rolRoutes = require("./rolRoutes");
 const userRoutes = require("./userRoutes");
+const asistenciaRoutes = require("./asistenciaRoutes");
 const authenticateToken = require("../../middlewares/session");
 
 router.use("/auth", loginRoutes);
@@ -23,6 +24,7 @@ router.use("/alertaApoderados", authenticateToken, alertaApoderadoRoutes);
 router.use("/alertaProfesores", authenticateToken, alertaProfesorRoutes);
 router.use("/apoderados", authenticateToken, apoderadoRoutes);
 router.use("/asignaturas", authenticateToken, asignaturaRoutes);
+// router.use("/asistencias", authenticateToken, asistenciaRoutes);
 router.use("/bloques", authenticateToken, bloqueRoutes);
 router.use("/cursos", authenticateToken, cursoRoutes);
 router.use("/asistencia", authenticateToken, detalleAsistenciaRoutes);

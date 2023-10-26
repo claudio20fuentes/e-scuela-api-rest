@@ -1,4 +1,5 @@
 const DetalleAsistenciaService = require("../services/detalleAsistenciaService");
+const AsistenciaService = require("../services/asistenciaService");
 
 const getDetalleAsistencia = async (req, res) => {
   const { school: idEscuela } = req.user;
@@ -16,13 +17,34 @@ const getDetalleAsistencia = async (req, res) => {
 };
 
 const createDetalleAsistencia = async (req, res) => {
-  const detalle = req.body;
+  const { idBloque: idBloqueString, asistencia } = req.body;
+  const { school: idEscuela } = req.user;
+  const idBloque = parseInt(idBloqueString);
+  const payloadAsistencia = { fecha: new Date(), idBloque, idEscuela };
 
   try {
-    const result = await DetalleAsistenciaService.createDetalleAsistencia(
-      detalle
+    const asistenciaResult = await AsistenciaService.createAsistencia(
+      payloadAsistencia
     );
-    return res.status(200).json({ succes: true, data: result });
+    if (asistenciaResult) {
+      const payloadDetalle = {
+        idAsistencia: asistenciaResult.id,
+        idEscuela,
+        fecha: new Date(),
+      };
+      asistencia.map(async (detalle) => {
+        try {
+          await DetalleAsistenciaService.createDetalleAsistencia({
+            ...payloadDetalle,
+            idMatricula: detalle.idMatricula,
+            estado: detalle.estado,
+          });
+        } catch (error) {
+          console.log(error, "en la matricula: ", detalle.idMatricula)
+        }
+      });
+    }
+    return res.status(200).json({ succes: true, body: asistenciaResult });
   } catch (error) {
     res.status(500).json({ error: "Error en el servidor" });
   }

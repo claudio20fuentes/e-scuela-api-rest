@@ -1,21 +1,23 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router";
-import { Card, CardContent, Typography, Grid, Button } from "@mui/material";
-import { getCursoByBloqueId } from "@services/cursosServices";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Grid,
+  Button,
+  Alert,
+} from "@mui/material";
 import EstudianteCard from "./EstudianteCard";
 import DatosBloque from "./DatosBloque";
+
+import FeatherIcon from "feather-icons-react";
 import Spinner from "@views/spinner/Spinner";
 
-// STYLES
+import { getCursoByBloqueId } from "@services/cursosServices";
+import { createAsistencia } from "@services/asistenciaService";
 
-const itemStyle = {
-  width: { xs: "100%", sm: "auto" },
-  flexDirection: { xs: "row", sm: "column" },
-  gap: 2,
-  lineHeight: { xs: "28px", sm: 1 },
-  alignItems: "center",
-  display: "flex",
-};
+import { UserContext } from "@context/UserContext";
 
 const AsistenciaMainView = () => {
   const [datosBloque, setDatosBloque] = useState({
@@ -31,12 +33,40 @@ const AsistenciaMainView = () => {
     atrasados: [],
   });
   const [isLoading, setIsLoading] = useState(true);
-
   const { id: idBloque } = useParams();
+  const { success, setSuccess } = useContext(UserContext);
 
   // HANDLES
+
+  function parseData(data, estadosArray) {
+    const parsedArray = [];
+
+    for (const estado of estadosArray) {
+      if (data[estado]) {
+        for (const student of data[estado]) {
+          parsedArray.push({
+            idMatricula: student.idMatricula,
+            estado: estadosArray.indexOf(estado),
+          });
+        }
+      }
+    }
+
+    return parsedArray;
+  }
+
   const handleSubmit = () => {
-    console.log("click");
+    const estadosArray = Object.keys(asistencia);
+    const asistenciaParsed = parseData(asistencia, estadosArray);
+
+    const asistenciaCreated = createAsistencia({
+      idBloque,
+      asistencia: asistenciaParsed,
+    });
+    if (asistenciaCreated) {
+      setSuccess({ estado: true, message: "Asistencia registrada con éxito" });
+      window.location.href = "#/";
+    }
   };
 
   const handleStudentStatus = (
@@ -91,9 +121,6 @@ const AsistenciaMainView = () => {
         <Typography variant="h3" fontWeight={500} ml={2} width="100%">
           Clase Actual
         </Typography>
-        <Button variant="contained" onClick={() => handleSubmit()}>
-          Registrar
-        </Button>
       </Grid>
       <DatosBloque datosBloque={datosBloque} isloading={isLoading} />
       {/* STUDENT COMPONENT*/}
@@ -105,6 +132,33 @@ const AsistenciaMainView = () => {
           setAsistencia={setAsistencia}
         />
       </Grid>
+      {asistencia.restantes.length === 0 && (
+        <Grid container justifyContent="center" mt={4} mb={4}>
+          <Grid item xs={11} md={4} display="flex" justifyContent="center">
+            <Card
+              sx={{
+                py: 1,
+                pr: 5,
+                backgroundColor: (theme) => theme.palette.secondary.main,
+                color: "white",
+                "&:hover": {
+                  backgroundColor: (theme) => theme.palette.secondary.main,
+                  // Same as the non-hovered state
+                },
+                transition: "background-image 0.3s ease",
+              }}
+              component={Button}
+              onClick={handleSubmit}
+              disabled={success.estado}
+              endIcon={<FeatherIcon icon="check-circle" size="40px" />}
+            >
+              <CardContent sx={{ height: "100%" }}>
+                <Typography variant="h3">Registrar Asistencia</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
+      )}
     </Grid>
   );
 };
