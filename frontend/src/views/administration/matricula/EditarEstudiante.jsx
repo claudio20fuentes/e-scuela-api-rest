@@ -17,74 +17,53 @@ import axios from "axios";
 import PageContainer from "@containers/PageContainer";
 
 import DatosPersonales from "./DatosPersonalesComponent";
-import AsignaturasCursos from "./AsignaturasCursosComponent";
+// import AsignaturasCursos from "./AsignaturasCursosComponent";
 
-import { getOneProfesor } from "@services/profesoresServices";
+import { getMatricula } from "@services/cursosServices";
+import { set } from "lodash";
 
-const EditarDocente = () => {
+const EditarEstudiante = () => {
   const [open, setOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const { id } = useParams();
+  const [classes, setClasses] = useState([]);
   const [user, setUser] = useState({
     nombre: "",
     apellidos: "",
-    correo: "",
-    movil: "",
-    idRol: 3,
-    subjects: [],
-    classes: [],
-    headTeacher: { state: false, class: {} },
+    rut: "",
+    curso: {value: "", label: ""},
   });
+  const { id } = useParams();
 
   const { handleSubmit } = useForm({
     mode: "onTouched",
   });
 
-  const parseAtribute = (data) => {
-    const response = data.map((atribute) => {
-      const { nombre, id } = atribute;
-      return { value: id, label: nombre };
-    });
-    return response.sort((a, b) => a.value - b.value);
-  };
-
-  const parseData = (profesor) => {
-    const { nombre, apellidos, correo, idRol, movil } = profesor.userData;
-    const { subjects, headTeacher, cursos } = profesor;
-    const parsedSubjects = parseAtribute(subjects);
-    const parsedClasses = parseAtribute(cursos);
-
-    const [parsedHeadTeacher] = headTeacher.map((el) => {
-      const state = headTeacher.length > 0;
-      const { id, nombreCurso } = el;
-      return { state, classroom: { value: id, label: nombreCurso } };
-    });
-
-    const response = {
-      nombre,
-      apellidos,
-      correo,
-      movil,
-      subjects: parsedSubjects,
-      classes: parsedClasses,
-      headTeacher: parsedHeadTeacher,
-      idRol,
+  const parser = (data) => {
+    const { Estudiante, Curso } = data;
+    return {
+      nombre: Estudiante.nombre,
+      apellidos: Estudiante.apellido,
+      rut: Estudiante.rut,
+      curso: {
+        value: Curso.id,
+        label: Curso.nombreCurso,
+      }
     };
-    return response;
   };
 
   useEffect(() => {
     const fetchData = async () => {
-      const profesor = await getOneProfesor(id);
-      setUser(parseData(profesor));
+      const dataFetched = await getMatricula(id);
+      if(dataFetched){
+        const parsed = parser(dataFetched);
+        setUser(parsed);
+      }
     };
     fetchData();
-    setIsLoading(false);
   }, []);
-
 
   const onSubmit = async () => {
     try {
+      // TODO handle submit in estudiante: [rut, nombre, apellido, idEscuela] then in matricula: [idEscuela, idEstudiante, idCurso]
       await axios
         .put(
           `${backend_url}/api/usuario/update-user/${userData.id}`,
@@ -108,21 +87,24 @@ const EditarDocente = () => {
     <PageContainer title="Profile" description="User profile">
       <Grid container>
         <Grid item xs={12} pl={3} mb={1}>
-          <Link href={`#/administration/teachers`} underline="hover">
+          <Link href={`#/administration/matriculas`} underline="hover">
             <Typography fontSize="12px" color="#8F90A6">
-              {`< Volver a Docentes`}
+              {`< Volver a Matículas`}
             </Typography>
           </Link>
         </Grid>
         <Grid item xs={12} pl={3} mb={2}>
-          <Typography variant="h3">Editar Docente</Typography>
+          <Typography variant="h3">Editar Estudiante</Typography>
         </Grid>
         <Grid item xs={12} md={8} display="flex">
           <Card style={{ width: "100%" }}>
             <CardContent>
               <Grid container gap={3}>
-                <DatosPersonales user={user} setUser={setUser} />
-                <AsignaturasCursos user={user} setUser={setUser} />
+                <DatosPersonales
+                  user={user}
+                  setUser={setUser}
+                  classes={classes}
+                />
                 <Divider width="100%" />
               </Grid>
               <Grid
@@ -137,7 +119,7 @@ const EditarDocente = () => {
                   component={Button}
                   variant="outlined"
                   color="primary"
-                  href="#/administration/teachers"
+                  href="#/administration/matriculas"
                 >
                   Cancelar
                 </Link>
@@ -157,4 +139,4 @@ const EditarDocente = () => {
   );
 };
 
-export default EditarDocente;
+export default EditarEstudiante;

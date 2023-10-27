@@ -18,26 +18,6 @@ const createMenuItems = () => {
       href: '/teacher/courses',
     },
     {
-      title: 'Mi Reg. Asistencia',
-      icon: 'command',
-      href: '/attendance',
-      collapse: true,
-      children: [
-        {
-          title: 'Diario',
-          icon: '',
-          href: '/attendance',
-        },
-        {
-          title: 'Resumen',
-          icon: '',
-          href: '/attendance/overall',
-        },
-        
-      ],
-    },
-
-    {
       navlabel: true,
       subheader: 'Administración',
       icon: 'mdi mdi-dots-horizontal',

@@ -25,6 +25,13 @@ const MatriculaMainView = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (selected.length > 0) {
+      const id = selected[selected.length -1];
+      window.location.href = `#/administration/matriculas/${id}`;
+    }
+  }, [selected]);
+
   const parseData = (matriculas) => {
     const rows = matriculas.map((matricula) => {
       const { nombre, apellido, rut } = matricula.estudiantes;
@@ -52,7 +59,7 @@ const MatriculaMainView = () => {
           </Typography>
         </Grid>
         <Grid item xs={12} display="flex" justifyContent="flex-end" pr={2}>
-          <Link href={`#/administration/matriculas`} underline="none">
+          <Link href={`#/administration/matriculas/create`} underline="none">
             <Button variant="contained">+ Agregar</Button>
           </Link>
         </Grid>
@@ -61,7 +68,7 @@ const MatriculaMainView = () => {
         <TableComponent
           rows={parseData(data)}
           setSelected={setSelected}
-          edit={true}
+          optionIcon={"edit"}
           isLoading={isLoading}
           search={true}
           columnsOnMobile={3}

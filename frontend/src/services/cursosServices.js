@@ -31,10 +31,10 @@ export const getCursoByBloqueId = async (idBloque) => {
   // });
 };
 
-export const getMatricula = async () => {
+export const getMatricula = async (id = '') => {
   return new Promise(async (resolve, reject) => {
     try {
-      const cursos = await axios.get(`${backendUrl}/api/v1/matriculas/`, {
+      const cursos = await axios.get(`${backendUrl}/api/v1/matriculas/${id}`, {
         headers: {
           authorization: "Bearer " + localStorage.getItem("token"),
           token: localStorage.getItem("token"),
