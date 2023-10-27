@@ -36,7 +36,7 @@ const AsistenciaMainView = () => {
   const { id: idBloque } = useParams();
   const { success, setSuccess } = useContext(UserContext);
 
-  // HANDLES
+  // HANDLERS
 
   function parseData(data, estadosArray) {
     const parsedArray = [];

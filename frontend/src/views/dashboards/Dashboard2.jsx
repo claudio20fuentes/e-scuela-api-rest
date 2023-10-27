@@ -7,6 +7,8 @@ import WelcomeCard from "./WelcomeCard";
 import PageContainer from "@components/container/PageContainer";
 
 import { getHorarioFromBloques } from "@services/profesoresServices";
+import { getAsistenciaByDay } from "@services/asistenciaServices";
+
 import ClasesProfesor from "@views/docente/ClasesProfesor";
 
 import { UserContext } from "@context/UserContext";
@@ -27,8 +29,17 @@ const Dashboard2 = () => {
     { subtitle: "No Registradas", total: 2, icon: "user-x" },
   ];
 
+  const parse = (asistencia) => {
+
+  }
+
   useEffect(() => {
     setOverviewInfo(overviewInfoDummy);
+    const fetch = async () => {
+      const asistenciaCompleta = await getAsistenciaByDay(new Date());
+      console.log(asistenciaCompleta)
+    }
+    fetch();
     setDateContext(new Date("2023-10-11T08:46:00"));
   }, []);
 

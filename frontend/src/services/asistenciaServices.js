@@ -96,10 +96,13 @@ export const checkAsistencia = async (date) => {
   });
 };
 
-export const getAsistenciaByDay = async (query = false) => {
-  const asistencia = await getAsistencia(query);
+export const getAsistenciaByDay = async (date = new Date()) => {
+  const asistencia = await getAsistencia();
   const parsedAsistencia = transformData(asistencia);
-  return parsedAsistencia;
+  // compare with the date
+  const currentDate = new Date(date).toISOString().split('T')[0];
+  const todayData = parsedAsistencia.find(obj => obj.fecha === currentDate);
+  return todayData;
 };
 
 function transformData(asistencia) {

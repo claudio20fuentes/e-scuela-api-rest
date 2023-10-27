@@ -41,19 +41,14 @@ const Dashboard1 = ({ userData }) => {
   const Checked = () => <FeatherIcon icon="check" color="#4caf50" />;
   const NotChecked = () => <FeatherIcon icon="x" color="#f44336" />;
 
-  const parse = (asistencias = [], date) => {
-    const dateString = date.toISOString().split("T")[0];
-    const asistenciaDiaria = asistencias.find((el) => {
-      const fecha = el.fecha.split("T")[0];
-      return fecha === dateString;
-    });
-
+  const parse = (asistencia = []) => {
+    
     let presentes = 0;
     let ausentes = 0;
 
-    if(!asistenciaDiaria) return [];
+    if(!asistencia) return [];
 
-    const parsedResult = asistenciaDiaria.cursos.map((curso) => {
+    const parsedResult = asistencia.cursos.map((curso) => {
       const { id, nombreCurso, bloques } = curso;
 
       const result = bloques.map((bloque) => {
@@ -107,7 +102,7 @@ const Dashboard1 = ({ userData }) => {
     const fetch = async () => {
       const matricula = await getMatricula();
       setMatricula(matricula);
-      const asistenciaDia = await getAsistenciaByDay();
+      const asistenciaDia = await getAsistenciaByDay(new Date());
       setAsistenciaDia(asistenciaDia);
       setData(parse(asistenciaDia, period));
       setIsLoading(false);
