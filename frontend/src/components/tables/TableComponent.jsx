@@ -95,19 +95,19 @@ const TableComponent = ({
   };
 
   function filterElements(arr, searchWord) {
-    const lowercaseSearch = searchWord.toLowerCase();
+    const normalizedSearch = searchWord.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     return arr.filter((obj) => {
-      for (const key in obj) {
-        if (
-          typeof obj[key] === "string" &&
-          obj[key].toLowerCase().includes(lowercaseSearch)
-        ) {
-          return true;
+        for (const key in obj) {
+            if (
+                typeof obj[key] === "string" &&
+                obj[key].toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(normalizedSearch)
+            ) {
+                return true;
+            }
         }
-      }
-      return false;
+        return false;
     });
-  }
+}
 
   useEffect(() => {
     setFiltered(rows);
