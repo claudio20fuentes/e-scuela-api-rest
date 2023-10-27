@@ -11,23 +11,75 @@ import {
 import BloqueComponent from "./BloqueComponent";
 
 import { getHorarioFromBloquesByDay } from "@services/profesoresServices";
-import { getAsistencia } from "@services/asistenciaServices";
+import {
+  getAsistencia,
+  getAsistenciaByDay,
+} from "@services/asistenciaServices";
 
 import { UserContext } from "@context/UserContext";
 
 const ClasesProfesor = ({ bloques }) => {
   const [asistencia, setAsistencia] = useState([{}]);
+  const [currentBloque, setCurrentBloque] = useState({});
+  const [todayClasses, setTodayClasses] = useState([]);
   const { date } = useContext(UserContext);
-  const bloquesDiarios = getHorarioFromBloquesByDay(bloques, date);
-  const { currentBloque, todayClasses, horario } = bloquesDiarios;
+
+  const parser = (cursos) => {
+    if (!cursos) {
+      console.log("no hay cursos");
+      return [];
+    }
+    return cursos.map((item) => {
+      const idCurso = item.idCurso;
+      const idsBloqueHora = item.bloques.map((bloque) => bloque.idBloqueHora);
+      return {
+        idCurso,
+        idsBloqueHora,
+      };
+    });
+  };
+
+  function removeMatchingObjects(objects, attendanceLists) {
+    const objectsToKeep = objects.filter((obj) => {
+      const { idHora, curso } = obj;
+      const idCursoToCheck = curso.id;
+
+      const matchingList = attendanceLists.find((list) => {
+        return (
+          list.idCurso === idCursoToCheck && list.idsBloqueHora.includes(idHora)
+        );
+      });
+
+      return !matchingList; // Keep the object if there is no matching list
+    });
+
+    return objectsToKeep;
+  }
 
   useEffect(() => {
     const fetchData = async () => {
-      const asistencia = await getAsistencia();
+      const asistencia = await getAsistenciaByDay(new Date());
       setAsistencia(asistencia);
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const bloquesDiarios = getHorarioFromBloquesByDay(bloques, date);
+    const {
+      currentBloque: current,
+      todayClasses: today,
+      horario,
+    } = bloquesDiarios;
+    const checked = parser(asistencia?.cursos);
+    const unchecked = !today ? false : removeMatchingObjects(today, checked);
+    setCurrentBloque(current);
+    unchecked && setTodayClasses(unchecked);
+    unchecked &&
+      setCurrentBloque(
+        unchecked.find((bloque) => bloque.idHora === current.idHora)
+      );
+  }, [asistencia]);
 
   return (
     <Grid container>

@@ -29,8 +29,9 @@ const Dashboard2 = () => {
     { subtitle: "No Registradas", total: 2, icon: "user-x" },
   ];
 
-  const parse = (asistencia) => {
+  const parse = (asistencia, bloques) => {
 
+    
   }
 
   useEffect(() => {

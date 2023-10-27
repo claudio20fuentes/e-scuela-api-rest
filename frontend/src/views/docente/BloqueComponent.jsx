@@ -7,7 +7,7 @@ import {
   Link,
 } from "@mui/material";
 
-const BloqueComponent = ({ bloque, state = 0 }) => {
+const BloqueComponent = ({ bloque = {}, state = 0 }) => {
 
   const none = { width: "100%" };
   const current = { width: "100%", backgroundColor: "#EFFEFF", color: "#18c0ce" };
@@ -19,7 +19,7 @@ const BloqueComponent = ({ bloque, state = 0 }) => {
   return (
     <>
       <Grid item display="flex" xs={12} >
-        <Link underline="none" display="contents" href={`#/attendance/${bloque.id}`}>
+        <Link underline="none" display="contents" href={`#/attendance/${bloque?.id}`}>
           <Card style={style}>
             <CardContent>
               <Grid
@@ -31,19 +31,19 @@ const BloqueComponent = ({ bloque, state = 0 }) => {
               >
                 <Grid item>
                   <Typography variant="h3" fontWeight={500}>
-                    {bloque.asignatura.value}
+                    {bloque?.asignatura?.value}
                   </Typography>
                   <Typography variant="h6" fontWeight={500}>
-                    {bloque.curso.value}
+                    {bloque?.curso?.value}
                   </Typography>
                 </Grid>
                 <Grid item display="grid" justifyItems="flex-start">
                   <Typography variant="h4" fontWeight={500}>
-                    Bloque: {bloque.idHora}
+                    Bloque: {bloque?.idHora}
                   </Typography>
                   <Typography variant="h6" fontWeight={500}>
-                    {bloque.horaInicio?.slice(0, -3)} -{" "}
-                    {bloque.horaFin?.slice(0, -3)}
+                    {bloque?.horaInicio?.slice(0, -3)} -{" "}
+                    {bloque?.horaFin?.slice(0, -3)}
                   </Typography>
                 </Grid>
               </Grid>
