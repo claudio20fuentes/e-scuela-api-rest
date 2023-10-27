@@ -24,7 +24,6 @@ import { getMatricula, getCursosByProfesor } from "@services/cursosServices";
 
 const EditarDocente = () => {
   const [open, setOpen] = useState(false);
-  const [classes, setClasses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { id } = useParams();
   const [user, setUser] = useState({
@@ -47,13 +46,14 @@ const EditarDocente = () => {
       const { nombre, id } = atribute;
       return { value: id, label: nombre };
     });
-    return response;
+    return response.sort((a, b) => a.value - b.value);
   };
 
   const parseData = (profesor) => {
     const { nombre, apellidos, correo, idRol, movil } = profesor.userData;
     const { subjects, headTeacher, cursos } = profesor;
     const parsedSubjects = parseAtribute(subjects);
+    const parsedClasses = parseAtribute(cursos);
 
     const [parsedHeadTeacher] = headTeacher.map((el) => {
       const state = headTeacher.length > 0;
@@ -67,7 +67,7 @@ const EditarDocente = () => {
       correo,
       movil,
       subjects: parsedSubjects,
-      classes: cursos,
+      classes: parsedClasses,
       headTeacher: parsedHeadTeacher,
       idRol,
     };
@@ -82,6 +82,8 @@ const EditarDocente = () => {
     fetchData();
     setIsLoading(false);
   }, []);
+
+  console.log(user);
 
   const onSubmit = async () => {
     try {

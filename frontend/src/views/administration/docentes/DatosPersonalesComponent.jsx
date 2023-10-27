@@ -8,7 +8,7 @@ import CustomFormLabel from "@customElements/CustomFormLabel";
 import CustomSelect from "@customElements/CustomSelect";
 
 import { getAllRoles } from "@services/rolesServices";
-import { getMatricula } from "@services/cursosServices";
+import { getAllCursos } from "@services/cursosServices";
 
 const DatosPersonalesComponent = ({ user, setUser }) => {
   const [roles, setRoles] = useState([]);
@@ -22,8 +22,11 @@ const DatosPersonalesComponent = ({ user, setUser }) => {
   useEffect(() => {
     const fetchData = async () => {
       const rols = await getAllRoles();
-      const cursos = await getMatricula();
-      setClasses(cursos);
+      const cursos = await getAllCursos();
+      const formattedCursos = cursos.map((curso) => {
+        return { value: curso.idCurso, label: curso.nombre };
+      });
+      setClasses(formattedCursos);
       setRoles(rols);
     };
     fetchData();

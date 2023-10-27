@@ -16,7 +16,7 @@ import CustomFormLabel from "@customElements/CustomFormLabel";
 import CustomSelect from "@customElements/CustomSelect";
 
 import { getAllAsignaturas } from "@services/asignaturasServices";
-import { getMatricula } from "@services/cursosServices";
+import { getAllCursos } from "@services/cursosServices";
 
 const CreateDocente = ({ user, setUser }) => {
   const [subjects, setSubjects] = useState([]);
@@ -27,9 +27,12 @@ const CreateDocente = ({ user, setUser }) => {
   useEffect(() => {
     const fetchData = async () => {
       const asignaturas = await getAllAsignaturas();
-      const cursos = await getMatricula();
+      const cursos = await getAllCursos();
+      const formattedCursos = cursos.map((curso) => {
+        return { value: curso.idCurso, label: curso.nombre };
+      });
+      setClasses(formattedCursos);
       setSubjects(asignaturas);
-      setClasses(cursos);
     };
     fetchData();
   }, []);
