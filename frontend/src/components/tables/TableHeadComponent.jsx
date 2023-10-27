@@ -65,7 +65,7 @@ const TableHeadComponent = ({
         )}
         {
           options && (
-            <TableCell style={{ width: "2px", padding: 0 }} align="center">
+            <TableCell align="center">
               <FeatherIcon icon="more-vertical" width="18" style={{ display: headers.length != 0 ? 'block' : 'none'}} />
             </TableCell>
           )

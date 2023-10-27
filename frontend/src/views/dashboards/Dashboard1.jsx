@@ -15,7 +15,6 @@ import { UserContext } from "@context/UserContext";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { es } from "date-fns/locale";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
-import { set } from "lodash";
 
 const Dashboard1 = ({ userData }) => {
   const mobile = useMediaQuery((theme) => theme.breakpoints.down("md"));
@@ -51,6 +50,8 @@ const Dashboard1 = ({ userData }) => {
 
     let presentes = 0;
     let ausentes = 0;
+
+    if(!asistenciaDiaria) return [];
 
     const parsedResult = asistenciaDiaria.cursos.map((curso) => {
       const { id, nombreCurso, bloques } = curso;
@@ -108,12 +109,12 @@ const Dashboard1 = ({ userData }) => {
       setMatricula(matricula);
       const asistenciaDia = await getAsistenciaByDay();
       setAsistenciaDia(asistenciaDia);
-      setData(parse(asistenciaDia, new Date()));
+      setData(parse(asistenciaDia, period));
       setIsLoading(false);
     };
     fetch();
     setIsLoading(false);
-  }, []);
+  }, [period]);
 
   useEffect(() => {
     setOverviewInfo(formatOverViewData(matricula.length, presentes, ausentes));
