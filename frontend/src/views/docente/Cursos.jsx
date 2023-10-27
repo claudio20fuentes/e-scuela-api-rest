@@ -48,11 +48,6 @@ const CursosProfesor = () => {
             Listado de Cursos
           </Typography>
         </Grid>
-        <Grid item xs={12} display="flex" justifyContent="flex-end" pr={2}>
-          <Link href={`#/administration/courses/create`} underline="none">
-            <Button variant="contained">+ Agregar</Button>
-          </Link>
-        </Grid>
       </Grid>
 
       <Grid container>
