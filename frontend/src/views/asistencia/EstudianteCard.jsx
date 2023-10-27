@@ -22,6 +22,7 @@ const AsistenciaMainView = ({
   const [selected, setSelected] = useState({}); // {idMatricula, nombre, apellido}
   const [selectedButton, setSelectedButton] = useState("restantes");
   const [selectedStudents, setSelectedStudents] = useState(estudiantes);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setSelectedButton("restantes");
@@ -30,6 +31,7 @@ const AsistenciaMainView = ({
       ...prev,
       restantes: estudiantes,
     }));
+    setIsLoading(false);
   }, [estudiantes]);
 
   useEffect(() => {
@@ -85,74 +87,90 @@ const AsistenciaMainView = ({
   };
 
   return (
-    <Grid container>
-      <Grid container style={{ borderBottom: "1px solid #8F90A6" }} mx={2}>
-        {buttons.map((button, index) => {
-          let total = asistencia[button]?.length || 0;
-          return (
-            <Button
-              key={index}
-              sx={{
-                color: selectedButton === button ? "primary" : "#8F90A6",
-                fontWeight: selectedButton === button ? 700 : 400,
-                borderRadius: 0,
-                width: "25%",
-                borderBottom:
-                  selectedButton === button ? "2px solid #00A693" : "none",
-              }}
-              onClick={() => setSelectedButton(button)}
-            >
-              {`${capitalize(button)} (${total})`}
-            </Button>
-          );
-        })}
-      </Grid>
-      {selectedStudents.map((estudiante, index) => (
-        <Grid key={index} item display="flex" xs={12} sm={6} md={4} xl={3}>
-          <Card style={itemStyle}>
-            <CardContent style={{ paddingBottom: "16px", paddingLeft: 0 }}>
-              <Grid container>
-                <Grid item xs={6}>
-                  <Typography variant="h5" fontWeight={500} ml={2} width="100%">
-                    {estudiante.nombre}
-                  </Typography>
-                  <Typography variant="h5" fontWeight={500} ml={2} width="100%">
-                    {estudiante.apellido}
-                  </Typography>
-                </Grid>
-                <Grid
-                  item
-                  xs={6}
-                  display="flex"
-                  flexDirection="row"
-                  gap={1}
-                  alignItems="center"
-                  justifyContent="flex-end"
+    <>
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <Grid container>
+          <Grid container style={{ borderBottom: "1px solid #8F90A6" }} mx={2}>
+            {buttons.map((button, index) => {
+              let total = asistencia[button]?.length || 0;
+              return (
+                <Button
+                  key={index}
+                  sx={{
+                    color: selectedButton === button ? "primary" : "#8F90A6",
+                    fontWeight: selectedButton === button ? 700 : 400,
+                    borderRadius: 0,
+                    width: "25%",
+                    borderBottom:
+                      selectedButton === button ? "2px solid #00A693" : "none",
+                  }}
+                  onClick={() => setSelectedButton(button)}
                 >
-                  {["presentes", "ausentes", "atrasados"].map(
-                    (status, index) => {
-                      if (selectedButton === status) {
-                        return null;
-                      }
-                      return (
-                        <RoundButton
-                          key={index}
-                          color={getStatusColors(status)}
-                          icon={getStatusIcon(status)}
-                          onClick={() =>
-                            handleStudentStatus(estudiante, status)
+                  {`${capitalize(button)} (${total})`}
+                </Button>
+              );
+            })}
+          </Grid>
+          {selectedStudents.map((estudiante, index) => (
+            <Grid key={index} item display="flex" xs={12} sm={6} md={4} xl={3}>
+              <Card style={itemStyle}>
+                <CardContent style={{ paddingBottom: "16px", paddingLeft: 0 }}>
+                  <Grid container>
+                    <Grid item xs={6}>
+                      <Typography
+                        variant="h5"
+                        fontWeight={500}
+                        ml={2}
+                        width="100%"
+                      >
+                        {estudiante.nombre}
+                      </Typography>
+                      <Typography
+                        variant="h5"
+                        fontWeight={500}
+                        ml={2}
+                        width="100%"
+                      >
+                        {estudiante.apellido}
+                      </Typography>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={6}
+                      display="flex"
+                      flexDirection="row"
+                      gap={1}
+                      alignItems="center"
+                      justifyContent="flex-end"
+                    >
+                      {["presentes", "ausentes", "atrasados"].map(
+                        (status, index) => {
+                          if (selectedButton === status) {
+                            return null;
                           }
-                        />
-                      );
-                    }
-                  )}
-                </Grid>
-              </Grid>
-            </CardContent>
-          </Card>
+                          return (
+                            <RoundButton
+                              key={index}
+                              color={getStatusColors(status)}
+                              icon={getStatusIcon(status)}
+                              onClick={() =>
+                                handleStudentStatus(estudiante, status)
+                              }
+                            />
+                          );
+                        }
+                      )}
+                    </Grid>
+                  </Grid>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
         </Grid>
-      ))}
-    </Grid>
+      )}
+    </>
   );
 };
 

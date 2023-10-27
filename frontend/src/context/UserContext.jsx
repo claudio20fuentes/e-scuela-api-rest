@@ -1,12 +1,13 @@
 // create context and provider
 import React, { createContext, useEffect, useState } from "react";
-import jwt from "jwt-decode";
+import { Alert } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 import { getAllBloques } from "@services/bloquesServices";
 import { getOneProfesor } from "@services/profesoresServices";
 
 import { formatDate } from "@utils/formatter";
+import jwt from "jwt-decode";
 
 export const UserContext = createContext();
 
@@ -26,6 +27,14 @@ export const UserProvider = (props) => {
     setUserData();
     setDateContext();
   }, []);
+
+  useEffect(() => {
+    if(success.estado){
+      setTimeout(() => {
+        setSuccess({ estado: false, message: "" });
+      }, 4000);
+    }
+  }, [success]);
 
   const setDateContext = (date) => {
     const formattedDate = formatDate(date);
@@ -62,20 +71,41 @@ export const UserProvider = (props) => {
   };
 
   return (
-    <UserContext.Provider
-      value={{
-        user,
-        setUser,
-        setUserData,
-        userBloques,
-        getBloques,
-        setDateContext,
-        date,
-        success,
-        setSuccess,
-      }}
-    >
-      {props.children}
-    </UserContext.Provider>
+    <>
+      <UserContext.Provider
+        value={{
+          user,
+          setUser,
+          setUserData,
+          userBloques,
+          getBloques,
+          setDateContext,
+          date,
+          success,
+          setSuccess,
+        }}
+      >
+        {props.children}
+      </UserContext.Provider>
+      {success.estado && (
+        <Alert
+          variant="filled"
+          severity="success"
+          style={{
+            position: "fixed",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            textAlign: "center",
+            zIndex: 9999,
+            color: "white",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          {success.message}
+        </Alert>
+      )}
+    </>
   );
 };

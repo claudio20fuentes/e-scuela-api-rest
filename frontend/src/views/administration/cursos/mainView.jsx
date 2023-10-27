@@ -13,11 +13,14 @@ const CursosMainView = () => {
 
   const parseData = (cursos) => {
     const rows = cursos.map((curso) => {
-      const { idCurso, curso: nombre, estudiantes } = curso;
+      const { estudiantes, profesor, nombre } = curso;
       return {
+        id: curso.idCurso,
         curso: nombre,
-        ["total Estudiantes"]: estudiantes.length,
-        id: idCurso,
+        matricula: estudiantes.length,
+        ["profesor guía"]: `${profesor.nombre} ${profesor.apellidos}`,
+        correo: profesor.correo,
+        // estudiantes,
       };
     });
     return rows;
@@ -25,15 +28,12 @@ const CursosMainView = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      // const cursos = await getMatricula();
       const cursos = await getAllCursos();
       setData(parseData(cursos));
       setIsLoading(false);
-    };
+    }; 
     fetchData();
   }, []);
-
-  console.log(data);
 
   return (
     <PageContainer title="Cursos" description="reports detail page">
@@ -57,7 +57,7 @@ const CursosMainView = () => {
           edit={false}
           isLoading={isLoading}
           search={true}
-          columnsOnMobile={2}
+          columnsOnMobile={3}
         />
       </Grid>
     </PageContainer>

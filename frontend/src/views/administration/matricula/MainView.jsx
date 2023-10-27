@@ -33,13 +33,14 @@ const MatriculaMainView = () => {
 
       return {
         curso: matricula.curso.nombre,
-        nombre: `${nombre} ${apellido}`,
+        nombre: nombre,
+        apellidos: apellido,
         rut: rut,
         ["fecha de ingreso"]: new Date(fecha).toLocaleDateString('en-GB'),
         ["N° Matricula"]: id,
       };
     });
-    return rows;
+    return rows.sort((a, b) => a.apellidos.localeCompare(b.apellidos));
   };
 
   return (
@@ -63,7 +64,7 @@ const MatriculaMainView = () => {
           edit={true}
           isLoading={isLoading}
           search={true}
-          columnsOnMobile={2}
+          columnsOnMobile={3}
         />
       </Grid>
     </PageContainer>

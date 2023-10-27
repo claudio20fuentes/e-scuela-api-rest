@@ -74,10 +74,7 @@ const AsistenciaMainView = () => {
     statusKey
   ) => {
     setAsistencia((prevAsistencia) => {
-      // Copy the previous state
       const updatedAsistencia = { ...prevAsistencia };
-
-      // Remove the student from any previous status
       Object.keys(updatedAsistencia).forEach((key) => {
         if (key !== statusKey) {
           updatedAsistencia[key] = updatedAsistencia[key].filter(
@@ -85,20 +82,15 @@ const AsistenciaMainView = () => {
           );
         }
       });
-
-      // Find the student in the current status
       const studentInStatus = updatedAsistencia[statusKey].find(
         (student) => student.idMatricula === idMatricula
       );
-
-      // If the student is not in the current status, add them
       if (!studentInStatus) {
         updatedAsistencia[statusKey] = [
           ...updatedAsistencia[statusKey],
           { idMatricula, nombre, apellido },
         ];
       }
-
       return updatedAsistencia;
     });
   };
@@ -143,7 +135,6 @@ const AsistenciaMainView = () => {
                 color: "white",
                 "&:hover": {
                   backgroundColor: (theme) => theme.palette.secondary.main,
-                  // Same as the non-hovered state
                 },
                 transition: "background-image 0.3s ease",
               }}

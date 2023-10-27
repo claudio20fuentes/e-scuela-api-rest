@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Typography, Grid, Link, Button } from "@mui/material";
 
 import PageContainer from "@containers/PageContainer";
@@ -7,40 +7,37 @@ import { TableComponent } from "@components/tables/";
 import { getCursosByProfesor } from "@services/cursosServices";
 import { UserContext } from "@context/UserContext";
 
-
 const CursosProfesor = () => {
   const [data, setData] = useState([]);
   const [selected, setSelected] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const { user: userData } = useContext(UserContext);
+
   useEffect(() => {
     const getData = async () => {
-      const cursos = await getCursosByProfesor();
+      const cursos = await getCursosByProfesor(userData.teacher);
       setData(cursos);
       setIsLoading(false);
     };
-
     getData();
   }, []);
 
-  console.log(data)
-
   const parseData = (cursos) => {
     const rows = cursos.map((curso) => {
-      const { courseData, teacherData, totalMatriculas } = curso;
-      const { nombre, apellidos, movil, correo, idRol } = teacherData;
+      const { estudiantes, profesor, nombre, totalMatriculas } = curso;
 
       return {
-        curso: courseData.nombre,
-        Matriculas: totalMatriculas,
-        nombre: `${nombre} ${apellidos}`,
-        movil,
-        correo,
-        idRol,
+        id: curso.id,
+        curso: nombre,
+        matricula: totalMatriculas,
+        ["profesor guía"]: `${profesor.nombre} ${profesor.apellidos}`,
+        correo: profesor.correo,
+        // estudiantes,
       };
     });
 
-    return rows;
+    return rows.sort((a, b) => a.curso.localeCompare(b.curso));
   };
 
   return (
@@ -65,7 +62,7 @@ const CursosProfesor = () => {
           edit={false}
           isLoading={isLoading}
           search={true}
-          columnsOnMobile={2}
+          columnsOnMobile={3}
         />
       </Grid>
     </PageContainer>
