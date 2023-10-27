@@ -15,7 +15,7 @@ import FeatherIcon from "feather-icons-react";
 import Spinner from "@views/spinner/Spinner";
 
 import { getCursoByBloqueId } from "@services/cursosServices";
-import { createAsistencia } from "@services/asistenciaService";
+import { createAsistencia } from "@services/asistenciaServices";
 
 import { UserContext } from "@context/UserContext";
 

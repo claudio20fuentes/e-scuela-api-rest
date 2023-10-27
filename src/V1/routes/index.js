@@ -24,7 +24,7 @@ router.use("/alertaApoderados", authenticateToken, alertaApoderadoRoutes);
 router.use("/alertaProfesores", authenticateToken, alertaProfesorRoutes);
 router.use("/apoderados", authenticateToken, apoderadoRoutes);
 router.use("/asignaturas", authenticateToken, asignaturaRoutes);
-// router.use("/asistencias", authenticateToken, asistenciaRoutes);
+router.use("/asistencia_unica", authenticateToken, asistenciaRoutes);
 router.use("/bloques", authenticateToken, bloqueRoutes);
 router.use("/cursos", authenticateToken, cursoRoutes);
 router.use("/asistencia", authenticateToken, detalleAsistenciaRoutes);

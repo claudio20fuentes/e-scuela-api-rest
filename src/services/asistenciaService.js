@@ -3,37 +3,30 @@ const DetalleAsistencia = require("../models/detalleAsistenciaModel");
 const Estudiante = require("../models/estudianteModel");
 const Matricula = require("../models/matriculaModel");
 const Bloque = require("../models/bloqueModel");
+const Curso = require("../models/cursoModel");
 
 class AsistenciaService {
   async getAsistencia(query) {
     try {
       const asistencia = await Asistencia.findAll({
         where: query,
-        attributes: ["fecha", "idBloque"],
+        attributes: ["id","fecha", "idBloque"],
         include: [
           {
             model: DetalleAsistencia,
-            attributes: ["idMatricula","estado"],
-            include: {
-              model: Matricula,
-              attributes: ["idCurso", "idEstudiante"],
-              include: {
-                model: Estudiante,
-                attributes: ["id", "nombre", "apellido"],
-              },
-            },
+            attributes: ["idMatricula", "estado"],
           },
           {
             model: Bloque,
-            attributes: ["idCurso", "idProfesor", "idBloqueHora"],
+            attributes: ["id", "idBloqueHora"],
             include: {
-              model: Estudiante,
-              attributes: ["id", "nombre", "apellido"],
+              model: Curso,
+              attributes: ["id", "nombreCurso"],
             },
-          }
+          },
         ],
       });
-      return detalle;
+      return asistencia;
     } catch (error) {
       console.error(error);
     }

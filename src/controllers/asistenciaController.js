@@ -1,4 +1,5 @@
-const AsistenciaService = require("../services/detalleAsistenciaService");
+// const AsistenciaService = require("../services/detalleAsistenciaService");
+const AsistenciaService = require("../services/asistenciaService");
 
 const getAsistencia = async (req, res) => {
   const { school: idEscuela } = req.user;

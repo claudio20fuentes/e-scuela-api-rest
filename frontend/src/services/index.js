@@ -3,6 +3,7 @@ const asignatura = require('./asignaturasServices');
 const cursos = require('./cursosServices');
 const roles = require('./rolesServices');
 const bloques = require('./bloquesServices');
+const asistencia = require('./asistenciaServices');
 
 
 export default {
@@ -10,5 +11,6 @@ export default {
     asignatura,
     cursos,
     roles,
-    bloques
+    bloques,
+    asistencia
 }

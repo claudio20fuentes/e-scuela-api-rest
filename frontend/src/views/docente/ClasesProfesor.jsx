@@ -11,7 +11,7 @@ import {
 import BloqueComponent from "./BloqueComponent";
 
 import { getHorarioFromBloquesByDay } from "@services/profesoresServices";
-import { getAsistencia } from "@services/asistenciaService";
+import { getAsistencia } from "@services/asistenciaServices";
 
 import { UserContext } from "@context/UserContext";
 
