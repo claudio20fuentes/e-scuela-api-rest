@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { Grid, Button, useMediaQuery } from "@mui/material";
 
 import { TableComponent } from "@components/tables/";
@@ -9,8 +9,6 @@ import FeatherIcon from "feather-icons-react";
 
 import { getMatricula, getAllCursos } from "@services/cursosServices";
 import { getAsistenciaByDay } from "@services/asistenciaServices";
-
-import { UserContext } from "@context/UserContext";
 
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { es } from "date-fns/locale";
@@ -27,8 +25,7 @@ const Dashboard1 = ({ userData }) => {
   const [presentes, setPresentes] = useState(0);
   const [ausentes, setAusentes] = useState(0);
   const [matricula, setMatricula] = useState([]);
-
-  const { date, setDate } = useContext(UserContext);
+  const [cursos, setCursos] = useState([]);
 
   const formatOverViewData = (matricula = 0, presentes = 0, ausentes = 0) => {
     return [
@@ -41,70 +38,109 @@ const Dashboard1 = ({ userData }) => {
   const Checked = () => <FeatherIcon icon="check" color="#4caf50" />;
   const NotChecked = () => <FeatherIcon icon="x" color="#f44336" />;
 
-  const parse = (asistencia = []) => {
-    
-    let presentes = 0;
-    let ausentes = 0;
-
-    if(!asistencia) return [];
-
-    const parsedResult = asistencia.cursos.map((curso) => {
-      const { id, nombreCurso, bloques } = curso;
-
-      const result = bloques.map((bloque) => {
-        return {
-          hora: bloque.idBloqueHora,
-          total: bloque.detallesAsistencias.length,
-          presentes: bloque.detallesAsistencias.filter((el) => el.estado === 1)
-            .length,
-          ausentes: bloque.detallesAsistencias.filter((el) => el.estado === 2)
-            .length,
-          atrasados: bloque.detallesAsistencias.filter((el) => el.estado === 3)
-            .length,
-        };
-      });
-
-      const maxPresentesObj = result.reduce((maxObj, currentObj) => {
-        return currentObj.presentes > maxObj.presentes ? currentObj : maxObj;
-      });
-
-      presentes += maxPresentesObj.presentes;
-      presentes += maxPresentesObj.atrasados;
-      ausentes += maxPresentesObj.ausentes;
-
-      // TODO: bring real bloqueHoras from backend
+  const parse = (asistencia = [], period, cursos = [] ) => {
+    let parsedResult = []
+    let empty = []
+    try{
+      const idCursosConRegistro = asistencia || asistencia.length > 0 ? asistencia?.cursos?.map((curso) => curso?.idCurso) : [];
+      const cursosSinRegistro = cursos.filter((curso) => !idCursosConRegistro?.includes(curso.idCurso));
+      let presentes = 0;
+      let ausentes = 0;
+      // TODO: bring real bloquesHoras from backend
       const bloquesHoras = [1, 2, 3, 4, 5, 6];
-      const checked = result.map((el) => el.hora);
-      const status = {};
-
+  
+      // Cursos sin registro
+      const status2 = {};
       bloquesHoras.forEach((hora, index) => {
-        status[`bloque ${hora}`] = checked.includes(hora) ? (
-          <Checked />
-        ) : (
-          <NotChecked />
-        );
+        status2[`bloque ${hora}`] = <NotChecked />
       });
-
-      return {
-        id,
-        curso: nombreCurso,
-        registros: `${checked.length} de ${bloquesHoras.length}`,
-        ...status,
-      };
-    });
+  
+      empty = cursosSinRegistro?.map((curso) => {
+        return {
+          id: curso.idCurso,
+          curso: curso.nombre,
+          registros: 0,
+          ...status2,
+        };
+      })
+      if(asistencia || asistencia.length > 0){
+  
+        parsedResult = asistencia.cursos?.map((curso) => {
+          const { nombreCurso, bloques } = curso;
+    
+          const result = bloques.map((bloque) => {
+            return {
+              hora: bloque.idBloqueHora,
+              total: bloque.detallesAsistencias.length,
+              presentes: bloque.detallesAsistencias.filter((el) => el.estado === 1)
+                .length,
+              ausentes: bloque.detallesAsistencias.filter((el) => el.estado === 2)
+                .length,
+              atrasados: bloque.detallesAsistencias.filter((el) => el.estado === 3)
+                .length,
+            };
+          });
+    
+          const maxPresentesObj = result.reduce((maxObj, currentObj) => {
+            return currentObj.presentes > maxObj.presentes ? currentObj : maxObj;
+          });
+    
+          presentes += maxPresentesObj.presentes;
+          presentes += maxPresentesObj.atrasados;
+          ausentes += maxPresentesObj.ausentes;
+    
+          const checked = result.map((el) => el.hora);
+          const status = {};
+    
+          //Bring real cursos from backend
+          bloquesHoras.forEach((hora, index) => {
+            status[`bloque ${hora}`] = checked.includes(hora) ? (
+              <Checked />
+            ) : (
+              <NotChecked />
+            );
+          });
+    
+          return {
+            id: curso.idCurso,
+            curso: nombreCurso,
+            registros: `${checked.length} de ${bloquesHoras.length}`,
+            ...status,
+          };
+        });
+      }
+      
+    } catch(e){
+      // Cursos sin registro
+      const status2 = {};
+      bloquesHoras.forEach((hora, index) => {
+        status2[`bloque ${hora}`] = <NotChecked />
+      });
+  
+      empty = cursosSinRegistro?.map((curso) => {
+        return {
+          id: curso.idCurso,
+          curso: curso.nombre,
+          registros: 0,
+          ...status2,
+        };
+      })
+    }
 
     setPresentes(presentes);
     setAusentes(ausentes);
-    return parsedResult.sort((a, b) => a.curso.localeCompare(b.curso));
+    const result = [...parsedResult || [], ...empty]
+    return result.sort((a, b) => a.curso.localeCompare(b.curso));
   };
 
   useEffect(() => {
     const fetch = async () => {
       const matricula = await getMatricula();
       setMatricula(matricula);
-      const asistenciaDia = await getAsistenciaByDay(new Date());
+      const asistenciaDia = await getAsistenciaByDay(period);
       setAsistenciaDia(asistenciaDia);
-      setData(parse(asistenciaDia, period));
+      const cursos = await getAllCursos();
+      setData(parse(asistenciaDia, period, cursos));
       setIsLoading(false);
     };
     fetch();
@@ -112,7 +148,10 @@ const Dashboard1 = ({ userData }) => {
   }, [period]);
 
   useEffect(() => {
-    setOverviewInfo(formatOverViewData(matricula.length, presentes, ausentes));
+    const fetch = async () => {
+      setOverviewInfo(formatOverViewData(matricula.length, presentes, ausentes));
+    };
+    fetch();
   }, [data]);
 
   return (
@@ -143,7 +182,6 @@ const Dashboard1 = ({ userData }) => {
         <TableComponent
           rows={data}
           setSelected={setSelected}
-          optionIcon={"eye"}
           isLoading={isLoading}
           search={false}
           columnsOnMobile={3}
