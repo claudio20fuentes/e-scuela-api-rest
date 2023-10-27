@@ -83,8 +83,6 @@ const EditarDocente = () => {
     setIsLoading(false);
   }, []);
 
-  console.log(user);
-
   const onSubmit = async () => {
     try {
       await axios
