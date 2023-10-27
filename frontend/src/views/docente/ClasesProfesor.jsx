@@ -18,15 +18,13 @@ import {
 
 import { UserContext } from "@context/UserContext";
 
-const ClasesProfesor = ({ bloques }) => {
+const ClasesProfesor = ({ bloques, todayClasses, setTodayClasses, setTotalDiarios }) => {
   const [asistencia, setAsistencia] = useState([{}]);
   const [currentBloque, setCurrentBloque] = useState({});
-  const [todayClasses, setTodayClasses] = useState([]);
   const { date } = useContext(UserContext);
 
   const parser = (cursos) => {
     if (!cursos) {
-      console.log("no hay cursos");
       return [];
     }
     return cursos.map((item) => {
@@ -66,6 +64,7 @@ const ClasesProfesor = ({ bloques }) => {
 
   useEffect(() => {
     const bloquesDiarios = getHorarioFromBloquesByDay(bloques, date);
+    setTotalDiarios(bloquesDiarios)
     const {
       currentBloque: current,
       todayClasses: today,
