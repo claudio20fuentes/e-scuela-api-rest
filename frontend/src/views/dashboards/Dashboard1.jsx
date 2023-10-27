@@ -100,7 +100,7 @@ const Dashboard1 = ({ userData }) => {
 
     setPresentes(presentes);
     setAusentes(ausentes);
-    return parsedResult; 
+    return parsedResult.sort((a, b) => a.curso.localeCompare(b.curso));
   };
 
   useEffect(() => {
