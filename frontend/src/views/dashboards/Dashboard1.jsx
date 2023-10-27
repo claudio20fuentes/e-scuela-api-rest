@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Grid, Button, useMediaQuery } from "@mui/material";
+import { Grid, Button, useMediaQuery, IconButton } from "@mui/material";
 
 import { TableComponent } from "@components/tables/";
 
@@ -35,26 +35,47 @@ const Dashboard1 = ({ userData }) => {
     ];
   };
 
-  const Checked = () => <FeatherIcon icon="check" color="#4caf50" />;
-  const NotChecked = () => <FeatherIcon icon="x" color="#f44336" />;
+  const Checked = ({ idBloque }) => (
+    <IconButton
+      onClick={() => {
+        console.log(idBloque);
+      }}
+    >
+      <FeatherIcon icon="check" color="#4caf50" />
+    </IconButton>
+  );
+  const NotChecked = ({ idBloque }) => (
+    <IconButton
+      onClick={() => {
+        console.log(idBloque);
+      }}
+    >
+      <FeatherIcon icon="x" color="#f44336" />
+    </IconButton>
+  );
 
-  const parse = (asistencia = [], period, cursos = [] ) => {
-    let parsedResult = []
-    let empty = []
-    try{
-      const idCursosConRegistro = asistencia || asistencia.length > 0 ? asistencia?.cursos?.map((curso) => curso?.idCurso) : [];
-      const cursosSinRegistro = cursos.filter((curso) => !idCursosConRegistro?.includes(curso.idCurso));
+  const parse = (asistencia = [], period, cursos = []) => {
+    let parsedResult = [];
+    let empty = [];
+    try {
+      const idCursosConRegistro =
+        asistencia || asistencia.length > 0
+          ? asistencia?.cursos?.map((curso) => curso?.idCurso)
+          : [];
+      const cursosSinRegistro = cursos.filter(
+        (curso) => !idCursosConRegistro?.includes(curso.idCurso)
+      );
       let presentes = 0;
       let ausentes = 0;
       // TODO: bring real bloquesHoras from backend
       const bloquesHoras = [1, 2, 3, 4, 5, 6];
-  
+
       // Cursos sin registro
       const status2 = {};
       bloquesHoras.forEach((hora, index) => {
-        status2[`bloque ${hora}`] = <NotChecked />
+        status2[`bloque ${hora}`] = <NotChecked idBloque={4} />;
       });
-  
+
       empty = cursosSinRegistro?.map((curso) => {
         return {
           id: curso.idCurso,
@@ -62,45 +83,51 @@ const Dashboard1 = ({ userData }) => {
           registros: 0,
           ...status2,
         };
-      })
-      if(asistencia || asistencia.length > 0){
-  
+      });
+      if (asistencia || asistencia.length > 0) {
         parsedResult = asistencia.cursos?.map((curso) => {
           const { nombreCurso, bloques } = curso;
-    
+
+          console.log(curso)
+
           const result = bloques.map((bloque) => {
             return {
               hora: bloque.idBloqueHora,
               total: bloque.detallesAsistencias.length,
-              presentes: bloque.detallesAsistencias.filter((el) => el.estado === 1)
-                .length,
-              ausentes: bloque.detallesAsistencias.filter((el) => el.estado === 2)
-                .length,
-              atrasados: bloque.detallesAsistencias.filter((el) => el.estado === 3)
-                .length,
+              presentes: bloque.detallesAsistencias.filter(
+                (el) => el.estado === 1
+              ).length,
+              ausentes: bloque.detallesAsistencias.filter(
+                (el) => el.estado === 2
+              ).length,
+              atrasados: bloque.detallesAsistencias.filter(
+                (el) => el.estado === 3
+              ).length,
             };
           });
-    
+
           const maxPresentesObj = result.reduce((maxObj, currentObj) => {
-            return currentObj.presentes > maxObj.presentes ? currentObj : maxObj;
+            return currentObj.presentes > maxObj.presentes
+              ? currentObj
+              : maxObj;
           });
-    
+
           presentes += maxPresentesObj.presentes;
           presentes += maxPresentesObj.atrasados;
           ausentes += maxPresentesObj.ausentes;
-    
+
           const checked = result.map((el) => el.hora);
           const status = {};
-    
+
           //Bring real cursos from backend
           bloquesHoras.forEach((hora, index) => {
             status[`bloque ${hora}`] = checked.includes(hora) ? (
-              <Checked />
+              <Checked idBloque={curso.bloques.find(el => el.idBloqueHora == hora).idBloque} />
             ) : (
-              <NotChecked />
+              <NotChecked idBloque={hora} />
             );
           });
-    
+
           return {
             id: curso.idCurso,
             curso: nombreCurso,
@@ -109,27 +136,13 @@ const Dashboard1 = ({ userData }) => {
           };
         });
       }
-      
-    } catch(e){
-      // Cursos sin registro
-      const status2 = {};
-      bloquesHoras.forEach((hora, index) => {
-        status2[`bloque ${hora}`] = <NotChecked />
-      });
-  
-      empty = cursosSinRegistro?.map((curso) => {
-        return {
-          id: curso.idCurso,
-          curso: curso.nombre,
-          registros: 0,
-          ...status2,
-        };
-      })
+    } catch (e) {
+      console.log(e)
     }
 
     setPresentes(presentes);
     setAusentes(ausentes);
-    const result = [...parsedResult || [], ...empty]
+    const result = [...(parsedResult || []), ...empty];
     return result.sort((a, b) => a.curso.localeCompare(b.curso));
   };
 
@@ -149,7 +162,9 @@ const Dashboard1 = ({ userData }) => {
 
   useEffect(() => {
     const fetch = async () => {
-      setOverviewInfo(formatOverViewData(matricula.length, presentes, ausentes));
+      setOverviewInfo(
+        formatOverViewData(matricula.length, presentes, ausentes)
+      );
     };
     fetch();
   }, [data]);
