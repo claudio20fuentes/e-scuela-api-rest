@@ -12,22 +12,23 @@ const Matricula = require("../models/matriculaModel");
 
 const BloqueHoraService = require("./bloqueHoraService");
 
-const { Op } = require("sequelize");
+const { Op, Sequelize } = require("sequelize");
 
 class BloquesServices {
   async getAllBloques({
     idEscuela,
-    idDia,
+    day,
     idCurso,
     idAsignatura,
     idProfesor,
-    hora,
+    time,
+    date = '',
   }) {
     try {
       const whereClause = { idEscuela };
 
-      if (idDia) {
-        whereClause.idDia = Number(idDia);
+      if (day) {
+        whereClause.idDia = Number(day);
       }
 
       if (idCurso) {
@@ -42,8 +43,8 @@ class BloquesServices {
         whereClause.idProfesor = Number(idProfesor);
       }
 
-      if (hora) {
-        const bloquesHora = await BloqueHoraService.getBloqueHora({ hora });
+      if (time) {
+        const bloquesHora = await BloqueHoraService.getBloqueHora({ hora: time });
         const bloquesHoraId = bloquesHora.map((bloqueHora) => bloqueHora.id);
         if (bloquesHoraId.length === 0) {
           return [];
@@ -85,6 +86,8 @@ class BloquesServices {
           {
             model: Asistencia,
             attributes: ["id", "fecha"],
+            required: false, // Make it optional
+            where: Sequelize.literal(`DATE(fecha) = '${date}'`),
             include: {
               model: DetalleAsistencia,
               attributes: ["id", "estado"],

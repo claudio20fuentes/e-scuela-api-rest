@@ -81,6 +81,9 @@ const CursosProfesor = Loadable(
 const AsistenciaMainView = Loadable(
   lazy(() => import('../views/asistencia/MainView'))
 );
+const EditarAsistencia = Loadable(
+  lazy(() => import('../views/asistencia/EditarAsistencia'))
+);
 
 /* ****Routes***** */
 
@@ -110,6 +113,7 @@ const Router = [
       { path: '/teacher/courses', element: <CursosProfesor/>},
 
       { path: '/attendance/:id', element: <AsistenciaMainView /> },
+      { path: '/attendance/:id/edit', element: <EditarAsistencia /> },
     ],
   },
   {

@@ -3,7 +3,7 @@ const ProfesorService = require("../services/profesorService");
 
 const getBloques = async (req, res) => {
   try {
-    const { id, idDia, idCurso, idAsignatura, idProfesor, hora } = req.query;
+    const { id, day, date, idCurso, idAsignatura, idProfesor, time } = req.query;
 
     const { school: idEscuela, role: idRol, teacher: userIdProfesor, parent: idApoderado  } = req.user;
 

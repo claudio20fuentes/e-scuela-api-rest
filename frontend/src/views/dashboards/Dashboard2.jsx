@@ -47,7 +47,7 @@ const Dashboard2 = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    setDateContext(new Date("2023-10-11T08:46:00"));
+    setDateContext(new Date("2023-10-27T11:00:00"));
     setIsLoading(false);
   }, []);
 

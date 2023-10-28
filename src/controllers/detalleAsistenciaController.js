@@ -20,7 +20,9 @@ const createDetalleAsistencia = async (req, res) => {
   const { idBloque: idBloqueString, asistencia } = req.body;
   const { school: idEscuela } = req.user;
   const idBloque = parseInt(idBloqueString);
-  const payloadAsistencia = { fecha: new Date(), idBloque, idEscuela };
+  const fecha = req.body.fecha || new Date();
+  const payloadAsistencia = { idBloque, idEscuela, fecha };
+
 
   try {
     const asistenciaResult = await AsistenciaService.createAsistencia(
@@ -30,7 +32,7 @@ const createDetalleAsistencia = async (req, res) => {
       const payloadDetalle = {
         idAsistencia: asistenciaResult.id,
         idEscuela,
-        fecha: new Date(),
+        fecha,
       };
       asistencia.map(async (detalle) => {
         try {

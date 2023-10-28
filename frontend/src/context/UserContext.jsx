@@ -81,6 +81,7 @@ export const UserProvider = (props) => {
           getBloques,
           setDateContext,
           date,
+          setDateContext,
           success,
           setSuccess,
         }}

@@ -1,25 +1,18 @@
 import axios from "axios";
 import { backend_url as backendUrl } from "@variables";
 
-export const getAllBloques = async (
-  query = false,
-  date = { day: false, time: false }
-) => {
+export const getAllBloques = async (query = false) => {
   return new Promise(async (resolve, reject) => {
     let queryString = "";
-    let dateString = "";
     if (query) {
       queryString = `?${Object.keys(query)
         .map((key) => `${key}=${query[key]}`)
         .join("&")}`;
     }
-    if (date.day) {
-      const { day, time } = date;
-      dateString = `&hora=${time}&idDia=${day}`;
-    }
+
     try {
       const res = await axios.get(
-        `${backendUrl}/api/v1/bloques${queryString}${dateString}`,
+        `${backendUrl}/api/v1/bloques${queryString}`,
         {
           headers: {
             authorization: "Bearer " + localStorage.getItem("token"),

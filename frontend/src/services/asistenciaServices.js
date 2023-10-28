@@ -1,7 +1,13 @@
 import axios from "axios";
 import { backend_url as backendUrl } from "@variables";
+import { IconButton } from "@mui/material";
+
+import FeatherIcon from "feather-icons-react";
 
 import { getAllBloques } from "@services/bloquesServices";
+import { getMatricula, getAllCursos } from "@services/cursosServices";
+
+const { formatDate } = require("@utils/formatter");
 
 // ESTADOS
 // 0: "restantes",
@@ -99,9 +105,12 @@ export const checkAsistencia = async (date) => {
 export const getAsistenciaByDay = async (date = new Date()) => {
   const asistencia = await getAsistencia();
   const parsedAsistencia = transformData(asistencia);
-  // compare with the date
-  const currentDate = new Date(date).toISOString().split('T')[0];
-  const todayData = parsedAsistencia.find(obj => obj.fecha === currentDate);
+  const currentDateParts = new Date(date)
+    .toLocaleString("es-ES", { timeZone: "America/Santiago" })
+    .split(",")[0]
+    .split("/");
+  const currentDate = `${currentDateParts[2]}-${currentDateParts[1]}-${currentDateParts[0]}`;
+  const todayData = parsedAsistencia.filter((obj) => obj.fecha === currentDate);
   return todayData;
 };
 
@@ -166,3 +175,114 @@ function transformData(asistencia) {
   });
   return transformedData;
 }
+
+function createUniqueCursosArray(registries) {
+  const uniqueCursos = {};
+
+  registries.forEach((registry) => {
+    const {
+      idCurso,
+      nombreCurso,
+      idBloque,
+      idBloqueHora,
+      asistencia,
+      horaInicio,
+      horaFin,
+    } = registry;
+
+    if (!uniqueCursos[idCurso]) {
+      uniqueCursos[idCurso] = {
+        idCurso,
+        nombreCurso,
+        bloques: [],
+      };
+    }
+
+    uniqueCursos[idCurso].bloques.push({
+      idBloque,
+      idBloqueHora,
+      asistencia,
+      horaInicio,
+      horaFin,
+    });
+  });
+
+  return Object.values(uniqueCursos);
+}
+
+const parser = (bloques) => {
+  const result = bloques.map((bloque) => {
+    const {
+      horaInicio,
+      horaFin,
+      id: idBloque,
+      idHora: idBloqueHora,
+      asistencia,
+      curso,
+    } = bloque;
+
+    return {
+      horaInicio,
+      horaFin,
+      idBloque,
+      idBloqueHora,
+      asistencia: !!asistencia.length,
+      idCurso: curso.value,
+      nombreCurso: curso.label,
+    };
+  });
+  const parsedResultByCurso = createUniqueCursosArray(result);
+  return parsedResultByCurso;
+};
+
+export const getAllSchoolAsistenciaByDay = async (period) => {
+  const { day, date } = formatDate(period);
+  const bloques = await getAllBloques({ day, date });
+  const parsedBloques = parser(bloques);
+
+  const response = parsedBloques.map((bloque) => {
+    const { bloques, nombreCurso } = bloque;
+    const registrados = `${
+      bloques.filter((bloque) => bloque.asistencia).length
+    } de ${bloques.length}`;
+    const status = {};
+    bloques.forEach((bloque) => {
+      const { asistencia, idBloque, idBloqueHora } = bloque;
+      status[`bloque ${idBloqueHora}`] = asistencia ? (
+        <Checked idBloque={idBloque} />
+      ) : (
+        <NotChecked idBloque={idBloque} />
+      );
+    });
+
+    return {
+      curso: nombreCurso,
+      registrados,
+      ...status,
+    };
+  });
+  return response;
+};
+
+const Checked = ({ idBloque }) => (
+  <IconButton
+    onClick={() => handleClickChecked(idBloque)}
+  >
+    <FeatherIcon icon="check" color="#4caf50" />
+  </IconButton>
+);
+const NotChecked = ({ idBloque }) => (
+  <IconButton
+    onClick={() => handleClickUnchecked(idBloque)}
+  >
+    <FeatherIcon icon="x" color="#f44336" />
+  </IconButton>
+);
+
+const handleClickChecked = async (idBloque) => {
+  window.location.href = `#/attendance/${idBloque}/edit`;
+};
+
+const handleClickUnchecked = async (idBloque) => {
+  window.location.href = `#/attendance/${idBloque}`;
+};
