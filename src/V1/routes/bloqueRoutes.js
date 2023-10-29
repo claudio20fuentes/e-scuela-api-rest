@@ -5,7 +5,7 @@ const bloqueController = require('../../controllers/bloqueController');
 router
     .get("/", bloqueController.getBloques)
     
-    .get("/:idDia/:idCurso", bloqueController.getAllBloquesDiaCurso)
+    .get("/:id", bloqueController.getBloqueById)
     
     .post("/", bloqueController.createBloque)
     

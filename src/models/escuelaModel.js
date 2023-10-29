@@ -8,6 +8,7 @@ const Estudiante = require('./estudianteModel');
 const Matricula = require('./matriculaModel');
 const detalleAsistencia = require('./detalleAsistenciaModel');
 const DetalleAsistencia = require('./detalleAsistenciaModel');
+const Asistencia = require('./asistenciaModel');
 
 const Escuela = sequelize.define('Escuela', {
   id: {
@@ -87,6 +88,16 @@ Escuela.hasMany(DetalleAsistencia, {
 })
 
 DetalleAsistencia.belongsTo(Escuela, {
+  foreignKey: 'idEscuela',
+  targetKey: 'id'
+})
+
+Escuela.hasMany(Asistencia, {
+  foreignKey: 'idEscuela',
+  sourceKey: 'id'
+})
+
+Asistencia.belongsTo(Escuela, {
   foreignKey: 'idEscuela',
   targetKey: 'id'
 })

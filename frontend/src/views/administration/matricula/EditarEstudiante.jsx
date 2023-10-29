@@ -1,4 +1,5 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import {
   Grid,
   Typography,
@@ -10,55 +11,73 @@ import {
 } from "@mui/material";
 
 import { useForm } from "react-hook-form";
-
-import { UserContext } from "@context/UserContext";
+import { backend_url } from "@variables";
+import axios from "axios";
 
 import PageContainer from "@containers/PageContainer";
-import DatosPersonales from "./DatosPersonalesComponent";
-import { getMatricula, createMatricula } from "@services/cursosServices";
 
-const CreateEstudiante = () => {
-  const { setSuccess } = useContext(UserContext);
+import DatosPersonales from "./DatosPersonalesComponent";
+// import AsignaturasCursos from "./AsignaturasCursosComponent";
+
+import { getMatricula } from "@services/cursosServices";
+import { set } from "lodash";
+
+const EditarEstudiante = () => {
   const [open, setOpen] = useState(false);
   const [classes, setClasses] = useState([]);
   const [user, setUser] = useState({
     nombre: "",
     apellidos: "",
     rut: "",
-    curso: { value: 0, label: "" },
+    curso: {value: "", label: ""},
   });
-  const [userCheck, setUserCheck] = useState(false);
+  const { id } = useParams();
 
   const { handleSubmit } = useForm({
     mode: "onTouched",
   });
 
+  const parser = (data) => {
+    const { Estudiante, Curso } = data;
+    return {
+      nombre: Estudiante.nombre,
+      apellidos: Estudiante.apellido,
+      rut: Estudiante.rut,
+      curso: {
+        value: Curso.id,
+        label: Curso.nombreCurso,
+      }
+    };
+  };
+
   useEffect(() => {
     const fetchData = async () => {
-      const dataFetched = await getMatricula();
-      setClasses(dataFetched);
+      const dataFetched = await getMatricula(id);
+      if(dataFetched){
+        const parsed = parser(dataFetched);
+        setUser(parsed);
+      }
     };
     fetchData();
   }, []);
 
-  useEffect(() => {
-    if (user.nombre && user.apellidos && user.rut && user.curso.value) {
-      setUserCheck(true);
-    } else {
-      setUserCheck(false);
-    }
-  }, [user]);
-
   const onSubmit = async () => {
     try {
-      const response = createMatricula(user);
-      if (response) {
-        setSuccess({
-          estado: true,
-          message: "Estudiante creado con éxito",
+      // TODO handle submit in estudiante: [rut, nombre, apellido, idEscuela] then in matricula: [idEscuela, idEstudiante, idCurso]
+      await axios
+        .put(
+          `${backend_url}/api/usuario/update-user/${userData.id}`,
+          { nombre: userName, celular: userPhone },
+          {
+            headers: {
+              authorization: "Bearer " + localStorage.getItem("token"),
+              cliente: localStorage.getItem("cliente"),
+            },
+          }
+        )
+        .then((res) => {
+          setOpen(!open);
         });
-        window.location.href = "#/administration/matriculas";
-      }
     } catch (error) {
       console.log(error);
     }
@@ -75,7 +94,7 @@ const CreateEstudiante = () => {
           </Link>
         </Grid>
         <Grid item xs={12} pl={3} mb={2}>
-          <Typography variant="h3">Nueva Matrícula</Typography>
+          <Typography variant="h3">Editar Estudiante</Typography>
         </Grid>
         <Grid item xs={12} md={8} display="flex">
           <Card style={{ width: "100%" }}>
@@ -107,7 +126,6 @@ const CreateEstudiante = () => {
                 <Button
                   variant="contained"
                   color="primary"
-                  disabled={!userCheck}
                   onClick={handleSubmit(onSubmit)}
                 >
                   Guardar cambios
@@ -121,4 +139,4 @@ const CreateEstudiante = () => {
   );
 };
 
-export default CreateEstudiante;
+export default EditarEstudiante;

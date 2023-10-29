@@ -1,71 +1,96 @@
-import { useContext } from "react";
-import {
-  Card,
-  CardContent,
-  Typography,
-  Grid,
-  Link,
-  Button,
-} from "@mui/material";
+import { useContext, useEffect, useState } from "react";
+import { Typography, Grid } from "@mui/material";
 
-import ClaseActual from "./ClaseActual";
+import CongratulationsCard from "@views/dashboards/CongratulationsCard";
+import BloqueComponent from "./BloqueComponent";
+
+import { getHorarioFromBloquesByDay } from "@services/profesoresServices";
+import { getAsistenciaByDay } from "@services/asistenciaServices";
 
 import { UserContext } from "@context/UserContext";
 
-const ClasesProfesor = ({ horario }) => {
+const ClasesProfesor = ({
+  setStatus,
+  bloques,
+  todayClasses,
+  setTodayClasses,
+}) => {
+  const [asistencia, setAsistencia] = useState([{}]);
+  const [currentBloque, setCurrentBloque] = useState({});
   const { date } = useContext(UserContext);
-  const todayClasses = horario
-    .find((dia) => dia.id === date.day)
-    ?.bloques?.sort((a, b) => a.idHorario - b.idHorario);
 
-  // Gets current bloque or 0 if there is no current bloque
-  const currentBloque =
-    todayClasses?.find(
-      (bloque) => bloque.horaInicio < date.time && bloque.horaFin > date.time
-    ) || false;
+  const parser = (asistencia = [], today = []) => {
+    if (!today?.length) {
+      return { checked: [], unchecked: [] };
+    }
+
+    const response = today.map((bloque) => {
+      let check = false;
+      const match = asistencia.find(
+        (curso) => curso.idCurso === bloque.curso.id
+      );
+      if (match) {
+        const checked = match.bloques.find(
+          (bloqueAsistencia) => bloqueAsistencia.idBloqueHora === bloque.idHora
+        );
+        if (checked) {
+          check = true;
+        }
+      }
+      return { ...bloque, check };
+    });
+
+    const checked = response.filter((bloque) => bloque.check);
+    const unchecked = response.filter((bloque) => !bloque.check);
+    return { checked, unchecked };
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const asistencia = await getAsistenciaByDay(date.date);
+      setAsistencia(asistencia);
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const bloquesDiarios = getHorarioFromBloquesByDay(bloques, date);
+    const { currentBloque: current, todayClasses: today } = bloquesDiarios;
+    const { checked, unchecked } = parser(asistencia[0]?.cursos, today);
+    unchecked && setTodayClasses(unchecked);
+    unchecked &&
+      setCurrentBloque(
+        unchecked.find((bloque) => bloque.idHora === current.idHora)
+      );
+    setStatus({ checked: checked.length, unchecked: unchecked.length });
+  }, [asistencia]);
 
   return (
     <Grid container>
-      {currentBloque && <ClaseActual bloque={currentBloque} />}
-      <Typography variant="h3" fontWeight={500} ml={2} width="100%">
-        Clases de hoy
-      </Typography>
-      {todayClasses?.map((bloque, index) => {
-        const current = currentBloque === bloque.idHora;
-        return (
-          <Grid key={index} item display="flex" xs={12} md={6} lg={4}>
-            <Card style={{ width: "100%" }}>
-              <CardContent>
-                <Grid
-                  container
-                  display="flex"
-                  justifyContent="space-between"
-                  alignItems="center"
-                  flexDirection="row-reverse"
-                >
-                  <Grid item>
-                    <Typography variant="h3" fontWeight={500}>
-                      {bloque.asignatura.value}
-                    </Typography>
-                    <Typography variant="h6" fontWeight={500}>
-                      {bloque.curso.value}
-                    </Typography>
-                  </Grid>
-                  <Grid item display="grid" justifyItems="flex-start">
-                    <Typography variant="h4" fontWeight={500}>
-                      Bloque: {bloque.idHora}
-                    </Typography>
-                    <Typography variant="h6" fontWeight={500}>
-                      {bloque.horaInicio?.slice(0, -3)} -{" "}
-                      {bloque.horaFin?.slice(0, -3)}
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </CardContent>
-            </Card>
-          </Grid>
-        );
-      })}
+      {currentBloque && (
+        <Grid item xs={12} mb={5}>
+          <Typography variant="h3" fontWeight={500} ml={2} width="100%">
+            Clase Actual
+          </Typography>
+          <BloqueComponent bloque={currentBloque} state={1} />
+        </Grid>
+      )}
+      {!todayClasses.length ? (
+        <CongratulationsCard />
+      ) : (
+        <>
+          <Typography variant="h3" fontWeight={500} ml={2} width="100%">
+            Clases de hoy
+          </Typography>
+          {todayClasses?.map((bloque, index) => {
+            return (
+              <Grid key={index} item display="flex" xs={12} md={6} lg={4}>
+                <BloqueComponent bloque={bloque} state={0} />
+              </Grid>
+            );
+          })}
+        </>
+      )}
     </Grid>
   );
 };

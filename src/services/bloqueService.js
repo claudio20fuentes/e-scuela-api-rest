@@ -5,18 +5,30 @@ const Curso = require("../models/cursoModel");
 const Profesor = require("../models/profesorModel");
 const Usuario = require("../models/userModel");
 const BloqueHora = require("../models/bloqueHoraModel");
+const Asistencia = require("../models/asistenciaModel");
+const DetalleAsistencia = require("../models/detalleAsistenciaModel");
+const Estudiante = require("../models/estudianteModel");
+const Matricula = require("../models/matriculaModel");
 
 const BloqueHoraService = require("./bloqueHoraService");
 
-const { Op } = require("sequelize");
+const { Op, Sequelize } = require("sequelize");
 
 class BloquesServices {
-  async getAllBloques({idEscuela, idDia, idCurso, idAsignatura, idProfesor, hora}) {
+  async getAllBloques({
+    idEscuela,
+    day,
+    idCurso,
+    idAsignatura,
+    idProfesor,
+    time,
+    date = '',
+  }) {
     try {
       const whereClause = { idEscuela };
 
-      if (idDia) {
-        whereClause.idDia = Number(idDia);
+      if (day) {
+        whereClause.idDia = Number(day);
       }
 
       if (idCurso) {
@@ -31,8 +43,8 @@ class BloquesServices {
         whereClause.idProfesor = Number(idProfesor);
       }
 
-      if (hora) {
-        const bloquesHora = await BloqueHoraService.getBloqueHora({ hora });
+      if (time) {
+        const bloquesHora = await BloqueHoraService.getBloqueHora({ hora: time });
         const bloquesHoraId = bloquesHora.map((bloqueHora) => bloqueHora.id);
         if (bloquesHoraId.length === 0) {
           return [];
@@ -71,6 +83,22 @@ class BloquesServices {
               attributes: ["id", "nombre", "apellidos"],
             },
           },
+          {
+            model: Asistencia,
+            attributes: ["id", "fecha"],
+            required: false, // Make it optional
+            where: Sequelize.literal(`DATE(fecha) = '${date}'`),
+            include: {
+              model: DetalleAsistencia,
+              attributes: ["id", "estado"],
+              include: {
+                model: Matricula,
+                Include: {
+                  model: Estudiante,
+                },
+              },
+            },
+          },
         ],
       });
 
@@ -88,10 +116,64 @@ class BloquesServices {
           idDia: idDia,
           idCurso: idCurso,
         },
-        include: {
-          model: Asignatura,
-          attributes: ["id", "nombre"],
-        },
+        include: [
+          {
+            model: Asignatura,
+            attributes: ["id", "nombre"],
+          },
+          {
+            model: DetalleAsistencia,
+          },
+        ],
+      });
+
+      return result;
+    } catch (error) {
+      console.error("Error al traer los bloques", error);
+    }
+  }
+
+  //Trae todos los bloques del dia de cada curso
+  async getBloqueById(id) {
+    try {
+      const result = await Bloque.findByPk(id, {
+        attributes: [],
+        include: [
+          {
+            model: Asistencia,
+            attributes: ["id", "fecha"],
+            include: {
+              model: DetalleAsistencia,
+              attributes: ["id", "estado", "idMatricula"],
+            },
+          },
+          {
+            model: Curso,
+            attributes: ["id", "nombreCurso"],
+            include: {
+              model: Matricula,
+              attributes: ["id"],
+              include: [
+                {
+                  model: Estudiante,
+                  attributes: ["id", "nombre", "apellido"],
+                },
+              ],
+            },
+          },
+          {
+            model: Asignatura,
+            attributes: ["id", "nombre"],
+          },
+          {
+            model: Profesor,
+            attributes: ["id"],
+            include: {
+              model: Usuario,
+              attributes: ["id", "nombre", "apellidos"],
+            },
+          },
+        ],
       });
 
       return result;

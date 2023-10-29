@@ -165,6 +165,9 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
                 );
                 // {/********If Sub No Menu**********/}
               } else {
+                if(item.title === "Mi Asistencia" && userData.role === 1){
+                  return null;
+                }
                 return (
                   <List component="li" disablePadding key={item.title}>
                     <ListItem

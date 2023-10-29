@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
-const DetalleAsistencia = require("./detalleAsistenciaModel");
+const Asistencia = require("./asistenciaModel");
 
 const Bloque = sequelize.define("Bloques", {
   id: {
@@ -32,6 +32,16 @@ const Bloque = sequelize.define("Bloques", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+});
+
+Bloque.hasMany(Asistencia, {
+  foreignKey: "idBloque",
+  sourceKey: "id",
+});
+
+Asistencia.belongsTo(Bloque, {
+  foreignKey: "idBloque",
+  sourceKey: "id",
 });
 
 module.exports = Bloque;

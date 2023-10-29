@@ -25,6 +25,13 @@ const MatriculaMainView = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (selected.length > 0) {
+      const id = selected[selected.length -1];
+      window.location.href = `#/administration/matriculas/${id}`;
+    }
+  }, [selected]);
+
   const parseData = (matriculas) => {
     const rows = matriculas.map((matricula) => {
       const { nombre, apellido, rut } = matricula.estudiantes;
@@ -33,13 +40,14 @@ const MatriculaMainView = () => {
 
       return {
         curso: matricula.curso.nombre,
-        nombre: `${nombre} ${apellido}`,
+        nombre: nombre,
+        apellidos: apellido,
         rut: rut,
         ["fecha de ingreso"]: new Date(fecha).toLocaleDateString('en-GB'),
         ["N° Matricula"]: id,
       };
     });
-    return rows;
+    return rows.sort((a, b) => a.apellidos.localeCompare(b.apellidos));
   };
 
   return (
@@ -60,10 +68,10 @@ const MatriculaMainView = () => {
         <TableComponent
           rows={parseData(data)}
           setSelected={setSelected}
-          edit={true}
+          optionIcon={"edit"}
           isLoading={isLoading}
           search={true}
-          columnsOnMobile={2}
+          columnsOnMobile={3}
         />
       </Grid>
     </PageContainer>

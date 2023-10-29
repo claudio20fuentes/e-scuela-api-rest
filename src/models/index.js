@@ -1,6 +1,7 @@
 const alertaApoderado = require('./alertaApoderadoModel');
 const alertaProfesor = require('./alertaProfesorModel');
 const apoderado = require('./apoderadoModel');
+const asistencia = require('./asistenciaModel');
 const detalleAsistencia = require('./detalleAsistenciaModel');
 const bloqueHora = require('./bloqueHoraModel');
 const bloque = require('./bloqueModel');
@@ -26,6 +27,7 @@ new apoderado(sequelize, DataTypes);
 new bloqueHora(sequelize, DataTypes);
 new curso(sequelize, DataTypes);
 new bloque(sequelize, DataTypes);
+new asistencia(sequelize, DataTypes);
 new detalleAsistencia(sequelize, DataTypes);
 new dia(sequelize, DataTypes);
 new estudiante(sequelize, DataTypes);

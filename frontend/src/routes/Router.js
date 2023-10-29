@@ -47,6 +47,12 @@ const AdministrarMatriculas = Loadable(
 const CrearMatricula = Loadable(
   lazy(() => import('../views/administration/matricula/CrearMatricula'))
 );
+const CrearMatricula = Loadable(
+  lazy(() => import('../views/administration/matricula/CrearEstudiante'))
+)
+const EditarMatricula = Loadable(
+  lazy(() => import('../views/administration/matricula/EditarEstudiante'))
+)
 /* ****DOCENTES***** */
 const AdministrarDocentes = Loadable(
   lazy(() => import('../views/administration/docentes/MainView'))
@@ -62,16 +68,23 @@ const EditarDocente = Loadable(
 const AdministrarCursos = Loadable(
   lazy(() => import('../views/administration/cursos/mainView'))
 );
-// const Curso = Loadable(
-//   lazy(() => import('../views/administration/cursos/CrearCurso'))
-// );
-// const EditarCurso = Loadable(
-//   lazy(() => import('../views/administration/cursos/EditarCurso'))
-// );
+
+/* ****HISTORIAL ASISTENCIA***** */
+const AsistenciaHistorialProfesor = Loadable(
+  lazy(() => import('../views/docente/AsistenciaHistory'))
+);
 
 /* ****CURSOS***** */
 const CursosProfesor = Loadable(
   lazy(() => import('../views/docente/Cursos'))
+);
+
+/* ****ASISTENCIA BLOQUE***** */
+const AsistenciaMainView = Loadable(
+  lazy(() => import('../views/asistencia/MainView'))
+);
+const EditarAsistencia = Loadable(
+  lazy(() => import('../views/asistencia/EditarAsistencia'))
 );
 
 /* ****Routes***** */
@@ -96,10 +109,11 @@ const Router = [
       // { path: '/administration/courses/:id', element: <EditarCurso/>},
       
       { path: '/administration/matriculas',element: <AdministrarMatriculas/> },
-      { path: '/administration/matriculas/create', element: <CrearMatricula/>},
-
-      { path: '/attendance', element: <RegistroAsistencia /> },
       { path: '/teacher/courses', element: <CursosProfesor/>},
+      { path: '/teacher/attendance', element: <AsistenciaHistorialProfesor /> },
+
+      { path: '/attendance/:id', element: <AsistenciaMainView /> },
+      { path: '/attendance/:id/edit', element: <EditarAsistencia /> },
     ],
   },
   {

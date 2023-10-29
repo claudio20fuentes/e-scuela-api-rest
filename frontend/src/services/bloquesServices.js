@@ -1,25 +1,18 @@
 import axios from "axios";
 import { backend_url as backendUrl } from "@variables";
 
-export const getAllBloques = async (
-  query = false,
-  date = { day: false, time: false }
-) => {
+export const getAllBloques = async (query = false) => {
   return new Promise(async (resolve, reject) => {
     let queryString = "";
-    let dateString = "";
     if (query) {
       queryString = `?${Object.keys(query)
         .map((key) => `${key}=${query[key]}`)
         .join("&")}`;
     }
-    if (date.day) {
-      const { day, time } = date;
-      dateString = `&hora=${time}&idDia=${day}`;
-    }
+
     try {
       const res = await axios.get(
-        `${backendUrl}/api/v1/bloques${queryString}${dateString}`,
+        `${backendUrl}/api/v1/bloques${queryString}`,
         {
           headers: {
             authorization: "Bearer " + localStorage.getItem("token"),
@@ -28,8 +21,8 @@ export const getAllBloques = async (
       );
 
       const data = res.data.body;
-
-      resolve(parser(data));
+      const parsedData = parser(data);
+      resolve(parsedData);
     } catch (error) {
       if (error.response && error.response.status === 401) {
         localStorage.clear();
@@ -51,32 +44,141 @@ const formatter = (value) => {
 };
 
 const parser = (data) => {
-  return data.map((el) => {
-    const {
-      Profesore: { User },
-      Dia,
-      Curso,
-      Asignatura,
-      BloquesHora,
-      id,
-    } = el;
-    
-    const { horaInicio, horaFin } = BloquesHora;
+  return data
+    .map((el) => {
+      const {
+        Profesore: { User },
+        Dia,
+        Curso,
+        Asignatura,
+        BloquesHora,
+        id,
+        Asistencia,
+      } = el;
 
-    return {
-      profesor: {
-        nombre: User.nombre,
-        apellido: User.apellidos,
-        id: el.id,
-        idUser: User.id,
-      },
-      id,
-      dia: formatter(Dia),
-      curso: formatter(Curso),
-      asignatura: formatter(Asignatura),
-      idHora: BloquesHora.id,
-      horaInicio,
-      horaFin,
-    };
+      const { horaInicio, horaFin } = BloquesHora;
+
+      const estadoNames = ["ausentes", "presentes", "atrasados", "retirados"];
+
+      const asistencia =
+        Asistencia.length === 0
+          ? false
+          : Asistencia.map((el) => {
+              const detalles = el.DetallesAsistencias.reduce(
+                (counts, detalleArray) => {
+                  counts[estadoNames[detalleArray.estado]]++; // Use estadoNames to label the count
+                  return counts;
+                },
+                { ausentes: 0, presentes: 0, atrasados: 0, retirados: 0 }
+              ); // Initialize counts with named keys
+
+              return { id: el.id, fecha: el.fecha, detalles };
+            });
+
+      return {
+        profesor: {
+          nombre: User.nombre,
+          apellido: User.apellidos,
+          id: el.id,
+          idUser: User.id,
+        },
+        id,
+        dia: formatter(Dia),
+        curso: formatter(Curso),
+        asignatura: formatter(Asignatura),
+        asistencia,
+        idHora: BloquesHora.id,
+        horaInicio,
+        horaFin,
+      };
+    })
+    .sort((a, b) => {
+      if (a.idHora < b.idHora) {
+        return -1;
+      }
+      if (a.idHora > b.idHora) {
+        return 1;
+      }
+      return 0;
+    });
+};
+
+export const getBloqueById = async (id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const bloque = await axios.get(`${backendUrl}/api/v1/bloques/${id}`, {
+        headers: {
+          authorization: "Bearer " + localStorage.getItem("token"),
+          token: localStorage.getItem("token"),
+        },
+      });
+      const data = bloque.data.body;
+      const response = {
+        profesor: {
+          id: data.Profesore.id,
+          nombre: data.Profesore.User.nombre,
+          apellido: data.Profesore.User.apellidos,
+        },
+        curso: {
+          id: data.Curso.id,
+          nombre: data.Curso.nombreCurso,
+          estudiantes: data.Curso.Matriculas.map((matricula) => ({
+            idMatricula: matricula.id,
+            nombre: matricula.Estudiante.nombre,
+            apellido: matricula.Estudiante.apellido,
+          })),
+        },
+        asignatura: {
+          id: data.Asignatura.id,
+          nombre: data.Asignatura.nombre,
+        },
+        asistencia:
+          data.Asistencia == 0
+            ? false
+            : data.Asistencia.map((el) => {
+                const detalles = el.DetallesAsistencias;
+                return { id: el.id, fecha: el.fecha, detalles };
+              }),
+      };
+
+      resolve(response);
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        localStorage.clear();
+        window.location.reload();
+      }
+      reject(error);
+    }
+  });
+};
+
+export const getBloquesHora = async () => {
+  return new Promise(async (resolve, reject) => {
+    
+    try {
+      const res = await axios.get(
+        `${backendUrl}/api/v1/bloques`,
+        {
+          headers: {
+            authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        }
+      );
+
+      const data = res.data.body;
+
+      console.log("data", data)
+
+      resolve(data);
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        localStorage.clear();
+        window.location.reload();
+      }
+      if (error.response && error.response.status === 400) {
+        resolve([]);
+      }
+      reject(error);
+    }
   });
 };

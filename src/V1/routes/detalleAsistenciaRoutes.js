@@ -1,8 +1,11 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const detalleAsistenciaController = require('../../controllers/detalleAsistenciaController');
+const detalleAsistenciaController = require("../../controllers/detalleAsistenciaController");
 
 router
-    .post("/", detalleAsistenciaController.createDetalleAsistencia);
+  .get("/", detalleAsistenciaController.getDetalleAsistencia)
+  .post("/", detalleAsistenciaController.createDetalleAsistencia)
+  .post("/detalle", detalleAsistenciaController.createDetalleAsistencia)
+  .put("/detalle/:id", detalleAsistenciaController.updateDetalleAsistencia)
 
 module.exports = router;

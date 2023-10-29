@@ -49,7 +49,6 @@ const FullLayout = () => {
   const token = localStorage.getItem('token');
   useEffect( () => {
     if (token) {
-      console.log('hay sesion');
       setLogged(true)
     }
   }, [])

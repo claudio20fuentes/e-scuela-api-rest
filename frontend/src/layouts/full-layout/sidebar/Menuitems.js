@@ -13,30 +13,15 @@ const createMenuItems = () => {
       href: '/dashboard',
     },
     {
-      title: 'Mis cursos',
+      title: 'Mis Cursos',
       icon: 'book-open',
       href: '/teacher/courses',
     },
     {
-      title: 'Mi Reg. Asistencia',
-      icon: 'command',
-      href: '/attendance',
-      collapse: true,
-      children: [
-        {
-          title: 'Diario',
-          icon: '',
-          href: '/attendance',
-        },
-        {
-          title: 'Resumen',
-          icon: '',
-          href: '/attendance/overall',
-        },
-        
-      ],
+      title: 'Mi Asistencia',
+      icon: 'check-square',
+      href: '/teacher/attendance',
     },
-
     {
       navlabel: true,
       subheader: 'Administración',

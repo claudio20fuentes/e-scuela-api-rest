@@ -1,41 +1,61 @@
 import { useState, useEffect, useContext } from "react";
-import { Grid, Button, Typography } from "@mui/material";
+import { Grid } from "@mui/material";
 
 import DataOverView from "./DataOverview";
 import WelcomeCard from "./WelcomeCard";
-import FeatherIcon from "feather-icons-react";
 
 import PageContainer from "@components/container/PageContainer";
+import Spinner from "@views/spinner/Spinner";
 
-import { getHorarioFromBloques } from "@services/profesoresServices";
-import { getCursosFromBloques } from "@services/cursosServices";
 import ClasesProfesor from "@views/docente/ClasesProfesor";
 
 import { UserContext } from "@context/UserContext";
 
 const Dashboard2 = () => {
   const [overviewInfo, setOverviewInfo] = useState([]);
+  const [todayClasses, setTodayClasses] = useState([]);
+  const [totalDiarios, setTotalDiarios] = useState(0);
+  const [status, setStatus] = useState({ checked: 0, unchecked: 0 });
+  const [isLoading, setIsLoading] = useState(true);
   const {
     user: userData,
     userBloques,
-    getBloques,
     setDateContext,
   } = useContext(UserContext);
 
-  const horario = getHorarioFromBloques(userBloques);
+  const parseOveviewInfo = () => {
+    const { checked, unchecked } = status;
+    const total = checked + unchecked;
 
-  const overviewInfoDummy = [
-    { subtitle: "Clases de hoy", total: 6, icon: "bar-chart-2" },
-    { subtitle: "Clases Registradas", total: 4, icon: "check-circle" },
-    { subtitle: "No Registradas", total: 2, icon: "user-x" },
-  ];
+    const result = [
+      { subtitle: "Clases de hoy", total: total, icon: "bar-chart-2" },
+      {
+        subtitle: "Clases Registradas",
+        total: checked,
+        icon: "check-circle",
+      },
+      { subtitle: "No Registradas", total: unchecked, icon: "user-x" },
+    ];
+
+    return result;
+  };
 
   useEffect(() => {
-    setOverviewInfo(overviewInfoDummy);
-    setDateContext(new Date("2023-10-10T10:00:00"));
+    setIsLoading(true);
+    setDateContext(new Date("2023-10-27T11:00:00"));
+    setIsLoading(false);
   }, []);
 
-  return (
+  useEffect(() => {
+    setIsLoading(true);
+    const overViewPased = parseOveviewInfo();
+    setOverviewInfo(overViewPased);
+    setIsLoading(false);
+  }, [status]);
+
+  return isLoading ? (
+    <Spinner />
+  ) : (
     <PageContainer
       title="E-scuela Dashboard"
       description="this is Analytical Dashboard"
@@ -48,7 +68,13 @@ const Dashboard2 = () => {
           <DataOverView data={overviewInfo} />
         </Grid>
         <Grid item xs={12} display="flex">
-          <ClasesProfesor horario={horario} />
+          <ClasesProfesor
+            setStatus={setStatus}
+            bloques={userBloques}
+            todayClasses={todayClasses}
+            setTodayClasses={setTodayClasses}
+            setTotalDiarios={setTotalDiarios}
+          />
         </Grid>
       </Grid>
     </PageContainer>

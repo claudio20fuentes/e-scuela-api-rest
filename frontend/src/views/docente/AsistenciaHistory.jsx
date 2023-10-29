@@ -1,19 +1,21 @@
 import { useState, useEffect, useContext } from "react";
-import { Grid } from "@mui/material";
+import { Grid, IconButton } from "@mui/material";
+
+import FeatherIcon from "feather-icons-react";
 
 import { TableComponent } from "@components/tables/";
 
 import DataOverView from "./DataOverview";
 import WelcomeCard from "./WelcomeCard";
 
-import { UserContext } from "../../context/UserContext";
-import { getAllSchoolAsistenciaByDay } from "../../services/asistenciaServices";
+import { UserContext } from "@context/UserContext";
+import { getProfesorAsistenciaByDay } from "@services/asistenciaServices";
 
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { es } from "date-fns/locale";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 
-const Dashboard1 = ({ userData }) => {
+const Dashboard1 = () => {
   const { date, setDateContext } = useContext(UserContext);
 
   const [overviewInfo, setOverviewInfo] = useState([]);
@@ -21,21 +23,56 @@ const Dashboard1 = ({ userData }) => {
   const [selected, setSelected] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [period, setPeriod] = useState(date.fullDate || new Date());
+  const [rawData, setRawData] = useState([]);
 
-  const formatOverViewData = () => {
+  const handleClickChecked = async (idBloque) => {
+    window.location.href = `#/attendance/${idBloque}/edit`;
+  };
+
+  const handleClickUnchecked = async (idBloque) => {
+    window.location.href = `#/attendance/${idBloque}`;
+  };
+
+  const formatData = (info) => {
+    const Checked = ({ idBloque }) => (
+      <IconButton onClick={() => handleClickChecked(idBloque)}>
+        <FeatherIcon icon="check" color="#4caf50" />
+      </IconButton>
+    );
+    const NotChecked = ({ idBloque }) => (
+      <IconButton onClick={() => handleClickUnchecked(idBloque)}>
+        <FeatherIcon icon="x" color="#f44336" />
+      </IconButton>
+    );
+
+    const result = info.map((item) => {
+      const { id, estado } = item;
+      return {
+        ...item,
+        estado: estado ? (
+          <Checked idBloque={id} />
+        ) : (
+          <NotChecked idBloque={id} />
+        ),
+      };
+    });
+    return result;
+  };
+
+  const formatOverViewData = (data) => {
     let totalRegistrados = 0;
     let total = 0;
 
     data.forEach((item) => {
-      const registrados = Number(item.registrados.split(" ")[0]);
-      const totalRegistros = Number(item.registrados.split(" ")[2]);
-      totalRegistrados += registrados;
-      total += totalRegistros;
+      total++;
+      if (item.estado) {
+        totalRegistrados++;
+      }
     });
 
     const noRegistrados = total - totalRegistrados;
     return [
-      { subtitle: "Clases de hoy", total: total, icon: "bar-chart-2" },
+      { subtitle: "Clases del día", total: total, icon: "bar-chart-2" },
       {
         subtitle: "Clases registradas",
         total: totalRegistrados,
@@ -51,8 +88,10 @@ const Dashboard1 = ({ userData }) => {
 
   useEffect(() => {
     const fetch = async () => {
-      const data = await getAllSchoolAsistenciaByDay(period);
-      setData(data);
+      const data = await getProfesorAsistenciaByDay(period);
+      const dataFormatted = formatData(data);
+      setData(dataFormatted);
+      setRawData(data);
       setIsLoading(false);
       setDateContext(period);
     };
@@ -61,14 +100,14 @@ const Dashboard1 = ({ userData }) => {
   }, [period]);
 
   useEffect(() => {
-    const overView = formatOverViewData(data);
+    const overView = formatOverViewData(rawData);
     setOverviewInfo(overView);
   }, [data]);
 
   return (
     <Grid container>
       <Grid item sm={5} display={{ xs: "none", sm: "flex" }}>
-        <WelcomeCard name={userData.name} />
+        <WelcomeCard />
       </Grid>
       <Grid item sm={7} display="flex">
         <DataOverView data={overviewInfo} />
@@ -95,7 +134,7 @@ const Dashboard1 = ({ userData }) => {
           setSelected={setSelected}
           isLoading={isLoading}
           search={false}
-          columnsOnMobile={2}
+          columnsOnMobile={4}
         />
       </Grid>
     </Grid>

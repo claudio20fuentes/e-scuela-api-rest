@@ -14,7 +14,7 @@ class ProfesorService {
           },
           {
             model: Curso,
-            attributes: ["nombreCurso"],
+            attributes: ["id", "nombreCurso"],
           },
           {
             model: Asignatura,
