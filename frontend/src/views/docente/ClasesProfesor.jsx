@@ -10,16 +10,16 @@ import { getAsistenciaByDay } from "@services/asistenciaServices";
 import { UserContext } from "@context/UserContext";
 
 const ClasesProfesor = ({
+  setStatus,
   bloques,
   todayClasses,
   setTodayClasses,
-  setTotalDiarios,
 }) => {
   const [asistencia, setAsistencia] = useState([{}]);
   const [currentBloque, setCurrentBloque] = useState({});
   const { date } = useContext(UserContext);
 
-  const parser = (asistencia =[], today =[]) => {
+  const parser = (asistencia = [], today = []) => {
     if (!today?.length) {
       return { checked: [], unchecked: [] };
     }
@@ -62,6 +62,7 @@ const ClasesProfesor = ({
       setCurrentBloque(
         unchecked.find((bloque) => bloque.idHora === current.idHora)
       );
+    setStatus({ checked: checked.length, unchecked: unchecked.length });
   }, [asistencia]);
 
   return (

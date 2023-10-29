@@ -15,6 +15,7 @@ const Dashboard2 = () => {
   const [overviewInfo, setOverviewInfo] = useState([]);
   const [todayClasses, setTodayClasses] = useState([]);
   const [totalDiarios, setTotalDiarios] = useState(0);
+  const [status, setStatus] = useState({ checked: 0, unchecked: 0 });
   const [isLoading, setIsLoading] = useState(true);
   const {
     user: userData,
@@ -22,21 +23,18 @@ const Dashboard2 = () => {
     setDateContext,
   } = useContext(UserContext);
 
-  const parseOveviewInfo = (totalclases = [], totalDiarios = []) => {
-    const noRegistradas = todayClasses?.length;
-    const total = totalDiarios?.todayClasses?.length;
-    const registradas = total - noRegistradas;
-
-    if (!total){ return []};
+  const parseOveviewInfo = () => {
+    const { checked, unchecked } = status;
+    const total = checked + unchecked;
 
     const result = [
       { subtitle: "Clases de hoy", total: total, icon: "bar-chart-2" },
       {
         subtitle: "Clases Registradas",
-        total: registradas,
+        total: checked,
         icon: "check-circle",
       },
-      { subtitle: "No Registradas", total: noRegistradas, icon: "user-x" },
+      { subtitle: "No Registradas", total: unchecked, icon: "user-x" },
     ];
 
     return result;
@@ -50,10 +48,10 @@ const Dashboard2 = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    const overViewPased = parseOveviewInfo(todayClasses, totalDiarios);
+    const overViewPased = parseOveviewInfo();
     setOverviewInfo(overViewPased);
     setIsLoading(false);
-  }, [todayClasses, totalDiarios]);
+  }, [status]);
 
   return isLoading ? (
     <Spinner />
@@ -71,6 +69,7 @@ const Dashboard2 = () => {
         </Grid>
         <Grid item xs={12} display="flex">
           <ClasesProfesor
+            setStatus={setStatus}
             bloques={userBloques}
             todayClasses={todayClasses}
             setTodayClasses={setTodayClasses}
