@@ -13,12 +13,12 @@ const createMenuItems = () => {
       href: '/dashboard',
     },
     {
-      title: 'Mis cursos',
+      title: 'Mis Cursos',
       icon: 'book-open',
       href: '/teacher/courses',
     },
     {
-      title: 'Mi asistencia',
+      title: 'Mi Asistencia',
       icon: 'check-square',
       href: '/teacher/attendance',
     },

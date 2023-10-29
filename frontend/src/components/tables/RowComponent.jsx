@@ -31,15 +31,16 @@ const RowComponent = ({
   return (
     <>
       <TableRow onClick={() => setOpen(!open)}>
-        {mobile && columnsOnMobile < rowContentArray.length ? (
+        {mobile && columnsOnMobile < rowContentArray.length && (
           <TableCell style={{ padding: 0, borderBottom: 0 }}>
             <IconButton aria-label="expand row" size="small">
               {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
             </IconButton>
           </TableCell>
-        ) : (
-          <TableCell style={{ borderBottom: 0 }} />
         )}
+        {
+          mobile && columnsOnMobile >= rowContentArray.length && <TableCell sx={{ padding: 0, borderBottom: 0 }} />
+        }
         {rowContentArray?.map((content, index) =>
           (index + 1 > columnsOnMobile && mobile) ||
           rowValuesArray[index] == "id" ? null : (
