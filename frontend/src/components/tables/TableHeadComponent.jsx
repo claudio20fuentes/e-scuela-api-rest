@@ -42,6 +42,7 @@ const TableHeadComponent = ({
               sortDirection={orderBy === header.value ? order : false}
               sx={{
                 paddingLeft: mobile ? 1 : 2,
+                whiteSpace: 'nowrap'
               }}
             >
               <TableSortLabel
