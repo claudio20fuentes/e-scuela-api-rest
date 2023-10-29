@@ -9,14 +9,19 @@ import {
   Collapse,
   useMediaQuery,
 } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
 import { capitalize } from "@utils/formatter";
 
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import FeatherIcon from "feather-icons-react";
 
-const RowComponent = ({ index, rowContent, optionIcon, setSelected, columnsOnMobile }) => {
+const RowComponent = ({
+  index,
+  rowContent,
+  optionIcon,
+  setSelected,
+  columnsOnMobile,
+}) => {
   const [open, setOpen] = useState(false);
   const mobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
@@ -26,21 +31,25 @@ const RowComponent = ({ index, rowContent, optionIcon, setSelected, columnsOnMob
   return (
     <>
       <TableRow onClick={() => setOpen(!open)}>
-        {mobile && (
+        {mobile && columnsOnMobile < rowContentArray.length ? (
           <TableCell style={{ padding: 0, borderBottom: 0 }}>
-            <IconButton
-              aria-label="expand row"
-              size="small"
-            >
+            <IconButton aria-label="expand row" size="small">
               {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
             </IconButton>
           </TableCell>
+        ) : (
+          <TableCell style={{ borderBottom: 0 }} />
         )}
         {rowContentArray?.map((content, index) =>
-          index + 1 > columnsOnMobile && mobile || rowValuesArray[index] == 'id' ? null : (
+          (index + 1 > columnsOnMobile && mobile) ||
+          rowValuesArray[index] == "id" ? null : (
             <TableCell
               key={index}
-              sx={{ paddingLeft: mobile ? 1 : 2, height: 70, borderBottom: mobile ? 0 : '1px solid #e0e0e0' }}
+              sx={{
+                paddingLeft: mobile ? 1 : 2,
+                height: 70,
+                borderBottom: mobile ? 0 : "1px solid #e0e0e0",
+              }}
             >
               {content}
             </TableCell>
@@ -49,14 +58,18 @@ const RowComponent = ({ index, rowContent, optionIcon, setSelected, columnsOnMob
         {optionIcon && (
           <TableCell
             align="center"
-            style={{ width: "2px", padding: 0, borderBottom: mobile ? 0 : '1px solid #e0e0e0'}}
+            style={{
+              width: "2px",
+              padding: 0,
+              borderBottom: mobile ? 0 : "1px solid #e0e0e0",
+            }}
           >
             <IconButton
               onClick={(e) => {
                 e.stopPropagation();
                 setSelected(rowContentArray);
               }}
-              style={{ color: '#1e4db7' }}
+              style={{ color: "#1e4db7" }}
             >
               <FeatherIcon icon={optionIcon} />
             </IconButton>
@@ -65,18 +78,27 @@ const RowComponent = ({ index, rowContent, optionIcon, setSelected, columnsOnMob
       </TableRow>
       {mobile && (
         <TableRow>
-          <TableCell sx={{ padding: 0 }} colSpan={rowContentArray.length - 1}>
+          <TableCell sx={{ padding: 0 }} colSpan={rowContentArray.length + 1}>
             <Collapse in={open} timeout="auto" unmountOnExit>
-              <Box style={{ backgroundColor: "#f2f6fc" }} >
+              <Box style={{ backgroundColor: "#f2f6fc" }}>
                 <Table size="small">
                   <TableBody>
                     {rowContentArray?.map((content, index) =>
                       index < columnsOnMobile ? null : (
                         <TableRow key={index}>
-                          <TableCell style={{ width: '45%', fontWeight: 700, borderBottom: 0 }}>
-                            {capitalize(rowValuesArray[index])}{":"}
+                          <TableCell
+                            style={{
+                              width: "45%",
+                              fontWeight: 700,
+                              borderBottom: 0,
+                            }}
+                          >
+                            {capitalize(rowValuesArray[index])}
+                            {":"}
                           </TableCell>
-                          <TableCell style={{ borderBottom: 0 }}>{content}</TableCell>
+                          <TableCell style={{ borderBottom: 0 }}>
+                            {content}
+                          </TableCell>
                         </TableRow>
                       )
                     )}

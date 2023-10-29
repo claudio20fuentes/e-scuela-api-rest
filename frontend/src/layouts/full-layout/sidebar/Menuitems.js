@@ -18,6 +18,11 @@ const createMenuItems = () => {
       href: '/teacher/courses',
     },
     {
+      title: 'Mi asistencia',
+      icon: 'check-square',
+      href: '/teacher/attendance',
+    },
+    {
       navlabel: true,
       subheader: 'Administración',
       icon: 'mdi mdi-dots-horizontal',

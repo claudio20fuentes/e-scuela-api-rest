@@ -65,12 +65,11 @@ const EditarDocente = Loadable(
 const AdministrarCursos = Loadable(
   lazy(() => import('../views/administration/cursos/mainView'))
 );
-// const Curso = Loadable(
-//   lazy(() => import('../views/administration/cursos/CrearCurso'))
-// );
-// const EditarCurso = Loadable(
-//   lazy(() => import('../views/administration/cursos/EditarCurso'))
-// );
+
+/* ****HISTORIAL ASISTENCIA***** */
+const AsistenciaHistorialProfesor = Loadable(
+  lazy(() => import('../views/docente/AsistenciaHistory'))
+);
 
 /* ****CURSOS***** */
 const CursosProfesor = Loadable(
@@ -111,6 +110,7 @@ const Router = [
       { path: '/administration/matriculas/:id',element: <EditarMatricula/> },
 
       { path: '/teacher/courses', element: <CursosProfesor/>},
+      { path: '/teacher/attendance', element: <AsistenciaHistorialProfesor /> },
 
       { path: '/attendance/:id', element: <AsistenciaMainView /> },
       { path: '/attendance/:id/edit', element: <EditarAsistencia /> },

@@ -4,7 +4,7 @@ import { IconButton } from "@mui/material";
 
 import FeatherIcon from "feather-icons-react";
 
-import { getAllBloques } from "@services/bloquesServices";
+import { getAllBloques, getBloquesHora } from "@services/bloquesServices";
 import { getCursoByBloqueId } from "@services/cursosServices";
 
 const { formatDate } = require("@utils/formatter");
@@ -308,10 +308,10 @@ const parse = (bloqueCompleto, date) => {
   } = bloqueCompleto;
 
   const asistenciaHoy = asistencia?.find((asistencia) => {
-    if(asistencia.fecha.split("T")[0] === date.date){
-      return {id: asistencia.id, detalle: asistencia.detalle};
+    if (asistencia.fecha.split("T")[0] === date.date) {
+      return { id: asistencia.id, detalle: asistencia.detalle };
     }
-    return []
+    return [];
   });
 
   if (!asistenciaHoy.detalles.length) {
@@ -327,16 +327,18 @@ const parse = (bloqueCompleto, date) => {
   const ausentes = result.filter((student) => student.estado === 2);
   const atrasados = result.filter((student) => student.estado === 3);
 
-  return { idAsistencia: asistenciaHoy.id, detalles: {todos: result, presentes, ausentes, atrasados} };
+  return {
+    idAsistencia: asistenciaHoy.id,
+    detalles: { todos: result, presentes, ausentes, atrasados },
+  };
 };
 
-export const updateDetalleAsistencia = async ({id, asistencia}) => {
+export const updateDetalleAsistencia = async ({ id, asistencia }) => {
   return new Promise(async (resolve, reject) => {
     try {
-
       let response = true;
 
-      asistencia.map( async (estudiante) => {
+      asistencia.map(async (estudiante) => {
         const payload = {
           estado: estudiante.estado,
         };
@@ -353,9 +355,9 @@ export const updateDetalleAsistencia = async ({id, asistencia}) => {
           );
         } catch (error) {
           response = false;
-          console.log("error: ", error)
+          console.log("error: ", error);
         }
-      })
+      });
 
       resolve(response);
     } catch (error) {
@@ -366,4 +368,26 @@ export const updateDetalleAsistencia = async ({id, asistencia}) => {
       reject(error);
     }
   });
+};
+
+export const getProfesorAsistenciaByDay = async (period) => {
+  const { day, date } = formatDate(period);
+  const bloques = await getAllBloques({ day, date });
+  const parsedBloques = parser(bloques);
+
+  const result = parsedBloques.map((curso) => {
+    const { bloques, nombreCurso } = curso;
+    const bloque = bloques[0];
+
+    const estado = bloque.asistencia
+
+    return {
+      id: bloque.idBloque,
+      bloque: bloque.idBloqueHora,
+      curso: nombreCurso,
+      estado,
+    };
+  });
+
+  return result.sort((a, b) => a.bloque - b.bloque);
 };
