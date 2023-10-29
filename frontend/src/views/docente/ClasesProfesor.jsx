@@ -19,8 +19,8 @@ const ClasesProfesor = ({
   const [currentBloque, setCurrentBloque] = useState({});
   const { date } = useContext(UserContext);
 
-  const parser = (asistencia, today) => {
-    if (!today?.length || !asistencia?.length) {
+  const parser = (asistencia =[], today =[]) => {
+    if (!today?.length) {
       return { checked: [], unchecked: [] };
     }
 
@@ -55,10 +55,8 @@ const ClasesProfesor = ({
 
   useEffect(() => {
     const bloquesDiarios = getHorarioFromBloquesByDay(bloques, date);
-    setTotalDiarios(bloquesDiarios);
     const { currentBloque: current, todayClasses: today } = bloquesDiarios;
-    const { checked, unchecked } = parser(asistencia[0].cursos, today);
-    setCurrentBloque(current);
+    const { checked, unchecked } = parser(asistencia[0]?.cursos, today);
     unchecked && setTodayClasses(unchecked);
     unchecked &&
       setCurrentBloque(

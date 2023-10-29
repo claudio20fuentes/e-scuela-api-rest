@@ -27,7 +27,7 @@ app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
 
-// TODO: REINICIA Y POBLA LA BD. USAR CON PRECAUCIÓN
+//! REINICIA Y POBLA LA BD. USAR CON PRECAUCIÓN
 
 // databaseInit();
 
