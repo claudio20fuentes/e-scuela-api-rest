@@ -1,14 +1,11 @@
 import { useState, useEffect, useContext } from "react";
-import { Grid, Button, Typography } from "@mui/material";
+import { Grid } from "@mui/material";
 
 import DataOverView from "./DataOverview";
 import WelcomeCard from "./WelcomeCard";
 
 import PageContainer from "@components/container/PageContainer";
 import Spinner from "@views/spinner/Spinner";
-
-import { getHorarioFromBloques } from "@services/profesoresServices";
-import { getAsistenciaByDay } from "@services/asistenciaServices";
 
 import ClasesProfesor from "@views/docente/ClasesProfesor";
 
@@ -26,9 +23,9 @@ const Dashboard2 = () => {
   } = useContext(UserContext);
 
   const parseOveviewInfo = (totalclases = [], totalDiarios = []) => {
-    const registradas = todayClasses?.length;
+    const noRegistradas = todayClasses?.length;
     const total = totalDiarios?.todayClasses?.length;
-    const noRegistradas = total - registradas;
+    const registradas = total - noRegistradas;
 
     if (!total){ return []};
 
@@ -47,7 +44,7 @@ const Dashboard2 = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    setDateContext(new Date("2023-10-24T11:00:00"));
+    setDateContext(new Date("2023-10-27T11:00:00"));
     setIsLoading(false);
   }, []);
 

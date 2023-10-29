@@ -109,7 +109,6 @@ export const getHorarioFromBloques = (bloques) => {
 
 export const getHorarioFromBloquesByDay = (bloques, date) => {
   const horario = getHorarioFromBloques(bloques);
-
   const todayClasses = horario
     .find((dia) => dia.id === date.day)
     ?.bloques?.sort((a, b) => a.idHorario - b.idHorario);
