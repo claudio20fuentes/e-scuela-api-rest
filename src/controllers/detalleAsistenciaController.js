@@ -23,7 +23,6 @@ const createDetalleAsistencia = async (req, res) => {
   const fecha = req.body.fecha || new Date();
   const payloadAsistencia = { idBloque, idEscuela, fecha };
 
-
   try {
     const asistenciaResult = await AsistenciaService.createAsistencia(
       payloadAsistencia
@@ -42,7 +41,7 @@ const createDetalleAsistencia = async (req, res) => {
             estado: detalle.estado,
           });
         } catch (error) {
-          console.log(error, "en la matricula: ", detalle.idMatricula)
+          console.log(error, "en la matricula: ", detalle.idMatricula);
         }
       });
     }
@@ -52,7 +51,25 @@ const createDetalleAsistencia = async (req, res) => {
   }
 };
 
+const updateDetalleAsistencia = async (req, res) => {
+  const { estado } = req.body;
+  const { id } = req.params;
+
+  const payload = {
+    id,
+    estado,
+  };
+
+  try {
+    const updated = await DetalleAsistenciaService.updateDetalleAsistencia(payload);
+    return res.status(200).json({ succes: true, body: updated });
+  } catch (error) {
+    res.status(500).json({ error: "Error en el servidor" });
+  }
+};
+
 module.exports = {
   getDetalleAsistencia,
   createDetalleAsistencia,
+  updateDetalleAsistencia,
 };

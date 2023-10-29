@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
   Grid,
   Typography,
@@ -10,25 +10,24 @@ import {
 } from "@mui/material";
 
 import { useForm } from "react-hook-form";
-import { backend_url } from "@variables";
-import axios from "axios";
+
+import { UserContext } from "@context/UserContext";
 
 import PageContainer from "@containers/PageContainer";
-
 import DatosPersonales from "./DatosPersonalesComponent";
-// import AsignaturasCursos from "./AsignaturasCursosComponent";
-
-import { getMatricula } from "@services/cursosServices";
+import { getMatricula, createMatricula } from "@services/cursosServices";
 
 const CreateEstudiante = () => {
+  const { setSuccess } = useContext(UserContext);
   const [open, setOpen] = useState(false);
   const [classes, setClasses] = useState([]);
   const [user, setUser] = useState({
     nombre: "",
     apellidos: "",
     rut: "",
-    curso: [],
+    curso: { value: 0, label: "" },
   });
+  const [userCheck, setUserCheck] = useState(false);
 
   const { handleSubmit } = useForm({
     mode: "onTouched",
@@ -42,23 +41,24 @@ const CreateEstudiante = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (user.nombre && user.apellidos && user.rut && user.curso.value) {
+      setUserCheck(true);
+    } else {
+      setUserCheck(false);
+    }
+  }, [user]);
+
   const onSubmit = async () => {
     try {
-      // TODO handle submit in estudiante: [rut, nombre, apellido, idEscuela] then in matricula: [idEscuela, idEstudiante, idCurso]
-      await axios
-        .put(
-          `${backend_url}/api/usuario/update-user/${userData.id}`,
-          { nombre: userName, celular: userPhone },
-          {
-            headers: {
-              authorization: "Bearer " + localStorage.getItem("token"),
-              cliente: localStorage.getItem("cliente"),
-            },
-          }
-        )
-        .then((res) => {
-          setOpen(!open);
+      const response = createMatricula(user);
+      if (response) {
+        setSuccess({
+          estado: true,
+          message: "Estudiante creado con éxito",
         });
+        window.location.href = "#/administration/matriculas";
+      }
     } catch (error) {
       console.log(error);
     }
@@ -107,6 +107,7 @@ const CreateEstudiante = () => {
                 <Button
                   variant="contained"
                   color="primary"
+                  disabled={!userCheck}
                   onClick={handleSubmit(onSubmit)}
                 >
                   Guardar cambios

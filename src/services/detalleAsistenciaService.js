@@ -38,6 +38,17 @@ class DetalleAsistenciaService {
       console.error("Error al crear el detalle de asistencia");
     }
   }
+
+  async updateDetalleAsistencia({id, estado}) {
+    try {
+      const detalle = await DetalleAsistencia.update({estado}, {
+        where: { id },
+      });
+      return detalle;
+    } catch (error) {
+      console.error("Error al actualizar el detalle de asistencia");
+    }
+  }
 }
 
 module.exports = new DetalleAsistenciaService();

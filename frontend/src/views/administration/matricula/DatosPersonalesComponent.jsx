@@ -72,7 +72,7 @@ const DatosPersonalesComponent = ({ user, setUser }) => {
                     variant="outlined"
                     fullWidth
                     onChange={(e) =>
-                      setUser({ ...user, apellido: e.target.value })
+                      setUser({ ...user, apellidos: e.target.value })
                     }
                   />
                 </>

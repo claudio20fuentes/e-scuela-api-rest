@@ -56,11 +56,13 @@ const ClasesProfesor = ({ bloques, todayClasses, setTodayClasses, setTotalDiario
 
   useEffect(() => {
     const fetchData = async () => {
-      const asistencia = await getAsistenciaByDay(new Date());
+      const asistencia = await getAsistenciaByDay(date);
       setAsistencia(asistencia);
     };
     fetchData();
   }, []);
+
+  console.log("date", date)
 
   useEffect(() => {
     const bloquesDiarios = getHorarioFromBloquesByDay(bloques, date);

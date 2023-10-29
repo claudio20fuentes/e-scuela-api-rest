@@ -6,105 +6,120 @@ import {
   Typography,
   Grid,
   Button,
+  Link,
   Alert,
 } from "@mui/material";
-import EstudianteCard from "./EstudianteCard";
+import EditarTable from "./EditarAsistenciaTable";
 import DatosBloque from "./DatosBloque";
 
 import FeatherIcon from "feather-icons-react";
 import Spinner from "@views/spinner/Spinner";
 
 import { getCursoByBloqueId } from "@services/cursosServices";
-import { createAsistencia } from "@services/asistenciaServices";
+import { getAsistenciaByCursoClass, updateDetalleAsistencia } from "@services/asistenciaServices";
 
 import { UserContext } from "@context/UserContext";
 
-const AsistenciaMainView = () => {
-  const { success, setSuccess, date } = useContext(UserContext);
+const EditarAsistencia = () => {
+  const { setSuccess, date } = useContext(UserContext);
   const { id: idBloque } = useParams();
-  
   const [datosBloque, setDatosBloque] = useState({
     curso: { nombre: "", id: "" },
     profesor: { nombre: "", apellido: "" },
     asignatura: { nombre: "", id: "" },
   });
-  const [estudiantes, setEstudiantes] = useState([]);
   const [asistencia, setAsistencia] = useState({
-    restantes: [],
+    todos: [],
     presentes: [],
     ausentes: [],
     atrasados: [],
   });
+  const [asistenciaId, setAsistenciaId] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
-  function parseData(data, estadosArray) {
-    const parsedArray = [];
-
-    for (const estado of estadosArray) {
-      if (data[estado]) {
-        for (const student of data[estado]) {
-          parsedArray.push({
-            idMatricula: student.idMatricula,
-            estado: estadosArray.indexOf(estado),
-          });
-        }
-      }
-    }
-
-    return parsedArray;
-  }
-
-
-  // HANDLERS 
+  // HANDLERS
 
   const handleSubmit = () => {
-    const estadosArray = Object.keys(asistencia);
-    const asistenciaParsed = parseData(asistencia, estadosArray);
-    const asistenciaCreated = createAsistencia({
-      idBloque,
-      asistencia: asistenciaParsed,
-      fecha: new Date(date.date)
+    const update = updateDetalleAsistencia({
+      id: asistenciaId,
+      asistencia: asistencia.todos,
     });
-    if (asistenciaCreated) {
-      setSuccess({ estado: true, message: "Asistencia registrada con éxito" });
+
+    if (update) {
+      setSuccess({ estado: true, message: "Asistencia actualizada con éxito" });
       window.location.href = "#/";
     }
   };
 
   const handleStudentStatus = (
-    { idMatricula, nombre, apellido },
+    { idMatricula, nombre, apellido, idDetalle },
     statusKey
   ) => {
+    let estado;
+
+    switch (statusKey) {
+      case "presentes":
+        estado = 1;
+        break;
+      case "ausentes":
+        estado = 2;
+        break;
+      case "atrasados":
+        estado = 3;
+        break;
+      default:
+        estado = 0;
+    }
+
     setAsistencia((prevAsistencia) => {
       const updatedAsistencia = { ...prevAsistencia };
+
+      // Update the "estado" value
+      estado = estado || 1; // Default to 1 if no statusKey matches
+      const updatedStudent = {
+        idMatricula,
+        nombre,
+        apellido,
+        estado,
+        idDetalle,
+      };
+
+      // Remove the student from all status keys
       Object.keys(updatedAsistencia).forEach((key) => {
-        if (key !== statusKey) {
-          updatedAsistencia[key] = updatedAsistencia[key].filter(
-            (student) => student.idMatricula !== idMatricula
-          );
-        }
+        updatedAsistencia[key] = updatedAsistencia[key].filter(
+          (student) => student.idMatricula !== idMatricula
+        );
       });
-      const studentInStatus = updatedAsistencia[statusKey].find(
-        (student) => student.idMatricula === idMatricula
-      );
-      if (!studentInStatus) {
-        updatedAsistencia[statusKey] = [
-          ...updatedAsistencia[statusKey],
-          { idMatricula, nombre, apellido },
-        ];
-      }
+
+      // Add the student to the specified status key
+      updatedAsistencia[statusKey] = [
+        ...updatedAsistencia[statusKey],
+        updatedStudent,
+      ];
+
+      // Replace the "todos" key with all students
+      const allStudents = [
+        ...updatedAsistencia.presentes,
+        ...updatedAsistencia.ausentes,
+        ...updatedAsistencia.atrasados,
+      ];
+      updatedAsistencia.todos = allStudents;
+
       return updatedAsistencia;
     });
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const bloqueCompleto = await getCursoByBloqueId(idBloque);
-      console.log("RES",bloqueCompleto)
-      setDatosBloque(bloqueCompleto);
-      setEstudiantes(bloqueCompleto?.curso?.estudiantes);
-    };
-    fetchData();
+    if (date.date != "") {
+      const fetchData = async () => {
+        const bloqueCompleto = await getCursoByBloqueId(idBloque);
+        const asistenciaTotal = await getAsistenciaByCursoClass(idBloque, date);
+        setAsistencia(asistenciaTotal.detalles);
+        setDatosBloque(bloqueCompleto);
+        setAsistenciaId(asistenciaTotal.idAsistencia);
+      };
+      fetchData();
+    }
     setIsLoading(false);
   }, []);
 
@@ -114,47 +129,25 @@ const AsistenciaMainView = () => {
     <Grid container>
       <Grid item xs={12} mr={2} display="flex" justifyContent="space-between">
         <Typography variant="h3" fontWeight={500} ml={2} width="100%">
-          Clase Actual
+          Editar Asistencia
         </Typography>
+      </Grid>
+      <Grid item xs={12} display="flex" justifyContent="flex-end" pr={2}>
+        <Button variant="contained" onClick={handleSubmit}>
+          Aceptar
+        </Button>
       </Grid>
       <DatosBloque datosBloque={datosBloque} isloading={isLoading} />
       {/* STUDENT COMPONENT*/}
       <Grid container>
-        <EstudianteCard
-          estudiantes={estudiantes}
-          asistencia={asistencia}
+        <EditarTable
           handleStudentStatus={handleStudentStatus}
+          asistencia={asistencia}
           setAsistencia={setAsistencia}
         />
       </Grid>
-      {asistencia.restantes.length === 0 && (
-        <Grid container justifyContent="center" mt={4} mb={4}>
-          <Grid item xs={11} md={4} display="flex" justifyContent="center">
-            <Card
-              sx={{
-                py: 1,
-                pr: 5,
-                backgroundColor: (theme) => theme.palette.secondary.main,
-                color: "white",
-                "&:hover": {
-                  backgroundColor: (theme) => theme.palette.secondary.main,
-                },
-                transition: "background-image 0.3s ease",
-              }}
-              component={Button}
-              onClick={handleSubmit}
-              disabled={success.estado}
-              endIcon={<FeatherIcon icon="check-circle" size="40px" />}
-            >
-              <CardContent sx={{ height: "100%" }}>
-                <Typography variant="h3">Registrar Asistencia</Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-      )}
     </Grid>
   );
 };
 
-export default AsistenciaMainView;
+export default EditarAsistencia;

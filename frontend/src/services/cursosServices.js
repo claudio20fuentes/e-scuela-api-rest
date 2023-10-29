@@ -31,7 +31,7 @@ export const getCursoByBloqueId = async (idBloque) => {
   // });
 };
 
-export const getMatricula = async (id = '') => {
+export const getMatricula = async (id = "") => {
   return new Promise(async (resolve, reject) => {
     try {
       const cursos = await axios.get(`${backendUrl}/api/v1/matriculas/${id}`, {
@@ -123,4 +123,28 @@ export const getAllCursos = async () => {
     }, [])
     ?.filter((item) => item !== null);
   return cursos;
+};
+
+export const createMatricula = async (user) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      
+      const cursos = await axios.post(`${backendUrl}/api/v1/matriculas/${id}`, {
+        headers: {
+          authorization: "Bearer " + localStorage.getItem("token"),
+          token: localStorage.getItem("token"),
+        },
+      });
+
+      const data = cursos.data.body;
+
+      resolve(data);
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        localStorage.clear();
+        window.location.reload();
+      }
+      reject(error);
+    }
+  });
 };

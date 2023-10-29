@@ -5,7 +5,7 @@ import { IconButton } from "@mui/material";
 import FeatherIcon from "feather-icons-react";
 
 import { getAllBloques } from "@services/bloquesServices";
-import { getMatricula, getAllCursos } from "@services/cursosServices";
+import { getCursoByBloqueId } from "@services/cursosServices";
 
 const { formatDate } = require("@utils/formatter");
 
@@ -105,12 +105,7 @@ export const checkAsistencia = async (date) => {
 export const getAsistenciaByDay = async (date = new Date()) => {
   const asistencia = await getAsistencia();
   const parsedAsistencia = transformData(asistencia);
-  const currentDateParts = new Date(date)
-    .toLocaleString("es-ES", { timeZone: "America/Santiago" })
-    .split(",")[0]
-    .split("/");
-  const currentDate = `${currentDateParts[2]}-${currentDateParts[1]}-${currentDateParts[0]}`;
-  const todayData = parsedAsistencia.filter((obj) => obj.fecha === currentDate);
+  const todayData = parsedAsistencia.filter((obj) => obj.fecha === date);
   return todayData;
 };
 
@@ -265,16 +260,12 @@ export const getAllSchoolAsistenciaByDay = async (period) => {
 };
 
 const Checked = ({ idBloque }) => (
-  <IconButton
-    onClick={() => handleClickChecked(idBloque)}
-  >
+  <IconButton onClick={() => handleClickChecked(idBloque)}>
     <FeatherIcon icon="check" color="#4caf50" />
   </IconButton>
 );
 const NotChecked = ({ idBloque }) => (
-  <IconButton
-    onClick={() => handleClickUnchecked(idBloque)}
-  >
+  <IconButton onClick={() => handleClickUnchecked(idBloque)}>
     <FeatherIcon icon="x" color="#f44336" />
   </IconButton>
 );
@@ -285,4 +276,94 @@ const handleClickChecked = async (idBloque) => {
 
 const handleClickUnchecked = async (idBloque) => {
   window.location.href = `#/attendance/${idBloque}`;
+};
+
+export const getAsistenciaByCursoClass = async (idBloque, date) => {
+  const bloqueCompleto = await getCursoByBloqueId(idBloque);
+  const asistencia = parse(bloqueCompleto, date);
+  return asistencia;
+};
+
+function mixArrays(students, details) {
+  // Create an object to store students by idMatricula
+  const studentsById = {};
+  students.forEach((student) => {
+    studentsById[student.idMatricula] = student;
+  });
+
+  // Combine the two arrays based on idMatricula
+  const combinedArray = details.map((detail) => ({
+    ...studentsById[detail.idMatricula],
+    estado: detail.estado,
+    idDetalle: detail.id,
+  }));
+
+  return combinedArray;
+}
+
+const parse = (bloqueCompleto, date) => {
+  const {
+    curso: { estudiantes },
+    asistencia,
+  } = bloqueCompleto;
+
+  const asistenciaHoy = asistencia?.find((asistencia) => {
+    if(asistencia.fecha.split("T")[0] === date.date){
+      return {id: asistencia.id, detalle: asistencia.detalle};
+    }
+    return []
+  });
+
+  if (!asistenciaHoy.detalles.length) {
+    return estudiantes.map((student) => ({
+      ...student,
+      estado: 0,
+    }));
+  }
+
+  const result = mixArrays(estudiantes, asistenciaHoy.detalles);
+
+  const presentes = result.filter((student) => student.estado === 1);
+  const ausentes = result.filter((student) => student.estado === 2);
+  const atrasados = result.filter((student) => student.estado === 3);
+
+  return { idAsistencia: asistenciaHoy.id, detalles: {todos: result, presentes, ausentes, atrasados} };
+};
+
+export const updateDetalleAsistencia = async ({id, asistencia}) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+
+      let response = true;
+
+      asistencia.map( async (estudiante) => {
+        const payload = {
+          estado: estudiante.estado,
+        };
+        try {
+          await axios.put(
+            `${backendUrl}/api/v1/asistencia/detalle/${estudiante.idDetalle}`,
+            payload,
+            {
+              headers: {
+                authorization: "Bearer " + localStorage.getItem("token"),
+                token: localStorage.getItem("token"),
+              },
+            }
+          );
+        } catch (error) {
+          response = false;
+          console.log("error: ", error)
+        }
+      })
+
+      resolve(response);
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        localStorage.clear();
+        window.location.reload();
+      }
+      reject(error);
+    }
+  });
 };

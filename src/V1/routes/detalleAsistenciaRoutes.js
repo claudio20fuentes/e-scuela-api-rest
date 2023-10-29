@@ -5,6 +5,7 @@ const detalleAsistenciaController = require("../../controllers/detalleAsistencia
 router
   .get("/", detalleAsistenciaController.getDetalleAsistencia)
   .post("/", detalleAsistenciaController.createDetalleAsistencia)
-  .post("/detalle", detalleAsistenciaController.createDetalleAsistencia);
+  .post("/detalle", detalleAsistenciaController.createDetalleAsistencia)
+  .put("/detalle/:id", detalleAsistenciaController.updateDetalleAsistencia)
 
 module.exports = router;

@@ -100,7 +100,6 @@ const AsistenciaMainView = () => {
   useEffect(() => {
     const fetchData = async () => {
       const bloqueCompleto = await getCursoByBloqueId(idBloque);
-      console.log("RES",bloqueCompleto)
       setDatosBloque(bloqueCompleto);
       setEstudiantes(bloqueCompleto?.curso?.estudiantes);
     };
